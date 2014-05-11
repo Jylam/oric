@@ -6,5 +6,5 @@ all:
 	$(CC) 2048.c > 2048.preproc
 	echo "#include \""$(MACROS)"\"" >> 2048_preproc.c
 	cat 2048.preproc >> 2048_preproc.c
-	cpp 2048_preproc.c
+	cpp -traditional-cpp 2048_preproc.c
 
