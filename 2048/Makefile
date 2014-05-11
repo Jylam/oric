@@ -18,7 +18,6 @@ all:
 	cat $(TAIL) >>  1.asm
 	$(ASM) -bt 0x500 1.asm  -o 2048.bin
 tap:
-#	wine $(OSDK)/oric/Bin2Tap/Bin/Bin2Tap.exe 2048.bin -o test.tap
 	$(OSDK)/osdk/main/header/header -a1 2048.bin test.tap 0x500
 	cp test.tap $(EUPHORIC_TAPES)
 
