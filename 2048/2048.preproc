@@ -1,6 +1,0 @@
-/* 16bit code V1.29 by F.Frances */
-_main
-	ENTER(0,8)
-	ASGNW_CA(42,(fp),6)
-	ADDW_ICI((fp),6,1,(fp),6)
-	LEAVE
