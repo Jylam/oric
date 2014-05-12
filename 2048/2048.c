@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-char board[4*4] = {0};
+char board[4*4] = {0, 1, 2, 3};
 
 
 void draw_board(void) {
@@ -32,14 +33,12 @@ void draw_board(void) {
 
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
-            char str[5];
             int i = 0;
-            for(i=0; i < strlen(str); i++) {
-
-            }
+            char str[5];
+            curset((x*10)+2, (y*7)+2, MODE_NONE);
+            sprintf(str, "%d", board[x+y*4]);
         }
     }
-
 
 
 }
@@ -50,7 +49,7 @@ void clear_screen(void) {
 
 
 void game(void) {
-    draw_board();
+    /*draw_board();*/
 }
 
 int main(int argc, char *argv[]) {
