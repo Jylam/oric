@@ -110,7 +110,6 @@ void move_up(void) {
 
 void move_down(void) {
     int x, y;
-
     for(x=0; x<4; x++) {
 
         for(y=0; y<4; y++) {

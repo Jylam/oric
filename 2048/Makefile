@@ -12,7 +12,8 @@ ORICULATOR_TAPES=/home/jylam/code/oric/emulators/oriculator-read-only/tapes
 
 all:
 	rm -f 2048.asm 2048_preproc.c 2048_preproc 2048.preproc 2048.temp_asm 2048_m.asm $(EUPHORIC_TAPES)/test.tap 1.asm go.asm
-	cpp -traditional-cpp -I$(OSDK_INCLUDES) 2048.c -o 2048_pre.c
+	cpp -traditional-cpp -I$(OSDK_INCLUDES) 2048.c -o 2048_pre_comment.c
+	cpp -xc++ 2048_pre_comment.c -o 2048_pre.c
 	$(CC) 2048_pre.c 2048_preproc.c
 	cpp -traditional-cpp -include $(MACROS) 2048_preproc.c -o 2048.temp_asm
 	grep -v '^#' 2048.temp_asm > 2048_m.asm
