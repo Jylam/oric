@@ -2,10 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {1, 1, 0, 0,
-                            6, 0, 6, 0,
-                            8, 8, 8, 0,
-                            11, 11, 0, 11};
+unsigned char board[4*4] = {2, 0, 1, 1,
+                            1, 0, 0, 0,
+                            0, 0, 0, 0,
+                            2, 0, 0, 2};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
@@ -88,17 +88,23 @@ void clear_screen(void) {
 void move_up(void) {
     int x, y;
 
-    for(x=0; x<4; x++)
-    for(y=3; y>0; y--) {
-        if(board[x+((y-1)*4)]==0) {
-            int y2;
-            for(y2=y; y2<4; y2++) {
-                char current = x+((y2-1)*4);
-                char new     = x+(y2*4);
-                board[current] = board[new];
-                board[new] = 0;
+    for(x=0; x<4; x++) {
+        /* Move pieces */
+        for(y=3; y>0; y--) {
+            if(board[x+((y-1)*4)]==0) {
+                int y2;
+                for(y2=y; y2<4; y2++) {
+                    char current = x+((y2-1)*4);
+                    char new     = x+(y2*4);
+                    board[current] = board[new];
+                    board[new] = 0;
+                }
+            } else if(board[x+((y-1)*4)]==board[x+((y)*4)]) {
+                    board[x+((y-1)*4)]++;
+                    board[x+((y)*4)]=0;
             }
         }
+
     }
 }
 
@@ -116,6 +122,9 @@ void move_down(void) {
                     board[new] = board[current];
                     board[current] = 0;
                 }
+            } else if(board[x+((y+1)*4)]==board[x+((y)*4)]) {
+                    board[x+((y+1)*4)]++;
+                    board[x+((y)*4)]=0;
             }
         }
     }
@@ -125,15 +134,18 @@ void move_left(void) {
     int x, y;
 
     for(y=0; y<4; y++)
-    for(x=3; x>0; x--) {
-        if(board[(x-1)+(y*4)]==0) {
-            int x2;
-            for(x2=x; x2<4; x2++) {
-                board[(x2-1)+(y*4)] = board[x2+(y*4)];
-                board[x2+(y*4)] = 0;
+        for(x=3; x>0; x--) {
+            if(board[(x-1)+(y*4)]==0) {
+                int x2;
+                for(x2=x; x2<4; x2++) {
+                    board[(x2-1)+(y*4)] = board[x2+(y*4)];
+                    board[x2+(y*4)] = 0;
+                }
+            } else if(board[(x-1)+(y*4)]==board[x+((y)*4)]) {
+                    board[(x-1)+(y*4)]++;
+                    board[x+((y)*4)]=0;
             }
         }
-    }
 }
 
 void move_right(void) {
@@ -148,6 +160,10 @@ void move_right(void) {
                     board[(x2+1)+(y*4)] = board[x2+(y*4)];
                     board[x2+((y)*4)] = 0;
                 }
+            }
+            else if(board[(x+1)+(y*4)]==board[x+((y)*4)]) {
+                board[(x+1)+(y*4)]++;
+                board[x+((y)*4)]=0;
             }
         }
     }
