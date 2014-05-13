@@ -2,7 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+unsigned char board[4*4] = {1, 1, 0, 0,
+                            6, 0, 6, 0,
+                            8, 8, 8, 0,
+                            11, 11, 0, 11};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
@@ -101,15 +104,17 @@ void move_down(void) {
     int x, y;
 
     for(x=0; x<4; x++) {
-        for(y=0; y<2; y++) {
+
+        for(y=3; y>=0; y--) {
             if(board[x+((y)*4)]==0) {
                 int y2;
-                for(y2=y; y2>=0; y2--) {
+                for(y2=y-1; y2>=0; y2--) {
                     board[x+((y2+1)*4)] = board[x+((y2)*4)];
                     board[x+((y2)*4)] = 0;
                 }
             }
         }
+
     }
 }
 
@@ -138,7 +143,6 @@ int main(int argc, char *argv[]) {
     clear_screen();
 
     curmov(0, 0, MODE_NONE);
-    init_board();
     draw_grid();
     draw_board();
 
