@@ -19,24 +19,13 @@ char *values[] = {
 };
 
 void init_board(void) {
-    char x   = rand()%4;
-    char y   = rand()%4;
-    char x2  = rand()%4;
-    char y2  = rand()%4;
+    unsigned char x   = 2;
+    unsigned char y   = 3;
+    unsigned char x2  = 3;
+    unsigned char y2  = 2;
 
-    while(x==x2 && y==y2) {
-        x2 = rand()%4;
-        y2 = rand()%4;
-    }
-    printf("X1 %d\n", x);
-    printf("Y1 %d\n", y);
-    printf("X2 %d\n", x2);
-    printf("Y2 %d\n", y2);
-    board[x+y*4] = 1;
-    board[x2+y2*4] = 8;
-
-    printf("NEW  %x:%d\n", &board[x+y*4], board[x+y*4]);
-    printf("NEW2 %x:%d\n", &board[x2+y2*4], board[x2+y2*4]);
+    board[x+(y*4)] = 1;
+    board[x2+(y2*4)] = 1;
 }
 
 void draw_entry(char x, char y, char value) {
@@ -92,7 +81,7 @@ void clear_screen(void) {
 
 
 void game(void) {
-/*    draw_board(); */
+    draw_board();
 }
 
 int main(int argc, char *argv[]) {
@@ -103,15 +92,6 @@ int main(int argc, char *argv[]) {
     srandom(1337);
     init_board();
 
-    for(y = 0; y < 4; y++) {
-        for(x = 0; x < 4; x++) {
-            printf("%x:%d ", &board[x+y*4], board[x+y*4]);
-        }
-        printf("\n");
-    }
-
-    while(1) {};
-    draw_board();
 
     while(1) {
         game();
