@@ -2,10 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {2, 0, 0, 0,
+unsigned char board[4*4] = {1, 1, 0, 2,
                             0, 0, 0, 0,
-                            1, 0, 0, 0,
-                            1, 0, 0, 0};
+                            0, 0, 0, 0,
+                            0, 0, 0, 0};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
@@ -91,7 +91,7 @@ void add_random_piece(void) {
     unsigned int count = 0;
     unsigned int id    = 0;
     unsigned int i     = 0;
-    // Count empty cases
+    // Count empty tiles
     for(i=0; i<4*4;i++) {
         if(board[i]==0) count++;
     }
@@ -104,67 +104,6 @@ void add_random_piece(void) {
         }
     }
 
-}
-
-void move_up(void) {
-    int x, y;
-
-    for(x=0; x<4; x++) {
-        /* Move pieces */
-        for(y=3; y>0; y--) {
-            if(board[x+((y-1)*4)]==0) {
-                int y2;
-                for(y2=y; y2<4; y2++) {
-                    char current = x+((y2-1)*4);
-                    char new     = x+(y2*4);
-                    board[current] = board[new];
-                    board[new] = 0;
-                }
-            } else if(board[x+((y-1)*4)]==board[x+((y)*4)]) {
-                board[x+((y-1)*4)]++;
-                board[x+((y)*4)]=0;
-            }
-        }
-
-    }
-}
-
-void move_down(void) {
-    int x, y;
-    for(x=0; x<4; x++) {
-        for(y=0; y<4; y++) {
-            if(board[x+((y)*4)]==0) {
-                int y2;
-                for(y2=y-1; y2>=0; y2--) {
-                    char current = x+((y2)*4);
-                    char new     = x+((y2+1)*4);
-                    board[new] = board[current];
-                    board[current] = 0;
-                }
-            } else if(board[x+((y+1)*4)]==board[x+((y)*4)]) {
-                board[x+((y+1)*4)]++;
-                board[x+((y)*4)]=0;
-            }
-        }
-    }
-}
-
-void move_left(void) {
-    int x, y;
-
-    for(y=0; y<4; y++)
-        for(x=3; x>0; x--) {
-            if(board[(x-1)+(y*4)]==0) {
-                int x2;
-                for(x2=x; x2<4; x2++) {
-                    board[(x2-1)+(y*4)] = board[x2+(y*4)];
-                    board[x2+(y*4)] = 0;
-                }
-            } else if(board[(x-1)+(y*4)]==board[x+((y)*4)]) {
-                board[(x-1)+(y*4)]++;
-                board[x+((y)*4)]=0;
-            }
-        }
 }
 
 void move_right(void) {
@@ -187,26 +126,64 @@ void move_right(void) {
         }
     }
 }
+void rotateBoard(void) {
+    char temp[4*4];
+    memcpy(temp, board, 4*4);
+
+    board[0+(3*4)] = temp[0+(0*4)];
+    board[0+(2*4)] = temp[1+(0*4)];
+    board[0+(1*4)] = temp[2+(0*4)];
+    board[0+(0*4)] = temp[3+(0*4)];
+
+    board[1+(3*4)] = temp[0+(1*4)];
+    board[1+(2*4)] = temp[1+(1*4)];
+    board[1+(1*4)] = temp[2+(1*4)];
+    board[1+(0*4)] = temp[3+(1*4)];
+
+    board[2+(3*4)] = temp[0+(2*4)];
+    board[2+(2*4)] = temp[1+(2*4)];
+    board[2+(1*4)] = temp[2+(2*4)];
+    board[2+(0*4)] = temp[3+(2*4)];
+
+    board[3+(3*4)] = temp[0+(3*4)];
+    board[3+(2*4)] = temp[1+(3*4)];
+    board[3+(1*4)] = temp[2+(3*4)];
+    board[3+(0*4)] = temp[3+(3*4)];
+}
 
 void game(void) {
     int k = getchar();
 
     switch(k) {
         case 11:  /* Up */
-            move_up();
+            rotateBoard();
+            rotateBoard();
+            rotateBoard();
+            move_right();
+            rotateBoard();
+            add_random_piece();
             break;
         case 10:  /* Down */
-            move_down();
+            rotateBoard();
+            move_right();
+            rotateBoard();
+            rotateBoard();
+            rotateBoard();
+            add_random_piece();
             break;
         case  8:  /* Left */
-            move_left();
+            rotateBoard();
+            rotateBoard();
+            move_right();
+            rotateBoard();
+            rotateBoard();
+            add_random_piece();
             break;
         case  9:  /* Right */
             move_right();
+            add_random_piece();
             break;
     }
-
-    add_random_piece();
 
     draw_board();
 }
