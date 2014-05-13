@@ -93,8 +93,10 @@ void move_up(void) {
         if(board[x+((y-1)*4)]==0) {
             int y2;
             for(y2=y; y2<4; y2++) {
-                board[x+((y2-1)*4)] = board[x+(y2*4)];
-                board[x+(y2*4)] = 0;
+                char current = x+((y2-1)*4);
+                char new     = x+(y2*4);
+                board[current] = board[new];
+                board[new] = 0;
             }
         }
     }
@@ -114,7 +116,6 @@ void move_down(void) {
                 }
             }
         }
-
     }
 }
 
@@ -147,7 +148,6 @@ void move_right(void) {
                 }
             }
         }
-
     }
 }
 
