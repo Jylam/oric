@@ -91,6 +91,7 @@ void add_random_piece(void) {
     unsigned int count = 0;
     unsigned int id    = 0;
     unsigned int i     = 0;
+
     // Count empty tiles
     for(i=0; i<4*4;i++) {
         if(board[i]==0) count++;
@@ -103,11 +104,11 @@ void add_random_piece(void) {
             board[i] = 1;
         }
     }
-
 }
 
-void move_right(void) {
+int move_right(void) {
     int x, y;
+    int got_move = 0;
 
     for(y=0; y<4; y++) {
 
@@ -115,18 +116,21 @@ void move_right(void) {
             if(board[x+(y*4)]==0) {
                 int x2;
                 for(x2=x-1; x2>=0; x2--) {
+                    if(board[x2+(y*4)]!=0) got_move = 1;
                     board[(x2+1)+(y*4)] = board[x2+(y*4)];
                     board[x2+((y)*4)] = 0;
                 }
             }
             else if(board[(x+1)+(y*4)]==board[x+((y)*4)]) {
+                if(board[x+(y*4)]!=0) got_move = 1;
                 board[(x+1)+(y*4)]++;
                 board[x+((y)*4)]=0;
             }
         }
     }
+    return got_move;
 }
-void rotateBoard(void) {
+void rotateBoardCCW(void) {
     char temp[4*4];
     memcpy(temp, board, 4*4);
 
@@ -153,35 +157,35 @@ void rotateBoard(void) {
 
 void game(void) {
     int k = getchar();
-
+    int got_move = 0;
     switch(k) {
         case 11:  /* Up */
-            rotateBoard();
-            rotateBoard();
-            rotateBoard();
-            move_right();
-            rotateBoard();
-            add_random_piece();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            got_move = move_right();
+            rotateBoardCCW();
+            if(got_move) add_random_piece();
             break;
         case 10:  /* Down */
-            rotateBoard();
-            move_right();
-            rotateBoard();
-            rotateBoard();
-            rotateBoard();
-            add_random_piece();
+            rotateBoardCCW();
+            got_move = move_right();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            if(got_move) add_random_piece();
             break;
         case  8:  /* Left */
-            rotateBoard();
-            rotateBoard();
-            move_right();
-            rotateBoard();
-            rotateBoard();
-            add_random_piece();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            got_move = move_right();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            if(got_move) add_random_piece();
             break;
         case  9:  /* Right */
-            move_right();
-            add_random_piece();
+            got_move = move_right();
+            if(got_move) add_random_piece();
             break;
     }
 
