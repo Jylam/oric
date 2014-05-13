@@ -105,7 +105,7 @@ void move_down(void) {
 
     for(x=0; x<4; x++) {
 
-        for(y=3; y>=0; y--) {
+        for(y=0; y<4; y++) {
             if(board[x+((y)*4)]==0) {
                 int y2;
                 for(y2=y-1; y2>=0; y2--) {
@@ -118,6 +118,38 @@ void move_down(void) {
     }
 }
 
+void move_left(void) {
+    int x, y;
+
+    for(y=0; y<4; y++)
+    for(x=3; x>0; x--) {
+        if(board[(x-1)+(y*4)]==0) {
+            int x2;
+            for(x2=x; x2<4; x2++) {
+                board[(x2-1)+(y*4)] = board[x2+(y*4)];
+                board[x2+(y*4)] = 0;
+            }
+        }
+    }
+}
+
+void move_right(void) {
+    int x, y;
+
+    for(y=0; y<4; y++) {
+
+        for(x=0; x<4; x++) {
+            if(board[x+(y*4)]==0) {
+                int x2;
+                for(x2=x-1; x2>=0; x2--) {
+                    board[(x2+1)+(y*4)] = board[x2+(y*4)];
+                    board[x2+((y)*4)] = 0;
+                }
+            }
+        }
+
+    }
+}
 
 void game(void) {
     int k = getchar();
@@ -131,8 +163,10 @@ void game(void) {
             move_down();
             break;
         case  8:  /* Left */
+            move_left();
             break;
         case  9:  /* Right */
+            move_right();
             break;
     }
     draw_board();
