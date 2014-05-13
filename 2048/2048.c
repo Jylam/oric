@@ -2,10 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {2, 0, 1, 1,
-                            1, 0, 0, 0,
+unsigned char board[4*4] = {2, 0, 0, 0,
                             0, 0, 0, 0,
-                            2, 0, 0, 2};
+                            1, 0, 0, 0,
+                            1, 0, 0, 0};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
@@ -20,6 +20,7 @@ char *values[] = {
     "1024",
     "2048"
 };
+
 
 void init_board(void) {
     unsigned char x   = 2;
@@ -85,6 +86,26 @@ void clear_screen(void) {
     memset(screen, ' ', 40*28);
 }
 
+
+void add_random_piece(void) {
+    unsigned int count = 0;
+    unsigned int id    = 0;
+    unsigned int i     = 0;
+    // Count empty cases
+    for(i=0; i<4*4;i++) {
+        if(board[i]==0) count++;
+    }
+
+    id = rand()%count;
+
+    for(i=0; i<4*4; i++) {
+        if(i==id) {
+            board[i] = 1;
+        }
+    }
+
+}
+
 void move_up(void) {
     int x, y;
 
@@ -100,8 +121,8 @@ void move_up(void) {
                     board[new] = 0;
                 }
             } else if(board[x+((y-1)*4)]==board[x+((y)*4)]) {
-                    board[x+((y-1)*4)]++;
-                    board[x+((y)*4)]=0;
+                board[x+((y-1)*4)]++;
+                board[x+((y)*4)]=0;
             }
         }
 
@@ -111,7 +132,6 @@ void move_up(void) {
 void move_down(void) {
     int x, y;
     for(x=0; x<4; x++) {
-
         for(y=0; y<4; y++) {
             if(board[x+((y)*4)]==0) {
                 int y2;
@@ -122,8 +142,8 @@ void move_down(void) {
                     board[current] = 0;
                 }
             } else if(board[x+((y+1)*4)]==board[x+((y)*4)]) {
-                    board[x+((y+1)*4)]++;
-                    board[x+((y)*4)]=0;
+                board[x+((y+1)*4)]++;
+                board[x+((y)*4)]=0;
             }
         }
     }
@@ -141,8 +161,8 @@ void move_left(void) {
                     board[x2+(y*4)] = 0;
                 }
             } else if(board[(x-1)+(y*4)]==board[x+((y)*4)]) {
-                    board[(x-1)+(y*4)]++;
-                    board[x+((y)*4)]=0;
+                board[(x-1)+(y*4)]++;
+                board[x+((y)*4)]=0;
             }
         }
 }
@@ -171,7 +191,6 @@ void move_right(void) {
 void game(void) {
     int k = getchar();
 
-    curmov(0, 0, MODE_SET);
     switch(k) {
         case 11:  /* Up */
             move_up();
@@ -186,6 +205,9 @@ void game(void) {
             move_right();
             break;
     }
+
+    add_random_piece();
+
     draw_board();
 }
 
@@ -196,7 +218,6 @@ int main(int argc, char *argv[]) {
     curmov(0, 0, MODE_NONE);
     draw_grid();
     draw_board();
-
 
     while(1) {
         game();
