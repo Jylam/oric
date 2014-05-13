@@ -111,8 +111,10 @@ void move_down(void) {
             if(board[x+((y)*4)]==0) {
                 int y2;
                 for(y2=y-1; y2>=0; y2--) {
-                    board[x+((y2+1)*4)] = board[x+((y2)*4)];
-                    board[x+((y2)*4)] = 0;
+                    char current = x+((y2)*4);
+                    char new     = x+((y2+1)*4);
+                    board[new] = board[current];
+                    board[current] = 0;
                 }
             }
         }
