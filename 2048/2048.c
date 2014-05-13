@@ -41,7 +41,7 @@ void draw_entry(char x, char y, char value) {
     }
 }
 
-void draw_board(void) {
+void draw_grid(void) {
     int x = 0;
     int y = 0;
 
@@ -66,21 +66,70 @@ void draw_board(void) {
         }
     }
 
+
+}
+void draw_board(void) {
+    int x = 0;
+    int y = 0;
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
             draw_entry(x, y, board[x+y*4]);
         }
     }
-
-
 }
 
 void clear_screen(void) {
     memset(screen, ' ', 40*28);
 }
 
+void move_up(void) {
+    int x, y;
+
+    for(x=0; x<4; x++)
+    for(y=3; y>0; y--) {
+        if(board[x+((y-1)*4)]==0) {
+            int y2;
+            for(y2=y; y2<4; y2++) {
+                board[x+((y2-1)*4)] = board[x+(y2*4)];
+                board[x+(y2*4)] = 0;
+            }
+        }
+    }
+}
+
+void move_down(void) {
+    int x, y;
+
+    for(x=0; x<4; x++) {
+        for(y=0; y<2; y++) {
+            if(board[x+((y)*4)]==0) {
+                int y2;
+                for(y2=y; y2>=0; y2--) {
+                    board[x+((y2+1)*4)] = board[x+((y2)*4)];
+                    board[x+((y2)*4)] = 0;
+                }
+            }
+        }
+    }
+}
+
 
 void game(void) {
+    int k = getchar();
+
+    curmov(0, 0, MODE_SET);
+    switch(k) {
+        case 11:  /* Up */
+            move_up();
+            break;
+        case 10:  /* Down */
+            move_down();
+            break;
+        case  8:  /* Left */
+            break;
+        case  9:  /* Right */
+            break;
+    }
     draw_board();
 }
 
@@ -88,9 +137,10 @@ int main(int argc, char *argv[]) {
     int x, y;
     clear_screen();
 
-    curset(0, 0, MODE_NONE);
-    srandom(1337);
+    curmov(0, 0, MODE_NONE);
     init_board();
+    draw_grid();
+    draw_board();
 
 
     while(1) {
