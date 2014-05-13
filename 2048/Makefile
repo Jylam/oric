@@ -8,7 +8,6 @@ LINKER=$(OSDK)/osdk/main/link65/link65
 LINKLIB=$(OSDK)/osdk/main/Osdk/_final_/lib/
 HEADER=$(OSDK)/osdk/main/Osdk/_final_/lib/header.s
 TAIL=$(OSDK)/osdk/main/Osdk/_final_/lib/tail.s
-EUPHORIC_TAPES=/home/jylam/code/oric/emulators/Euphoric/tapes/
 ORICULATOR_TAPES=/home/jylam/code/oric/emulators/oriculator-read-only/tapes
 
 all:
@@ -22,7 +21,6 @@ all:
 	$(ASM) -bt 0x500 go.asm  -o 2048.bin
 tap:
 	$(OSDK)/osdk/main/header/header -a1 2048.bin test.tap 0x500
-	cp test.tap $(EUPHORIC_TAPES)
 	cp test.tap $(ORICULATOR_TAPES)
 clean:
 	rm -f 2048.asm 2048_preproc.c 2048_preproc 2048.preproc  2048.temp_asm 2048.bin 2048_m.asm 1.asm go.asm
