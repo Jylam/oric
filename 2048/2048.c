@@ -106,11 +106,17 @@ void add_random_piece(void) {
     // Chose a random free tile
     id = rand()%count;
 
-    // Put 2 in selected tile
+    // Fill selected tile
+    count = 0;
     for(i=0; i<4*4; i++) {
-        if(i==id) {
-            board[i] = 1;
+        if(board[i] == 0) {
+            if(count == id) {
+                board[i] = 1;
+                return;
+            }
+            count++;
         }
+        count++;
     }
 }
 #if 0
