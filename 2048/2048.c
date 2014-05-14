@@ -2,10 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {1, 1, 0, 2,
+unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
-                            0, 0, 0, 0};
+                            1, 1, 0, 2};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
@@ -119,32 +119,6 @@ void add_random_piece(void) {
         count++;
     }
 }
-#if 0
-int move_right(void) {
-    int x, y;
-    int got_move = 0;
-
-    for(y=0; y<4; y++) {
-
-        for(x=0; x<4; x++) {
-            if(board[x+(y*4)]==0) {
-                int x2;
-                for(x2=x-1; x2>=0; x2--) {
-                    if(board[x2+(y*4)]!=0) got_move = 1;
-                    board[(x2+1)+(y*4)] = board[x2+(y*4)];
-                    board[x2+((y)*4)] = 0;
-                }
-            }
-            else if(board[(x+1)+(y*4)]==board[x+((y)*4)]) {
-                if(board[x+(y*4)]!=0) got_move = 1;
-                board[(x+1)+(y*4)]++;
-                board[x+((y)*4)]=0;
-            }
-        }
-    }
-    return got_move;
-}
-#else
 
 int find_next(unsigned char *b, int x, int stop) {
     int t = 0;
@@ -165,33 +139,37 @@ int find_next(unsigned char *b, int x, int stop) {
     return x;
 }
 
-int move_left(void) {
-    int x, y, t = 0;
+int move_line_left(unsigned char *b) {
+    int x, t = 0;
     int got_move = 0;
     int stop = 0;
     int success = 0;
-
-    for(y=0; y<4; y++) {
-
-        unsigned char *b = &board[y*4];
-        for(x=0; x<4; x++) {
-            // Found non-zero tile, find the next one
-            if(b[x]!=0) {
-                t = find_next(b, x, stop);
-                if (t!=x) {
-                    if (b[t]!=0) {
-                        stop = t+1;
-                    }
-                    b[t]++;
-                    b[x]=0;
-                    success = 1;
+    for(x=0; x<4; x++) {
+        if(b[x]!=0) {
+            t = find_next(b, x, stop);
+            if (t!=x) {
+                if (b[t]!=0) {
+                    stop = t+1;
                 }
+                b[t]++;
+                b[x]=0;
+                success = 1;
             }
         }
     }
     return success;
 }
-#endif
+
+int move_left(void) {
+    int y;
+    int success = 0;
+
+    for(y=0; y<4; y++) {
+        unsigned char *b = &board[y*4];
+        success |= move_line_left(b);
+    }
+    return success;
+}
 
 void rotateBoardCCW(void) {
     char temp[4*4];
@@ -228,7 +206,6 @@ void game(void) {
             rotateBoardCCW();
             got_move = move_left();
             rotateBoardCCW();
-            if(got_move) add_random_piece();
             break;
         case 11:  /* Up */
             rotateBoardCCW();
@@ -236,7 +213,6 @@ void game(void) {
             rotateBoardCCW();
             rotateBoardCCW();
             rotateBoardCCW();
-            if(got_move) add_random_piece();
             break;
         case  9:  /* Right */
             rotateBoardCCW();
@@ -244,13 +220,13 @@ void game(void) {
             got_move = move_left();
             rotateBoardCCW();
             rotateBoardCCW();
-            if(got_move) add_random_piece();
             break;
         case  8:  /* Left */
             got_move = move_left();
-            if(got_move) add_random_piece();
             break;
     }
+
+    //if(got_move) add_random_piece();
     if(lost) {
         while(1) {
             printf("LOST\n");
