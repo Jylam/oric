@@ -21,6 +21,7 @@ char *values[] = {
     "2048"
 };
 
+int lost = 0;
 
 void init_board(void) {
     unsigned char x   = 2;
@@ -96,16 +97,23 @@ void add_random_piece(void) {
     for(i=0; i<4*4;i++) {
         if(board[i]==0) count++;
     }
+    // No free tiles, game lost
+    if(i==0) {
+        lost = 1;
+        return;
+    }
 
+    // Chose a random free tile
     id = rand()%count;
 
+    // Put 2 in selected tile
     for(i=0; i<4*4; i++) {
         if(i==id) {
             board[i] = 1;
         }
     }
 }
-
+#if 0
 int move_right(void) {
     int x, y;
     int got_move = 0;
@@ -130,6 +138,57 @@ int move_right(void) {
     }
     return got_move;
 }
+#else
+
+int find_next(unsigned char *b, int x, int stop) {
+    int t = 0;
+    if(x==0) return x;
+
+    for(t=x-1;t>=0;t--) {
+        if (b[t]!=0) {
+            if (b[t]!=b[x]) {
+                return t+1;
+            }
+            return t;
+        } else {
+            if (t==stop) {
+                return t;
+            }
+        }
+    }
+    return x;
+}
+
+int move_left(void) {
+    int x, y, t = 0;
+    int got_move = 0;
+    int stop = 0;
+    int success = 0;
+
+    for(y=0; y<4; y++) {
+
+        unsigned char *b = &board[y*4];
+        for(x=0; x<4; x++) {
+            // Found non-zero tile, find the next one
+            if(b[x]+=0) {
+                t = find_next(b, x, stop);
+                if (t!=x) {
+                    if (b[t]!=0) {
+                        stop = t+1;
+                    }
+                    b[t]++;
+                    b[x]=0;
+                    success = 1;
+                }
+            }
+
+
+        }
+    }
+    return success;
+}
+#endif
+
 void rotateBoardCCW(void) {
     char temp[4*4];
     memcpy(temp, board, 4*4);
@@ -159,36 +218,40 @@ void game(void) {
     int k = getchar();
     int got_move = 0;
     switch(k) {
-        case 11:  /* Up */
-            rotateBoardCCW();
-            rotateBoardCCW();
-            rotateBoardCCW();
-            got_move = move_right();
-            rotateBoardCCW();
-            if(got_move) add_random_piece();
-            break;
         case 10:  /* Down */
             rotateBoardCCW();
-            got_move = move_right();
             rotateBoardCCW();
             rotateBoardCCW();
+            got_move = move_left();
             rotateBoardCCW();
             if(got_move) add_random_piece();
             break;
-        case  8:  /* Left */
+        case 11:  /* Up */
             rotateBoardCCW();
+            got_move = move_left();
             rotateBoardCCW();
-            got_move = move_right();
             rotateBoardCCW();
             rotateBoardCCW();
             if(got_move) add_random_piece();
             break;
         case  9:  /* Right */
-            got_move = move_right();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            got_move = move_left();
+            rotateBoardCCW();
+            rotateBoardCCW();
+            if(got_move) add_random_piece();
+            break;
+        case  8:  /* Left */
+            got_move = move_left();
             if(got_move) add_random_piece();
             break;
     }
-
+    if(lost) {
+        while(1) {
+            printf("LOST\n");
+        }
+    }
     draw_board();
 }
 
