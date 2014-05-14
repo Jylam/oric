@@ -176,7 +176,7 @@ int move_left(void) {
         unsigned char *b = &board[y*4];
         for(x=0; x<4; x++) {
             // Found non-zero tile, find the next one
-            if(b[x]+=0) {
+            if(b[x]!=0) {
                 t = find_next(b, x, stop);
                 if (t!=x) {
                     if (b[t]!=0) {
@@ -187,8 +187,6 @@ int move_left(void) {
                     success = 1;
                 }
             }
-
-
         }
     }
     return success;
