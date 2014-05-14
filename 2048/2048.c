@@ -1,5 +1,6 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <sys/graphics.h>
+#include <lib.h>
 
 char *screen = (char*)0xbb80;
 unsigned char board[4*4] = {0, 2, 2, 1,
@@ -240,8 +241,8 @@ void game(void) {
 
 int main(int argc, char *argv[]) {
     int x, y;
+    setflags(getflags()&~CURSOR);
     clear_screen();
-
     curmov(0, 0, MODE_NONE);
     draw_grid();
     draw_board();
