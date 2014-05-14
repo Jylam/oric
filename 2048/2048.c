@@ -3,23 +3,23 @@
 #include <lib.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {0, 2, 2, 1,
+unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
-                            0, 0, 0, 0,
-                            0, 0, 0, 0};
+                            0, 0, 0, 1,
+                            0, 0, 1, 0};
 char *values[] = {
-    "    ", /* 0 */
-    "2   ",
-    "4   ",
-    "8   ",
-    "16  ",
-    "32  ",
-    "64  ",
-    "128 ",
-    "256 ",
-    "512 ",
-    "1024",
-    "2048"
+    "    ", // 0
+    "2   ", // 1
+    "4   ", // 2
+    "8   ", // 3
+    "16  ", // 4
+    "32  ", // 5
+    "64  ", // 6
+    "128 ", // 7
+    "256 ", // 8
+    "512 ", // 9
+    "1024", // 10
+    "2048"  // 11
 };
 
 int lost = 0;
@@ -97,8 +97,9 @@ void add_random_piece(void) {
     for(i=0; i<4*4;i++) {
         if(board[i]==0) count++;
     }
+
     // No free tiles, game lost
-    if(i==0) {
+    if(count==0) {
         lost = 1;
         return;
     }
@@ -241,7 +242,7 @@ void game(void) {
 
 int main(int argc, char *argv[]) {
     int x, y;
-    setflags(getflags()&~CURSOR);
+    setflags(getflags()&~(CURSOR|SCREEN));
     clear_screen();
     curmov(0, 0, MODE_NONE);
     draw_grid();
