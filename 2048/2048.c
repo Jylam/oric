@@ -2,7 +2,7 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {3, 0, 0, 3,
+unsigned char board[4*4] = {0, 2, 2, 1,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0};
@@ -70,9 +70,8 @@ void draw_grid(void) {
             screen[x+y*40] = '-';
         }
     }
-
-
 }
+
 void draw_board(void) {
     int x = 0;
     int y = 0;
@@ -116,7 +115,6 @@ void add_random_piece(void) {
             }
             count++;
         }
-        count++;
     }
 }
 
@@ -151,7 +149,12 @@ int move_line_left(unsigned char *b) {
                 if (b[t]!=0) {
                     stop = t+1;
                 }
-                b[t]++;
+
+                if(b[t]==b[x]) {
+                    b[t]=b[x]+1;
+                } else {
+                    b[t]=b[x];
+                }
                 b[x]=0;
                 success = 1;
             }
@@ -166,7 +169,7 @@ int move_left(void) {
 
     for(y=0; y<4; y++) {
         unsigned char *b = &board[y*4];
-        success |= move_line_left(b);
+        success += move_line_left(b);
     }
     return success;
 }
@@ -226,7 +229,7 @@ void game(void) {
             break;
     }
 
-    //if(got_move) add_random_piece();
+    if(got_move) add_random_piece();
     if(lost) {
         while(1) {
             printf("LOST\n");
