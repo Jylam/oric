@@ -2,10 +2,10 @@
 #include <sys/graphics.h>
 
 char *screen = (char*)0xbb80;
-unsigned char board[4*4] = {0, 0, 0, 0,
+unsigned char board[4*4] = {3, 0, 0, 3,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
-                            1, 1, 0, 2};
+                            0, 0, 0, 0};
 char *values[] = {
     "    ", /* 0 */
     "2   ",
