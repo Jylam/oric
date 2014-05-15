@@ -2,7 +2,11 @@
 #include <sys/graphics.h>
 #include <lib.h>
 
+#ifdef HIRES
+char *screen = (char*)0xa000;
+#else
 char *screen = (char*)0xbb80;
+#endif
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 1,
@@ -33,7 +37,7 @@ void init_board(void) {
     board[x+(y*4)] = 1;
     board[x2+(y2*4)] = 1;
 }
-
+#ifndef HIRES
 void draw_entry(char x, char y, char value) {
     int i = 0;
     int offset = ((x*10)+2)+((y*7)+2)*40;
@@ -72,7 +76,8 @@ void draw_grid(void) {
         }
     }
 }
-
+#else
+#endif
 void draw_board(void) {
     int x = 0;
     int y = 0;
@@ -84,7 +89,11 @@ void draw_board(void) {
 }
 
 void clear_screen(void) {
+#ifndef HIRES
     memset(screen, ' ', 40*28);
+#else
+
+#endif
 }
 
 
@@ -244,6 +253,9 @@ int main(int argc, char *argv[]) {
     int x, y;
     setflags(getflags()&~(CURSOR|SCREEN));
     clear_screen();
+#ifdef HIRES
+    hires();
+#endif
     curmov(0, 0, MODE_NONE);
     draw_grid();
     draw_board();
