@@ -1,6 +1,7 @@
 //#include <stdio.h>
 #include <sys/graphics.h>
 #include <lib.h>
+#define HIRES
 
 #ifdef HIRES
 char *screen = (char*)0xa000;
@@ -54,29 +55,78 @@ void draw_entry(char x, char y, char value) {
 void draw_grid(void) {
     int x = 0;
     int y = 0;
-
-    for(x=0; x<40; x++) {
-        screen[x+y*40] = '-';
+    int oy = 0;
+    for(x=0; x<40; x++) {  // Up
+        screen[x] = '-';
     }
 
-    y = 40;
+    y = 40*40;
     for(x=0; x<40; x++) {
-        screen[x+y*40] = '-';
+        screen[x+y] = '-'; // Down
     }
+
 
     for(x = 0; x < 40; x+=10) {
+        oy = 0;
         for(y=0; y<40; y++) {
-            screen[x+y*40] = '|';
+            screen[x+oy] = '|';
+            oy+=40;
         }
     }
 
+    oy=0;
     for(y = 0; y < 29; y+=7) {
         for(x=0; x<40; x++) {
-            screen[x+y*40] = '-';
+            screen[x+oy] = '-';
         }
+        oy+=280; // 40*7
     }
+
 }
 #else
+void draw_entry(char x, char y, char value) {
+    int i = 0;
+    int offset = ((x*10)+2)+((y*7)+2)*40;
+    char *str = values[value];
+
+    for(i = 0; i < 4; i++) {
+        screen[offset+i] = ' ';
+    }
+    for(i = 0; i < 4; i++) {
+        screen[offset+i] = str[i];
+    }
+}
+
+void draw_grid(void) {
+    int x = 0;
+    int y = 0;
+    int oy = 0;
+    for(x=0; x<40; x++) {  // Up
+        screen[x] = A_BGWHITE;
+    }
+    y = 40*199;
+    for(x=y; x<y+40; x++) {
+        screen[x] = A_BGWHITE; // Down
+    }
+
+    for(x = 2; x < 40; x+=10) {
+        oy = 0;
+        for(y=0; y<200; y++) {
+            screen[x+oy] = 'J';
+            oy+=40;
+        }
+    }
+#if 0
+
+    oy=0;
+    for(y = 0; y < 29; y+=7) {
+        for(x=0; x<40; x++) {
+            screen[x+oy] = '-';
+        }
+        oy+=280; // 40*7
+    }
+#endif
+}
 #endif
 void draw_board(void) {
     int x = 0;
@@ -251,12 +301,12 @@ void game(void) {
 
 int main(int argc, char *argv[]) {
     int x, y;
-    setflags(getflags()&~(CURSOR|SCREEN));
     clear_screen();
 #ifdef HIRES
     hires();
 #endif
     curmov(0, 0, MODE_NONE);
+    setflags(getflags()&~(CURSOR|SCREEN));
     draw_grid();
     draw_board();
 
