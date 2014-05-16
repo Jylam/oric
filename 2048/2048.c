@@ -86,14 +86,14 @@ void draw_grid(void) {
 #else
 void draw_entry(char x, char y, char value) {
     int i = 0;
-    int offset = ((x*10)+2)+((y*50)+2)*40;
+    int offset = ((x*9)+5)+((y*50)+25)*40;
     char *str = values[value];
 
     for(i = 0; i < 4; i++) {
-        screen[offset+i] = 0xff;
+        screen[offset+i] = 0x60;
     }
     for(i = 0; i < 4; i++) {
-        screen[offset+i] = str[i];
+//        screen[offset+i] = str[i];
     }
 }
 
