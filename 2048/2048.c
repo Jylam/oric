@@ -86,11 +86,11 @@ void draw_grid(void) {
 #else
 void draw_entry(char x, char y, char value) {
     int i = 0;
-    int offset = ((x*10)+2)+((y*7)+2)*40;
+    int offset = ((x*10)+2)+((y*50)+2)*40;
     char *str = values[value];
 
     for(i = 0; i < 4; i++) {
-        screen[offset+i] = ' ';
+        screen[offset+i] = 0xff;
     }
     for(i = 0; i < 4; i++) {
         screen[offset+i] = str[i];
@@ -101,31 +101,26 @@ void draw_grid(void) {
     int x = 0;
     int y = 0;
     int oy = 0;
-    for(x=0; x<40; x++) {  // Up
-        screen[x] = A_BGWHITE;
-    }
-    y = 40*199;
-    for(x=y; x<y+40; x++) {
-        screen[x] = A_BGWHITE; // Down
-    }
 
-    for(x = 2; x < 40; x+=10) {
+
+    for(x = 2; x < 40; x+=9) {
         oy = 0;
         for(y=0; y<200; y++) {
-            screen[x+oy] = 'J';
+            screen[x+y*40] = 0x60;
             oy+=40;
         }
     }
-#if 0
 
     oy=0;
-    for(y = 0; y < 29; y+=7) {
-        for(x=0; x<40; x++) {
-            screen[x+oy] = '-';
+    for(y = 0; y < 200; y+=50) {
+        for(x=2; x<38; x++) {
+            screen[x+y*40] = 0x7f;
         }
-        oy+=280; // 40*7
+//        oy+=; // 40*7
     }
-#endif
+    for(x=2; x<38; x++) {
+        screen[x+199*40] = 0x7f;
+    }
 }
 #endif
 void draw_board(void) {
