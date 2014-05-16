@@ -84,16 +84,21 @@ void draw_grid(void) {
 
 }
 #else
+#define XOFFSET 2
+
+char c2048[] = {0b100001};
+
 void draw_entry(char x, char y, char value) {
     int i = 0;
-    int offset = ((x*9)+5)+((y*50)+25)*40;
+    int ty = 0, oy = 0;
+    int offset = ((x*9)+XOFFSET)+((y*50)+15)*40;
     char *str = values[value];
 
-    for(i = 0; i < 4; i++) {
-        screen[offset+i] = 0x60;
-    }
-    for(i = 0; i < 4; i++) {
-//        screen[offset+i] = str[i];
+    for(ty=0;ty<22; ty++) {
+        for(i = 2; i < 7; i++) {
+            screen[offset+oy+i] = 0b00111111;
+        }
+        oy+=40;
     }
 }
 
@@ -297,6 +302,7 @@ void game(void) {
 int main(int argc, char *argv[]) {
     int x, y;
     clear_screen();
+
 #ifdef HIRES
     hires();
 #endif
