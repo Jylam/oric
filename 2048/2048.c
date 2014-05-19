@@ -105,10 +105,10 @@ void draw_entry(char x, char y, char value) {
     char *str = values[value];
 
     int ex = 0;
-
-    for(ty=0;ty<22; ty++) {
+    unsigned char v = 0;
+    for(ty=0;ty<9; ty++) {
         for(i = 2; i < 7; i++) {
-            screen[offset+oy+i] = c2048[ex];
+            screen[offset+oy+i] = ~c2048[ex];
             ex++;
         }
         oy+=40;
@@ -134,7 +134,7 @@ void draw_grid(void) {
         for(x=2; x<38; x++) {
             screen[x+y*40] = 0x7f;
         }
-//        oy+=; // 40*7
+
     }
     for(x=2; x<38; x++) {
         screen[x+199*40] = 0x7f;
