@@ -1,18 +1,14 @@
 //#include <stdio.h>
+#define NULL ((void*)0)
 #include <sys/graphics.h>
 #include <lib.h>
 #include "font.h"
-#define HIRES
 
-#ifdef HIRES
 char *screen = (char*)0xa000;
-#else
-char *screen = (char*)0xbb80;
-#endif
 unsigned char board[4*4] = {1, 0, 0, 0,
                             1, 0, 0, 0,
                             1, 0, 0, 0,
-                            1, 1, 1, 1};
+                            11, 1, 1, 1};
 char *values[] = {
     "    ", // 0
     "2   ", // 1
@@ -39,55 +35,24 @@ void init_board(void) {
     board[x+(y*4)] = 1;
     board[x2+(y2*4)] = 1;
 }
-#ifndef HIRES
-void draw_entry(char x, char y, char value) {
-    int i = 0;
-    int offset = ((x*10)+2)+((y*7)+2)*40;
-    char *str = values[value];
-
-    for(i = 0; i < 4; i++) {
-        screen[offset+i] = ' ';
-    }
-    for(i = 0; i < 4; i++) {
-        screen[offset+i] = str[i];
-    }
-}
-
-void draw_grid(void) {
-    int x = 0;
-    int y = 0;
-    int oy = 0;
-    for(x=0; x<40; x++) {  // Up
-        screen[x] = '-';
-    }
-
-    y = 40*40;
-    for(x=0; x<40; x++) {
-        screen[x+y] = '-'; // Down
-    }
-
-
-    for(x = 0; x < 40; x+=10) {
-        oy = 0;
-        for(y=0; y<40; y++) {
-            screen[x+oy] = '|';
-            oy+=40;
-        }
-    }
-
-    oy=0;
-    for(y = 0; y < 29; y+=7) {
-        for(x=0; x<40; x++) {
-            screen[x+oy] = '-';
-        }
-        oy+=280; // 40*7
-    }
-
-}
-#else
-
 void draw_color(char x, char y, char value) {
 
+}
+
+void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
+    unsigned int offset;
+    unsigned int i = 0;
+    unsigned int ty = 0;
+
+    unsigned char offset_x;
+
+    offset_x = 1;
+    offset = ((x)+offset_x)+((y))*40;
+    for(ty=0;ty<9; ty++) {
+//        screen[offset+2] = 0b00000111;
+//        screen[offset] = 0b00000001;
+        offset+=40;
+    }
 }
 
 void draw_entry(unsigned char x, unsigned char y, char value) {
@@ -97,34 +62,42 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
 
     unsigned int ex = 2;
     unsigned char w, h, offset_x;
-    unsigned char *sprite;
+    unsigned char *sprite = NULL;
+    unsigned char color;
 
-//    draw_color(x, y, value);
     switch(value) {
-        case 0:
-            return;
         case 1:
             sprite = c2;
+            color  = A_FWWHITE;
             break;
         case 2:
             sprite = c4;
+            color  = A_FWWHITE;
             break;
         case 3:
             sprite = c8;
+            color  = A_FWWHITE;
             break;
         case 9:
             sprite = c512;
+            color  = A_FWWHITE;
             break;
         case 10:
             sprite = c1024;
+            color  = A_FWWHITE;
             break;
         case 11:
             sprite = c2048;
+            color  = A_FWWHITE;
             break;
         default:
-            return;
+            sprite = NULL;
+            color = A_FWBLACK;
             break;
     }
+    set_entry_color(x, y, color);
+    if(sprite == NULL)
+        return;
 
     w        = sprite[0];
     h        = sprite[1];
@@ -146,30 +119,33 @@ void draw_grid(void) {
     int y = 0;
     int oy = 0;
 
+    for(y=0;y<200;y++) {
+        screen[y*40+1]   = 0x07; // Ink white
+        screen[(y*40)+2] = 0x17; // Paper Black
+    }
 
     for(x = 2; x < 40; x+=9) {
         oy = 0;
         for(y=0; y<200; y++) {
-            screen[x+y*40] = 0x60;
+            screen[x+y*40] = 0b01100000; // Vertical Lines
             oy+=40;
         }
     }
 
     oy=0;
-    for(y = 0; y < 200; y+=50) {
+    for(y = 0; y < 240; y+=50) {
         for(x=2; x<38; x++) {
-            screen[x+y*40] = 0x7f;
+           screen[x+y*40] = 0b01111111;  // Horizontal lines
         }
-
     }
     for(x=2; x<38; x++) {
-        screen[x+199*40] = 0x7f;
+           screen[x+199*40] = 0b01111111; // Bottom horizontal line
     }
 }
-#endif
 void draw_board(void) {
     unsigned int x = 0;
     unsigned int y = 0;
+
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
             draw_entry(x*9, (y*50)+20, board[x+y*4]);
@@ -178,11 +154,6 @@ void draw_board(void) {
 }
 
 void clear_screen(void) {
-#ifndef HIRES
-    memset(screen, ' ', 40*28);
-#else
-
-#endif
 }
 
 
@@ -342,9 +313,7 @@ int main(int argc, char *argv[]) {
     int x, y;
     clear_screen();
 
-#ifdef HIRES
     hires();
-#endif
     curmov(0, 0, MODE_NONE);
     setflags(getflags()&~(CURSOR|SCREEN));
     draw_grid();
