@@ -1,6 +1,7 @@
 //#include <stdio.h>
 #include <sys/graphics.h>
 #include <lib.h>
+#include "font.h"
 #define HIRES
 
 #ifdef HIRES
@@ -10,8 +11,8 @@ char *screen = (char*)0xbb80;
 #endif
 unsigned char board[4*4] = {1, 0, 0, 0,
                             1, 0, 0, 0,
-                            0, 0, 0, 1,
-                            0, 0, 1, 0};
+                            1, 0, 0, 0,
+                            1, 1, 1, 1};
 char *values[] = {
     "    ", // 0
     "2   ", // 1
@@ -84,66 +85,32 @@ void draw_grid(void) {
 
 }
 #else
-#define XOFFSET 2
 
-unsigned char c2048[] = {5, 9, 2, // Width, height, offset_x
-                         0b11100001, 0b11111000, 0b11011111, 0b11100111, 0b11100001,
-                         0b11011100, 0b11111011, 0b11011111, 0b11100111, 0b11001100,
-                         0b11111110, 0b11110111, 0b11101111, 0b11010111, 0b11011110,
-                         0b11111110, 0b11110111, 0b11101110, 0b11110111, 0b11001100,
-                         0b11111101, 0b11110111, 0b11101110, 0b11110111, 0b11100001,
-                         0b11111011, 0b11110111, 0b11101101, 0b11110111, 0b11001100,
-                         0b11110111, 0b11110111, 0b11101100, 0b11000011, 0b11011110,
-                         0b11101111, 0b11111011, 0b11011111, 0b11110111, 0b11001100,
-                         0b11000000, 0b11111000, 0b11011111, 0b11110111, 0b11100001
+void draw_color(char x, char y, char value) {
 
-};
+}
 
-unsigned char c1024[] = {5, 9, 2,
-                         0b11000111, 0b11111000, 0b11011110, 0b11000111, 0b11111001,
-                         0b11110111, 0b11111011, 0b11011101, 0b11110011, 0b11111001,
-                         0b11110111, 0b11110111, 0b11101111, 0b11111011, 0b11110101,
-                         0b11110111, 0b11110111, 0b11101111, 0b11111011, 0b11101101,
-                         0b11110111, 0b11110111, 0b11101111, 0b11110111, 0b11101101,
-                         0b11110111, 0b11110111, 0b11101111, 0b11101111, 0b11011101,
-                         0b11110111, 0b11110111, 0b11101111, 0b11011111, 0b11000000,
-                         0b11110111, 0b11111011, 0b11011110, 0b11111111, 0b11111101,
-                         0b11000001, 0b11111000, 0b11011100, 0b11000011, 0b11111101
+void draw_entry(unsigned char x, unsigned char y, char value) {
+    unsigned int offset;
+    unsigned int i = 0;
+    unsigned int ty = 0, oy = 0;
 
-};
-
-unsigned char c512[] = {
-                        0b11,
-};
-
-unsigned char c2[] = {1, 9, 4,
-                         0b11100001,
-                         0b11011100,
-                         0b11111110,
-                         0b11111110,
-                         0b11111101,
-                         0b11111011,
-                         0b11110111,
-                         0b11101111,
-                         0b11000000,
-
-};
-void draw_entry(char x, char y, char value) {
-    int offset;
-    int i = 0;
-    int ty = 0, oy = 0;
-    char *str = values[value];
-
-    int ex = 2;
-    unsigned char v = 0;
+    unsigned int ex = 2;
     unsigned char w, h, offset_x;
     unsigned char *sprite;
 
+//    draw_color(x, y, value);
     switch(value) {
         case 0:
             return;
         case 1:
             sprite = c2;
+            break;
+        case 2:
+            sprite = c4;
+            break;
+        case 3:
+            sprite = c8;
             break;
         case 9:
             sprite = c512;
@@ -155,14 +122,14 @@ void draw_entry(char x, char y, char value) {
             sprite = c2048;
             break;
         default:
-            sprite = c2048;
+            return;
             break;
     }
 
     w        = sprite[0];
     h        = sprite[1];
     offset_x = sprite[2];
-    offset = ((x*9)+offset_x)+((y*50)+20)*40;
+    offset = ((x)+offset_x)+((y))*40;
     oy = offset;
     ex = 3;        // Skip WxH from sprite map
     for(ty=0;ty<h; ty++) {
@@ -201,11 +168,11 @@ void draw_grid(void) {
 }
 #endif
 void draw_board(void) {
-    int x = 0;
-    int y = 0;
+    unsigned int x = 0;
+    unsigned int y = 0;
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
-            draw_entry(x, y, board[x+y*4]);
+            draw_entry(x*9, (y*50)+20, board[x+y*4]);
         }
     }
 }
