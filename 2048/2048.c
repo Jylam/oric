@@ -111,6 +111,10 @@ unsigned char c1024[] = {
 
 };
 
+unsigned char c512[] = {
+
+}
+
 void draw_entry(char x, char y, char value) {
     int i = 0;
     int ty = 0, oy = 0;
