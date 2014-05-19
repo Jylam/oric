@@ -8,8 +8,8 @@ char *screen = (char*)0xa000;
 #else
 char *screen = (char*)0xbb80;
 #endif
-unsigned char board[4*4] = {0, 0, 0, 0,
-                            0, 0, 0, 0,
+unsigned char board[4*4] = {1, 0, 0, 0,
+                            1, 0, 0, 0,
                             0, 0, 0, 1,
                             0, 0, 1, 0};
 char *values[] = {
@@ -86,7 +86,8 @@ void draw_grid(void) {
 #else
 #define XOFFSET 2
 
-unsigned char c2048[] = {0b11100001, 0b11111000, 0b11011111, 0b11100111, 0b11100001,
+unsigned char c2048[] = {5, 9, 2, // Width, height, offset_x
+                         0b11100001, 0b11111000, 0b11011111, 0b11100111, 0b11100001,
                          0b11011100, 0b11111011, 0b11011111, 0b11100111, 0b11001100,
                          0b11111110, 0b11110111, 0b11101111, 0b11010111, 0b11011110,
                          0b11111110, 0b11110111, 0b11101110, 0b11110111, 0b11001100,
@@ -98,7 +99,7 @@ unsigned char c2048[] = {0b11100001, 0b11111000, 0b11011111, 0b11100111, 0b11100
 
 };
 
-unsigned char c1024[] = {
+unsigned char c1024[] = {5, 9, 2,
                          0b11000111, 0b11111000, 0b11011110, 0b11000111, 0b11111001,
                          0b11110111, 0b11111011, 0b11011101, 0b11110011, 0b11111001,
                          0b11110111, 0b11110111, 0b11101111, 0b11111011, 0b11110101,
@@ -112,20 +113,61 @@ unsigned char c1024[] = {
 };
 
 unsigned char c512[] = {
+                        0b11,
+};
 
-}
+unsigned char c2[] = {1, 9, 4,
+                         0b11100001,
+                         0b11011100,
+                         0b11111110,
+                         0b11111110,
+                         0b11111101,
+                         0b11111011,
+                         0b11110111,
+                         0b11101111,
+                         0b11000000,
 
+};
 void draw_entry(char x, char y, char value) {
+    int offset;
     int i = 0;
     int ty = 0, oy = 0;
-    int offset = ((x*9)+XOFFSET)+((y*50)+15)*40;
     char *str = values[value];
 
-    int ex = 0;
+    int ex = 2;
     unsigned char v = 0;
-    for(ty=0;ty<9; ty++) {
-        for(i = 2; i < 7; i++) {
-            screen[offset+oy+i] = c1024[ex];
+    unsigned char w, h, offset_x;
+    unsigned char *sprite;
+
+    switch(value) {
+        case 0:
+            return;
+        case 1:
+            sprite = c2;
+            break;
+        case 9:
+            sprite = c512;
+            break;
+        case 10:
+            sprite = c1024;
+            break;
+        case 11:
+            sprite = c2048;
+            break;
+        default:
+            sprite = c2048;
+            break;
+    }
+
+    w        = sprite[0];
+    h        = sprite[1];
+    offset_x = sprite[2];
+    offset = ((x*9)+offset_x)+((y*50)+20)*40;
+    oy = offset;
+    ex = 3;        // Skip WxH from sprite map
+    for(ty=0;ty<h; ty++) {
+        for(i = 2; i < w+2; i++) {   // Skip 2 bytes of attributes at the start of the ULA line
+            screen[oy+i] = sprite[ex];
             ex++;
         }
         oy+=40;
@@ -164,7 +206,6 @@ void draw_board(void) {
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
             draw_entry(x, y, board[x+y*4]);
-            return;
         }
     }
 }
