@@ -326,9 +326,7 @@ void game(void) {
 
     if(got_move) add_random_piece();
     if(lost) {
-        while(1) {
-            printf("LOST\n");
-        }
+        init_board();
     }
     draw_board();
 }
