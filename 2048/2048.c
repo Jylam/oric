@@ -7,8 +7,8 @@
 char *screen = (char*)0xa000;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
-                            0, 0, 0, 1,
-                            0, 0, 1, 0};
+                            0, 0, 0, 0,
+                            0, 0, 0, 0};
 char *values[] = {
     "    ", // 0
     "2   ", // 1
@@ -32,8 +32,8 @@ void init_board(void) {
     unsigned char x2  = 3;
     unsigned char y2  = 2;
 
-    //board[x+(y*4)] = 1;
-    //board[x2+(y2*4)] = 1;
+    add_random_piece();
+    add_random_piece();
 }
 
 void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
@@ -72,47 +72,47 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     switch(value) {
         case 1:
             sprite = c2;
-            color  = A_FWWHITE;
+            color  = A_FWRED;
             break;
         case 2:
             sprite = c4;
-            color  = A_FWWHITE;
+            color  = A_FWBLUE;
             break;
         case 3:
             sprite = c8;
-            color  = A_FWWHITE;
+            color  = A_FWGREEN;
             break;
         case 4:
             sprite = c16;
-            color  = A_FWWHITE;
+            color  = A_FWYELLOW;
             break;
         case 5:
             sprite = c32;
-            color  = A_FWWHITE;
+            color  = A_FWMAGENTA;
             break;
         case 6:
             sprite = c64;
-            color  = A_FWWHITE;
+            color  = A_FWCYAN;
             break;
         case 7:
             sprite = c128;
-            color  = A_FWWHITE;
+            color  = A_FWRED;
             break;
         case 8:
             sprite = c256;
-            color  = A_FWWHITE;
+            color  = A_FWBLUE;
             break;
         case 9:
             sprite = c512;
-            color  = A_FWWHITE;
+            color  = A_FWGREEN;
             break;
         case 10:
             sprite = c1024;
-            color  = A_FWWHITE;
+            color  = A_FWYELLOW;
             break;
         case 11:
             sprite = c2048;
-            color  = A_FWWHITE;
+            color  = A_FWMAGENTA;
             break;
         default:
             sprite = NULL;
@@ -336,10 +336,11 @@ void game(void) {
 int main(int argc, char *argv[]) {
     int x, y;
     clear_screen();
-
     hires();
     curmov(0, 0, MODE_NONE);
     setflags(getflags()&~(CURSOR|SCREEN));
+
+    init_board();
     draw_grid();
     draw_board();
 
