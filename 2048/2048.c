@@ -4,6 +4,7 @@
 #include <lib.h>
 #include "font.h"
 
+int lost = 0;
 char *screen = (char*)0xa000;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
@@ -40,28 +41,17 @@ unsigned char* tiles[] = {
 };
 
 
-int lost = 0;
 
 void init_board(void) {
-    unsigned char x   = 2;
-    unsigned char y   = 3;
-    unsigned char x2  = 3;
-    unsigned char y2  = 2;
-
     add_random_piece();
     add_random_piece();
 }
 
 void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     unsigned int offset;
-    unsigned int i = 0;
-    unsigned int ty = 0;
-    unsigned char tx = 0;
+    unsigned char ty = 0;
 
-    unsigned char offset_x;
-
-    offset_x = 1;
-    offset = ((x)+offset_x)+((y))*40;
+    offset = x+1+y*40;
     for(ty=0;ty<9; ty++) {
         screen[offset+2] = color;
         screen[offset+3] = 0b01000000;
@@ -145,10 +135,6 @@ void draw_board(void) {
         }
     }
 }
-
-void clear_screen(void) {
-}
-
 
 void add_random_piece(void) {
     unsigned int count = 0;
@@ -302,10 +288,9 @@ void game(void) {
 
 int main(int argc, char *argv[]) {
     int x, y;
-    clear_screen();
+
     hires();
-    curmov(0, 0, MODE_NONE);
-    setflags(getflags()&~(CURSOR|SCREEN));
+    setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
     init_board();
     draw_grid();
