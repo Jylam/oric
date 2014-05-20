@@ -26,18 +26,18 @@ char *values[] = {
 };
 
 unsigned char* tiles[] = {
-	NULL, (unsigned char*)A_FWBLACK,
-	c2,   (unsigned char*)A_FWRED,
-	c4,   (unsigned char*)A_FWGREEN,
-	c8,   (unsigned char*)A_FWYELLOW,
-	c16,  (unsigned char*)A_FWBLUE,
-	c32,  (unsigned char*)A_FWMAGENTA,
-	c64,  (unsigned char*)A_FWCYAN,
-	c128, (unsigned char*)A_FWWHITE,
-	c256, (unsigned char*)A_FWRED,
-	c512, (unsigned char*)A_FWGREEN,
-	c1024,(unsigned char*)A_FWYELLOW,
-	c2048,(unsigned char*)A_FWBLUE,
+	NULL, (unsigned char*)A_BGBLACK,
+	c2,   (unsigned char*)A_BGRED,
+	c4,   (unsigned char*)A_BGGREEN,
+	c8,   (unsigned char*)A_BGBLUE,
+	c16,  (unsigned char*)A_BGMAGENTA,
+	c32,  (unsigned char*)A_BGCYAN,
+	c64,  (unsigned char*)A_BGRED,
+	c128, (unsigned char*)A_BGGREEN,
+	c256, (unsigned char*)A_BGBLUE,
+	c512, (unsigned char*)A_BGMAGENTA,
+	c1024,(unsigned char*)A_BGCYAN,
+	c2048,(unsigned char*)A_BGRED,
 };
 
 
@@ -49,17 +49,18 @@ void init_board(void) {
 
 void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     unsigned int offset;
-    unsigned char ty = 0;
+    unsigned char ty;
 
-    offset = x+1+y*40;
-    for(ty=0;ty<9; ty++) {
+    offset = x+1+(y+1)*40;
+    for(ty=0;ty<40; ty++) {
         screen[offset+2] = color;
         screen[offset+3] = 0b01000000;
         screen[offset+4] = 0b01000000;
         screen[offset+5] = 0b01000000;
         screen[offset+6] = 0b01000000;
         screen[offset+7] = 0b01000000;
-        screen[offset+8] = 0b00000111; // Ink White
+        screen[offset+8] = 0b01000000;
+        screen[offset+9] = A_BGBLACK; // Ink White
 
         offset+=40;
     }
@@ -85,7 +86,7 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     w        = sprite[0];
     h        = sprite[1];
     offset_x = sprite[2];
-    offset = ((x)+offset_x)+((y))*40;
+    offset = ((x)+offset_x)+((y+20))*40;
     oy = offset;
     ex = 3;        // Skip WxH from sprite map
     for(ty=0;ty<h; ty++) {
@@ -131,7 +132,7 @@ void draw_board(void) {
 
     for(y = 0; y < 4; y++) {
         for(x = 0; x < 4; x++) {
-            draw_entry(x*9, (y*50)+20, board[x+y*4]);
+            draw_entry(x*9, (y*50), board[x+y*4]);
         }
     }
 }
