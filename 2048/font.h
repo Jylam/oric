@@ -28,7 +28,7 @@ unsigned char c512[] = {
                         0b01,
 };
 
-unsigned char c8[] = {0, 9, 4, // Width, height, offset_x
+unsigned char c8[] = {1, 9, 4, // Width, height, offset_x
                          0b01011110,
                          0b01110011,
                          0b01100001,
@@ -40,7 +40,7 @@ unsigned char c8[] = {0, 9, 4, // Width, height, offset_x
                          0b01011110
 
 };
-unsigned char c4[] = {0, 9, 4,
+unsigned char c4[] = {1, 9, 4,
                          0b01000110,
                          0b01000110,
                          0b01001010,
@@ -53,7 +53,7 @@ unsigned char c4[] = {0, 9, 4,
 
 };
 
-unsigned char c2[] = {0, 9, 4,
+unsigned char c2[] = {1, 9, 4,
                          0b01011110,
                          0b01100011,
                          0b01000001,

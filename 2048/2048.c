@@ -8,7 +8,7 @@ char *screen = (char*)0xa000;
 unsigned char board[4*4] = {1, 0, 0, 0,
                             1, 0, 0, 0,
                             1, 0, 0, 0,
-                            11, 1, 1, 1};
+                            11, 10, 3, 2};
 char *values[] = {
     "    ", // 0
     "2   ", // 1
@@ -32,25 +32,29 @@ void init_board(void) {
     unsigned char x2  = 3;
     unsigned char y2  = 2;
 
-    board[x+(y*4)] = 1;
-    board[x2+(y2*4)] = 1;
-}
-void draw_color(char x, char y, char value) {
-
+    //board[x+(y*4)] = 1;
+    //board[x2+(y2*4)] = 1;
 }
 
 void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     unsigned int offset;
     unsigned int i = 0;
     unsigned int ty = 0;
+    unsigned char tx = 0;
 
     unsigned char offset_x;
 
     offset_x = 1;
     offset = ((x)+offset_x)+((y))*40;
     for(ty=0;ty<9; ty++) {
-//        screen[offset+2] = 0b00000111;
-//        screen[offset] = 0b00000001;
+        screen[offset+2] = color;
+        screen[offset+3] = 0b01000000;
+        screen[offset+4] = 0b01000000;
+        screen[offset+5] = 0b01000000;
+        screen[offset+6] = 0b01000000;
+        screen[offset+7] = 0b01000000;
+        screen[offset+8] = 0b00000111; // Ink White
+
         offset+=40;
     }
 }
