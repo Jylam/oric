@@ -77,10 +77,9 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     value  = value<<1;                         // Interleaved with color
     sprite = tiles[value];                     // Get tile pointer
     color  = (unsigned char)tiles[(value)+1];  // Get color, 1 byte after tile pointer
-
     sprintf(&screen_text[3], "%x %x %x", x, y, color);
     set_entry_color(x, y, color);              // Clear tile and set color
-    sprintf(&screen_text[43], "%x %x %x", _x, _y, _color);
+    sprintf(&screen_text[43], "%x %x", _x, _y);
 
     if(sprite == NULL)                         // Empty tile
         return;

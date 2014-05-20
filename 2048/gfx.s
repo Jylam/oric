@@ -20,6 +20,10 @@ _set_entry_color
     sta __color
 
     ;offset = (y<<5) + (y<<3);
-
+    lda __y
+    asl
+    sta __y
+    ror
+    sta __y+1
 
     rts
