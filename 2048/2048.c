@@ -90,6 +90,14 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
             sprite = c32;
             color  = A_FWWHITE;
             break;
+        case 6:
+            sprite = c64;
+            color  = A_FWWHITE;
+            break;
+        case 7:
+            sprite = c128;
+            color  = A_FWWHITE;
+            break;
         case 9:
             sprite = c512;
             color  = A_FWWHITE;
