@@ -61,7 +61,7 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
 
     unsigned int ex;
     unsigned char w, h, offset_x, ty;
-    unsigned char *sprite = NULL;
+    unsigned char *sprite;
     unsigned char color;
 
     value  = value<<1;                         // Interleaved with color
@@ -73,17 +73,15 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     if(sprite == NULL)                         // Empty tile
 	    return;
 
-
-    w        = sprite[0]+2; // Width, Skip 2 bytes of attributes, see ox
-    h        = sprite[1];   // Height, always 9
-    offset_x = sprite[2];   // Offset of the sprite, to center the tile
+    w        = sprite[0]+2;  // Width, Skip 2 bytes of attributes, see ox
+    h        = sprite[1];    // Height, always 9
+    offset_x = sprite[2];    // Offset of the sprite, to center the tile
 
     ox       = 0;
     oy       = (x+offset_x); // Sprites are at Y=20, X=offset_x+x
     y       += 20;
-    oy      += (y*40);
-    ex = 3;                 // Skip WxH from sprite map
-
+    oy      += (y*40);       // FIXME multiplication
+    ex = 3;                  // Skip WxH from sprite map
 
     for(ty=0;ty<h; ty++) {
     	    ox=2;           // Skip 2 bytes of attributes at the start of the ULA line
