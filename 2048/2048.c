@@ -37,21 +37,24 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     unsigned int offset;
     unsigned char ty;
 
-    offset = x+1+(y+1)*40;
+    x++;
+    y++;
+    offset = (y<<5) + (y<<3);  // Y*40 = Y*32 + Y*8
+    offset += x;
     for(ty=0;ty<40; ty++) {
         screen[offset+2] = color;     // Set color
         screen[offset+9] = A_BGBLACK; // Reset to black for drawing the line
 
-	// Clear previous sprite  FIXME: don't do this if already cleared
-	if(ty>18 && ty<28) {
-		screen[offset+3] = 0b01000000;
-		screen[offset+4] = 0b01000000;
-		screen[offset+5] = 0b01000000;
-		screen[offset+6] = 0b01000000;
-		screen[offset+7] = 0b01000000;
-	}
+        // Clear previous sprite  FIXME: don't do this if already cleared
+        if(ty>18 && ty<28) {
+            screen[offset+3] = 0b01000000;
+            screen[offset+4] = 0b01000000;
+            screen[offset+5] = 0b01000000;
+            screen[offset+6] = 0b01000000;
+            screen[offset+7] = 0b01000000;
+        }
 
-	offset+=40;
+        offset+=40;
     }
 }
 
@@ -71,26 +74,26 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     set_entry_color(x, y, color);              // Clear tile and set color
 
     if(sprite == NULL)                         // Empty tile
-	    return;
+        return;
 
     w        = sprite[0]+2;  // Width, Skip 2 bytes of attributes, see ox
     h        = sprite[1];    // Height, always 9
     offset_x = sprite[2];    // Offset of the sprite, to center the tile
 
     ox       = 0;
-    oy       = (x+offset_x); // Sprites are at Y=20, X=offset_x+x
     y       += 20;
-    oy      += (y*40);       // FIXME multiplication
+    oy       = (y<<5) + (y<<3);  // Y*40 = Y*32 + Y*8
+    oy      += (x+offset_x); // Sprites are at Y=y+20, X=x+offset_x
     ex = 3;                  // Skip WxH from sprite map
 
     for(ty=0;ty<h; ty++) {
-    	    ox=2;           // Skip 2 bytes of attributes at the start of the ULA line
-	    while(ox < w) {
-		    screen[oy+ox] = sprite[ex];
-		    ex++;
-		    ox++;
-	    }
-	    oy+=40;
+        ox=2;           // Skip 2 bytes of attributes at the start of the ULA line
+        while(ox < w) {
+            screen[oy+ox] = sprite[ex];
+            ex++;
+            ox++;
+        }
+        oy+=40;
     }
 }
 
@@ -103,24 +106,24 @@ void draw_grid(void) {
     // Vertical lines
     x=2;
     while(x<40) {
-	    oy = 0;
-	    for(y=0; y<200; y++) {
-		    screen[x+y*40] = 0b01100000;
-		    oy+=40;
-	    }
+        oy = 0;
+        for(y=0; y<200; y++) {
+            screen[x+y*40] = 0b01100000;
+            oy+=40;
+        }
 
-	    x+=9;
+        x+=9;
     }
     // Horizontal lines
     oy=0;
     for(y = 0; y < 200; y+=50) {
         for(x=2; x<38; x++) {
-           screen[x+y*40] = 0b01111111;  // Horizontal lines
+            screen[x+y*40] = 0b01111111;  // Horizontal lines
         }
     }
     // Last line (?)
     for(x=2; x<38; x++) {
-           screen[x+199*40] = 0b01111111; // Bottom horizontal line
+        screen[x+199*40] = 0b01111111; // Bottom horizontal line
     }
 }
 
@@ -132,12 +135,12 @@ void draw_board(void) {
     unsigned char i  = 0;
 
     for(y = 0; y < 4; y++) {
-    	px = 0;
+        px = 0;
         for(x = 0; x < 4; x++) {
             draw_entry(px, py, board[i++]);
-	    px+=9;
+            px+=9;
         }
-	py+=50;
+        py+=50;
     }
 }
 

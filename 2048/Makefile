@@ -1,5 +1,5 @@
-#OSDK=/home/jylam/code/oric/public/pc/tools/
-OSDK=/home/jylam/perso/oric/osdk/public/pc/tools/
+OSDK=/home/jylam/code/oric/public/pc/tools/
+#OSDK=/home/jylam/perso/oric/osdk/public/pc/tools/
 
 
 CC=$(OSDK)/osdk/main/compiler/compiler
@@ -20,7 +20,7 @@ all:
 	cpp -traditional-cpp -include $(MACROS) 2048_preproc.c -o 2048.temp_asm
 	grep -v '^#' 2048.temp_asm > 2048_m.asm
 	$(OSDK)/osdk/main/macrosplitter/macrosplitter 2048_m.asm 2048.asm
-	cat keyboard.s >> 2048.asm
+	cat gfx.s >> 2048.asm
 	$(LINKER) -d $(LINKLIB) 2048.asm -o go.asm
 	$(ASM) -bt 0x500 go.asm  -o 2048.bin
 tap:
