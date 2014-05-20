@@ -9,7 +9,7 @@ unsigned char *screen = (unsigned char*)0xa000;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
-                            0, 0, 0, 0};
+                            10, 11, 0, 0};
 
 unsigned char* tiles[] = {
 	NULL, (unsigned char*)A_BGBLACK,
@@ -39,16 +39,16 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
 
     offset = x+1+(y+1)*40;
     for(ty=0;ty<40; ty++) {
-        screen[offset+2] = color;
-        screen[offset+9] = A_BGBLACK; // Ink White
+        screen[offset+2] = color;     // Set color
+        screen[offset+9] = A_BGBLACK; // Reset to black for drawing the line
 
+	// Clear previous sprite  FIXME: don't do this if already cleared
 	if(ty>18 && ty<28) {
 		screen[offset+3] = 0b01000000;
 		screen[offset+4] = 0b01000000;
 		screen[offset+5] = 0b01000000;
 		screen[offset+6] = 0b01000000;
 		screen[offset+7] = 0b01000000;
-		screen[offset+8] = 0b01000000;
 	}
 
 	offset+=40;
@@ -64,19 +64,27 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     unsigned char *sprite = NULL;
     unsigned char color;
 
-    sprite = tiles[value*2];
-    color  = (unsigned char)tiles[(value*2)+1];
+    value  = value<<1;                         // Interleaved with color
+    sprite = tiles[value];                     // Get tile pointer
+    color  = (unsigned char)tiles[(value)+1];  // Get color, 1 byte after tile pointer
 
-    set_entry_color(x, y, color);
-    if(sprite == NULL)
+    set_entry_color(x, y, color);              // Clear tile and set color
+
+    if(sprite == NULL)                         // Empty tile
 	    return;
 
-    w        = sprite[0]+2; // Skip 2 bytes of attributes, see ox
-    h        = sprite[1];
-    offset_x = sprite[2];
+
+    w        = sprite[0]+2; // Width, Skip 2 bytes of attributes, see ox
+    h        = sprite[1];   // Height, always 9
+    offset_x = sprite[2];   // Offset of the sprite, to center the tile
+
     ox       = 0;
-    oy       = (x+offset_x)+(y+20)*40;
+    oy       = (x+offset_x); // Sprites are at Y=20, X=offset_x+x
+    y       += 20;
+    oy      += (y*40);
     ex = 3;                 // Skip WxH from sprite map
+
+
     for(ty=0;ty<h; ty++) {
     	    ox=2;           // Skip 2 bytes of attributes at the start of the ULA line
 	    while(ox < w) {
