@@ -4,8 +4,10 @@
 #include <lib.h>
 #include "font.h"
 
-int lost = 0;
+int lost  = 0;
+int score = 0;
 unsigned char *screen = (unsigned char*)0xa000;
+unsigned char *screen_text = (unsigned char*)0xbf68;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
@@ -34,7 +36,7 @@ void init_board(void) {
 }
 
 void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
-    unsigned int offset;
+    unsigned int  offset;
     unsigned char ty;
 
     x++;
@@ -56,6 +58,7 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
 
         offset+=40;
     }
+    sprintf(&screen_text[2], "Score: %d", score);
 }
 
 void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
@@ -101,25 +104,26 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
 void draw_grid(void) {
     int x = 0;
     int y = 0;
-    int oy = 0;
+    unsigned int oy = 0;
 
     // Vertical lines
     x=2;
+    oy=0;
     while(x<40) {
         oy = 0;
         for(y=0; y<200; y++) {
-            screen[x+y*40] = 0b01100000;
+            screen[x+oy] = 0b01100000;
             oy+=40;
         }
-
         x+=9;
     }
     // Horizontal lines
     oy=0;
     for(y = 0; y < 200; y+=50) {
         for(x=2; x<38; x++) {
-            screen[x+y*40] = 0b01111111;  // Horizontal lines
+            screen[x+oy] = 0b01111111;  // Horizontal lines
         }
+        oy+=(40*50);
     }
     // Last line (?)
     for(x=2; x<38; x++) {
@@ -210,6 +214,7 @@ int move_line_left(unsigned char *b) {
 
                 if(b[t]==b[x]) {
                     b[t]=b[x]+1;
+                    score+=1<<b[t];
                 } else {
                     b[t]=b[x];
                 }
@@ -289,6 +294,7 @@ void game(void) {
 
     if(got_move) add_random_piece();
     if(lost) {
+        sprintf(&screen_text[2], "Score : %d     YOU LOST!", score);
         init_board();
     }
     draw_board();
