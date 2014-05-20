@@ -10,20 +10,6 @@ unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0};
-unsigned char *values[] = {
-    (unsigned char*)"    ", // 0
-    (unsigned char*)"2   ", // 1
-    (unsigned char*)"4   ", // 2
-    (unsigned char*)"8   ", // 3
-    (unsigned char*)"16  ", // 4
-    (unsigned char*)"32  ", // 5
-    (unsigned char*)"64  ", // 6
-    (unsigned char*)"128 ", // 7
-    (unsigned char*)"256 ", // 8
-    (unsigned char*)"512 ", // 9
-    (unsigned char*)"1024", // 10
-    (unsigned char*)"2048"  // 11
-};
 
 unsigned char* tiles[] = {
 	NULL, (unsigned char*)A_BGBLACK,
