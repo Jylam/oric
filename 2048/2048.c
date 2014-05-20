@@ -87,6 +87,7 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     }
 }
 
+// Called only one time
 void draw_grid(void) {
     int x = 0;
     int y = 0;
@@ -115,14 +116,21 @@ void draw_grid(void) {
            screen[x+199*40] = 0b01111111; // Bottom horizontal line
     }
 }
+
 void draw_board(void) {
-    unsigned int x = 0;
-    unsigned int y = 0;
+    unsigned int  x = 0;
+    unsigned int  y = 0;
+    unsigned int  px = 0;
+    unsigned int  py = 0;
+    unsigned char i  = 0;
 
     for(y = 0; y < 4; y++) {
+    	px = 0;
         for(x = 0; x < 4; x++) {
-            draw_entry(x*9, (y*50), board[x+y*4]);
+            draw_entry(px, py, board[i++]);
+	    px+=9;
         }
+	py+=50;
     }
 }
 
