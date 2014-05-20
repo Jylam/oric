@@ -60,7 +60,7 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     unsigned int i = 0;
     unsigned int ty = 0, oy = 0;
 
-    unsigned int ex = 2;
+    unsigned int ex;
     unsigned char w, h, offset_x;
     unsigned char *sprite = NULL;
     unsigned char color;
