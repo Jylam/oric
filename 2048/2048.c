@@ -11,7 +11,8 @@ unsigned char *screen_text = (unsigned char*)0xbf68;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
-                            10, 11, 0, 0};
+                            0, 0, 0, 0};
+extern void set_entry_color(unsigned char x, unsigned char y, unsigned char color);
 
 unsigned char* tiles[] = {
 	NULL, (unsigned char*)A_BGBLACK,
@@ -29,7 +30,6 @@ unsigned char* tiles[] = {
 };
 
 
-
 void init_board(void) {
     score = 0;
     lost  = 0;
@@ -38,7 +38,7 @@ void init_board(void) {
     add_random_piece();
 }
 
-void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
+void Cset_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     unsigned int  offset;
     unsigned char ty;
 
@@ -64,6 +64,7 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     sprintf(&screen_text[2], "Score: %d", score);
 }
 
+extern unsigned char _x, _y, _color;
 void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     unsigned int ox;
     unsigned int oy;
@@ -77,7 +78,9 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     sprite = tiles[value];                     // Get tile pointer
     color  = (unsigned char)tiles[(value)+1];  // Get color, 1 byte after tile pointer
 
+    sprintf(&screen_text[3], "%x %x %x", x, y, color);
     set_entry_color(x, y, color);              // Clear tile and set color
+    sprintf(&screen_text[43], "%x %x %x", _x, _y, _color);
 
     if(sprite == NULL)                         // Empty tile
         return;
