@@ -24,6 +24,22 @@ char *values[] = {
     "2048"  // 11
 };
 
+unsigned char* tiles[] = {
+	NULL, (unsigned char*)A_FWBLACK,
+	c2,   (unsigned char*)A_FWRED,
+	c4,   (unsigned char*)A_FWGREEN,
+	c8,   (unsigned char*)A_FWYELLOW,
+	c16,  (unsigned char*)A_FWBLUE,
+	c32,  (unsigned char*)A_FWMAGENTA,
+	c64,  (unsigned char*)A_FWCYAN,
+	c128, (unsigned char*)A_FWWHITE,
+	c256, (unsigned char*)A_FWRED,
+	c512, (unsigned char*)A_FWGREEN,
+	c1024,(unsigned char*)A_FWYELLOW,
+	c2048,(unsigned char*)A_FWBLUE,
+};
+
+
 int lost = 0;
 
 void init_board(void) {
@@ -67,61 +83,14 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     unsigned int ex;
     unsigned char w, h, offset_x;
     unsigned char *sprite = NULL;
-    unsigned char color;
+    unsigned char color = A_FWWHITE;
 
-    switch(value) {
-        case 1:
-            sprite = c2;
-            color  = A_FWRED;
-            break;
-        case 2:
-            sprite = c4;
-            color  = A_FWBLUE;
-            break;
-        case 3:
-            sprite = c8;
-            color  = A_FWGREEN;
-            break;
-        case 4:
-            sprite = c16;
-            color  = A_FWYELLOW;
-            break;
-        case 5:
-            sprite = c32;
-            color  = A_FWMAGENTA;
-            break;
-        case 6:
-            sprite = c64;
-            color  = A_FWCYAN;
-            break;
-        case 7:
-            sprite = c128;
-            color  = A_FWRED;
-            break;
-        case 8:
-            sprite = c256;
-            color  = A_FWBLUE;
-            break;
-        case 9:
-            sprite = c512;
-            color  = A_FWGREEN;
-            break;
-        case 10:
-            sprite = c1024;
-            color  = A_FWYELLOW;
-            break;
-        case 11:
-            sprite = c2048;
-            color  = A_FWMAGENTA;
-            break;
-        default:
-            sprite = NULL;
-            color = A_FWBLACK;
-            break;
-    }
+    sprite = tiles[(value*2)];
+    color  = (unsigned char)tiles[(value*2)+1];
+
     set_entry_color(x, y, color);
     if(sprite == NULL)
-        return;
+	    return;
 
     w        = sprite[0];
     h        = sprite[1];
@@ -130,11 +99,11 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     oy = offset;
     ex = 3;        // Skip WxH from sprite map
     for(ty=0;ty<h; ty++) {
-        for(i = 2; i < w+2; i++) {   // Skip 2 bytes of attributes at the start of the ULA line
-            screen[oy+i] = sprite[ex];
-            ex++;
-        }
-        oy+=40;
+	    for(i = 2; i < w+2; i++) {   // Skip 2 bytes of attributes at the start of the ULA line
+		    screen[oy+i] = sprite[ex];
+		    ex++;
+	    }
+	    oy+=40;
     }
 }
 

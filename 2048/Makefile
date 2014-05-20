@@ -1,4 +1,6 @@
-OSDK=/home/jylam/code/oric/public/pc/tools/
+#OSDK=/home/jylam/code/oric/public/pc/tools/
+OSDK=/home/jylam/perso/oric/osdk/public/pc/tools/
+
 
 CC=$(OSDK)/osdk/main/compiler/compiler
 OSDK_INCLUDES=$(OSDK)/osdk/main/Osdk/_final_/include
