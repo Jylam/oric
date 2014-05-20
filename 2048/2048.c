@@ -56,14 +56,13 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
 }
 
 void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
-    unsigned int offset;
-    unsigned int i = 0;
-    unsigned int ty = 0, oy = 0;
+    unsigned int ox;
+    unsigned int oy;
 
     unsigned int ex;
-    unsigned char w, h, offset_x;
+    unsigned char w, h, offset_x, ty;
     unsigned char *sprite = NULL;
-    unsigned char color = A_FWWHITE;
+    unsigned char color;
 
     sprite = tiles[value*2];
     color  = (unsigned char)tiles[(value*2)+1];
@@ -72,16 +71,18 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     if(sprite == NULL)
 	    return;
 
-    w        = sprite[0];
+    w        = sprite[0]+2; // Skip 2 bytes of attributes, see ox
     h        = sprite[1];
     offset_x = sprite[2];
-    offset = ((x)+offset_x)+((y+20))*40;
-    oy = offset;
-    ex = 3;        // Skip WxH from sprite map
+    ox       = 0;
+    oy       = (x+offset_x)+(y+20)*40;
+    ex = 3;                 // Skip WxH from sprite map
     for(ty=0;ty<h; ty++) {
-	    for(i = 2; i < w+2; i++) {   // Skip 2 bytes of attributes at the start of the ULA line
-		    screen[oy+i] = sprite[ex];
+    	    ox=2;           // Skip 2 bytes of attributes at the start of the ULA line
+	    while(ox < w) {
+		    screen[oy+ox] = sprite[ex];
 		    ex++;
+		    ox++;
 	    }
 	    oy+=40;
     }
