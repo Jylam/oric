@@ -103,12 +103,15 @@ void draw_grid(void) {
     int oy = 0;
 
     // Vertical lines
-    for(x = 2; x < 40; x+=9) {
-        oy = 0;
-        for(y=0; y<200; y++) {
-            screen[x+y*40] = 0b01100000;
-            oy+=40;
-        }
+    x=2;
+    while(x<40) {
+	    oy = 0;
+	    for(y=0; y<200; y++) {
+		    screen[x+y*40] = 0b01100000;
+		    oy+=40;
+	    }
+
+	    x+=9;
     }
     // Horizontal lines
     oy=0;
