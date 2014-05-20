@@ -5,10 +5,10 @@
 #include "font.h"
 
 char *screen = (char*)0xa000;
-unsigned char board[4*4] = {1, 0, 11, 10,
-                            2, 0, 0, 9,
-                            3, 0, 0, 8,
-                            4, 5, 6, 7};
+unsigned char board[4*4] = {0, 0, 0, 0,
+                            0, 0, 0, 0,
+                            0, 0, 0, 1,
+                            0, 0, 1, 0};
 char *values[] = {
     "    ", // 0
     "2   ", // 1
@@ -96,6 +96,10 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
             break;
         case 7:
             sprite = c128;
+            color  = A_FWWHITE;
+            break;
+        case 8:
+            sprite = c256;
             color  = A_FWWHITE;
             break;
         case 9:
