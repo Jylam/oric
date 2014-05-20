@@ -5,24 +5,24 @@
 #include "font.h"
 
 int lost = 0;
-char *screen = (char*)0xa000;
+unsigned char *screen = (unsigned char*)0xa000;
 unsigned char board[4*4] = {0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0};
-char *values[] = {
-    "    ", // 0
-    "2   ", // 1
-    "4   ", // 2
-    "8   ", // 3
-    "16  ", // 4
-    "32  ", // 5
-    "64  ", // 6
-    "128 ", // 7
-    "256 ", // 8
-    "512 ", // 9
-    "1024", // 10
-    "2048"  // 11
+unsigned char *values[] = {
+    (unsigned char*)"    ", // 0
+    (unsigned char*)"2   ", // 1
+    (unsigned char*)"4   ", // 2
+    (unsigned char*)"8   ", // 3
+    (unsigned char*)"16  ", // 4
+    (unsigned char*)"32  ", // 5
+    (unsigned char*)"64  ", // 6
+    (unsigned char*)"128 ", // 7
+    (unsigned char*)"256 ", // 8
+    (unsigned char*)"512 ", // 9
+    (unsigned char*)"1024", // 10
+    (unsigned char*)"2048"  // 11
 };
 
 unsigned char* tiles[] = {
@@ -69,7 +69,7 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     }
 }
 
-void draw_entry(unsigned char x, unsigned char y, char value) {
+void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     unsigned int offset;
     unsigned int i = 0;
     unsigned int ty = 0, oy = 0;
@@ -79,7 +79,7 @@ void draw_entry(unsigned char x, unsigned char y, char value) {
     unsigned char *sprite = NULL;
     unsigned char color = A_FWWHITE;
 
-    sprite = tiles[(value*2)];
+    sprite = tiles[value*2];
     color  = (unsigned char)tiles[(value*2)+1];
 
     set_entry_color(x, y, color);
