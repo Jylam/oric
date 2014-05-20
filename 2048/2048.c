@@ -102,25 +102,22 @@ void draw_grid(void) {
     int y = 0;
     int oy = 0;
 
-    for(y=0;y<200;y++) {
-        screen[y*40+1]   = 0x07; // Ink white
-        screen[(y*40)+2] = 0x17; // Paper Black
-    }
-
+    // Vertical lines
     for(x = 2; x < 40; x+=9) {
         oy = 0;
         for(y=0; y<200; y++) {
-            screen[x+y*40] = 0b01100000; // Vertical Lines
+            screen[x+y*40] = 0b01100000;
             oy+=40;
         }
     }
-
+    // Horizontal lines
     oy=0;
-    for(y = 0; y < 240; y+=50) {
+    for(y = 0; y < 200; y+=50) {
         for(x=2; x<38; x++) {
            screen[x+y*40] = 0b01111111;  // Horizontal lines
         }
     }
+    // Last line (?)
     for(x=2; x<38; x++) {
            screen[x+199*40] = 0b01111111; // Bottom horizontal line
     }
