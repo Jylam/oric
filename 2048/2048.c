@@ -31,6 +31,9 @@ unsigned char* tiles[] = {
 
 
 void init_board(void) {
+    score = 0;
+    lost  = 0;
+    memset(board, 0x00, 4*4);
     add_random_piece();
     add_random_piece();
 }
@@ -157,12 +160,12 @@ void add_random_piece(void) {
     for(i=0; i<4*4;i++) {
         if(board[i]==0) count++;
     }
-
     // No free tiles, game lost
     if(count==0) {
         lost = 1;
         return;
     }
+
 
     // Chose a random free tile
     id = rand()%count;
@@ -295,6 +298,7 @@ void game(void) {
     if(got_move) add_random_piece();
     if(lost) {
         sprintf(&screen_text[2], "Score : %d     YOU LOST!", score);
+        while(getchar()); //FIXME
         init_board();
     }
     draw_board();
