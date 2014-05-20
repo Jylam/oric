@@ -54,15 +54,18 @@ void set_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     offset = x+1+(y+1)*40;
     for(ty=0;ty<40; ty++) {
         screen[offset+2] = color;
-        screen[offset+3] = 0b01000000;
-        screen[offset+4] = 0b01000000;
-        screen[offset+5] = 0b01000000;
-        screen[offset+6] = 0b01000000;
-        screen[offset+7] = 0b01000000;
-        screen[offset+8] = 0b01000000;
         screen[offset+9] = A_BGBLACK; // Ink White
 
-        offset+=40;
+	if(ty>18 && ty<28) {
+		screen[offset+3] = 0b01000000;
+		screen[offset+4] = 0b01000000;
+		screen[offset+5] = 0b01000000;
+		screen[offset+6] = 0b01000000;
+		screen[offset+7] = 0b01000000;
+		screen[offset+8] = 0b01000000;
+	}
+
+	offset+=40;
     }
 }
 
