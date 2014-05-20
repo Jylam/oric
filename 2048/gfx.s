@@ -4,21 +4,22 @@ __y
 .db $0
 __color
 .db $0
-
+__offset
+.dw $0
 _set_entry_color
-    ldy #0      ; Load x
-    lda (sp),y
-    tax
-    inx
-    stx __x
+    ldy #0      ; Load argument x
+    lda (sp),y  ;
+    adc #1      ; x++
+    sta __x     ; Store X into __x
     ldy #2
     lda (sp),y
-    tax
-    inx
-    stx __y
+    adc #1      ; y++
+    sta __y
     ldy #4
     lda (sp),y
-    tax
-    inx
-    stx __color
+    sta __color
+
+    ;offset = (y<<5) + (y<<3);
+
+
     rts
