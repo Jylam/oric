@@ -3,6 +3,7 @@
 #include <sys/graphics.h>
 #include <lib.h>
 #include "font.h"
+void add_random_piece(void);
 
 int lost  = 0;
 int score = 0;
@@ -46,6 +47,7 @@ void Cset_entry_color(unsigned char x, unsigned char y, unsigned char color) {
     y++;
     offset = (y<<5) + (y<<3);  // Y*40 = Y*32 + Y*8
     offset += x;
+
     for(ty=0;ty<40; ty++) {
         screen[offset+2] = color;     // Set color
         screen[offset+9] = A_BGBLACK; // Reset to black for drawing the line
@@ -65,7 +67,8 @@ void Cset_entry_color(unsigned char x, unsigned char y, unsigned char color) {
 }
 
 extern unsigned char _x, _y, _color;
-extern unsigned int  _offset_l, _offset_h, _offset;
+extern unsigned char _offset_l, _offset_h;
+extern unsigned int  _offset;
 void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     unsigned int ox;
     unsigned int oy;
@@ -79,11 +82,7 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     sprite = tiles[value];                     // Get tile pointer
     color  = (unsigned char)tiles[(value)+1];  // Get color, 1 byte after tile pointer
 
-    _offset=1;
-    sprintf(&screen_text[3], "H%d L%d  %d",  _offset_h, _offset_l, _offset);
     set_entry_color(x, y, color);              // Clear tile and set color
-    sprintf(&screen_text[43], "H%d L%d  %d", _offset_h, _offset_l, _offset);
-    while(1);
     if(sprite == NULL)                         // Empty tile
         return;
 
