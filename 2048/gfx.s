@@ -88,23 +88,40 @@ _set_entry_color
     sta ty
     ldy ty
 
-    ldx __offset_l
+    ldx  #0
+
+    ; screen = screen + offset
+    CLC               ; tmp1 is 40 already
+    LDA __screen+0
+    ADC __offset+0
+    STA __screen+0
+    LDA __screen+1
+    ADC __offset+1
+    STA __screen+1
+
+
+
+    LDA #<40      ; tmp1 = 40
+    STA __tmp1+0
+    LDA #>40
+    STA __tmp1+1
+
 loop_y:
     sty ty
 
     ; screen[offset+2] = color;
-    lda #%01001100
-    sta SCREEN,x
+    lda __color
+    sta _screen,x
     inx
 
     ; offset+=40;
-    CLC             ;Ensure carry is clear \
-    LDA __screen+0       ;Add the two least significant bytes \
-    ADC __tmp1+0 \
-    STA RES+0       ;... and store the result \
-    LDA VLA+1       ;Add the two most significant bytes \
-    ADC VLB+1       ;... and any propagated carry bit   \
-    STA RES+1       ;... and store the result \
+    CLC               ; tmp1 is 40 already
+    LDA __screen+0
+    ADC __tmp1+0
+    STA __screen+0
+    LDA __screen+1
+    ADC __tmp1+1
+    STA __screen+1
 
    ; }
     ldy ty
