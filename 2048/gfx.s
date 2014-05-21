@@ -63,7 +63,7 @@ _set_entry_color
     sta __offset_h
     clc
 
-		     ; offset+=x
+		             ; offset+=x
     lda __offset_l
     adc __x
     sta __offset_l
@@ -72,19 +72,18 @@ _set_entry_color
     sta __offset_h
     clc
 
-		     ; for(ty=0;ty<40; ty++) {
+		             ; for(ty=0;ty<40; ty++) {
     lda #40
     sta ty
     ldy ty
 loop_y:
     sty ty
 
-		     ;
 
 
     ldy ty
     dey
-    bne loop_y
+    bne loop_y   ;}
     rts
 
 
