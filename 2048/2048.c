@@ -65,6 +65,7 @@ void Cset_entry_color(unsigned char x, unsigned char y, unsigned char color) {
 }
 
 extern unsigned char _x, _y, _color;
+extern unsigned int  _offset_l, _offset_h, _offset;
 void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     unsigned int ox;
     unsigned int oy;
@@ -77,10 +78,12 @@ void draw_entry(unsigned char x, unsigned char y, unsigned char value) {
     value  = value<<1;                         // Interleaved with color
     sprite = tiles[value];                     // Get tile pointer
     color  = (unsigned char)tiles[(value)+1];  // Get color, 1 byte after tile pointer
-    sprintf(&screen_text[3], "%x %x %x", x, y, color);
-    set_entry_color(x, y, color);              // Clear tile and set color
-    sprintf(&screen_text[43], "%x %x", _x, _y);
 
+    _offset=1;
+    sprintf(&screen_text[3], "H%d L%d  %d",  _offset_h, _offset_l, _offset);
+    set_entry_color(x, y, color);              // Clear tile and set color
+    sprintf(&screen_text[43], "H%d L%d  %d", _offset_h, _offset_l, _offset);
+    while(1);
     if(sprite == NULL)                         // Empty tile
         return;
 
