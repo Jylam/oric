@@ -18,9 +18,11 @@ all:
 	cpp -xc++ 2048_pre_comment.c -o 2048_pre.c
 	$(CC) 2048_pre.c 2048_preproc.c
 	cpp -traditional-cpp -include $(MACROS) 2048_preproc.c -o 2048.temp_asm
+	cpp -traditional-cpp -include $(MACROS) gfx.s -o gfx_p.asm
 	grep -v '^#' 2048.temp_asm > 2048_m1.asm
+	grep -v '^#' gfx_p.asm > gfx_p_c.asm
 	$(OSDK)/osdk/main/macrosplitter/macrosplitter 2048_m1.asm 2048.asm
-	cat gfx.s 2048.asm > go2.asm
+	cat gfx_p_c.asm 2048.asm > go2.asm
 	$(LINKER) -d $(LINKLIB) go2.asm -o go.asm
 	$(ASM) -bt 0x500 -C -W -v  go.asm  -o 2048.bin
 tap:
