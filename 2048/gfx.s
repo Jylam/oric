@@ -42,6 +42,7 @@ _set_entry_color
     lda (sp),y  ; Load argument color
     sta __color
 
+
     ;offset = (y<<5) + (y<<3);
     lda __y
     sta __offset_l
@@ -66,7 +67,7 @@ _set_entry_color
     asl __offset2_l
     rol __offset2_h
 
-    lda __offset_l   ; y<<5 + y<<3
+    lda __offset_l   ; offset+=offset2
     adc __offset2_l
     sta __offset_l
     lda __offset_h
@@ -84,11 +85,13 @@ _set_entry_color
     clc
 
 	; for(ty=0;ty<40; ty++) {
-    lda #40
-    sta ty
-    ldy ty
 
     ldx  #0
+
+    LDA #<SCREEN      ; __screen = SCREEN
+    STA __screen+0
+    LDA #>SCREEN
+    STA __screen+1
 
     ; screen = screen + offset
     CLC               ; tmp1 is 40 already
@@ -106,15 +109,22 @@ _set_entry_color
     LDA #>40
     STA __tmp1+1
 
+    LDX #2
+
+    lda #40
+    sta ty
+    ldy ty
+
 loop_y:
     sty ty
 
     ; screen[offset+2] = color;
-    lda __color
-    sta _screen,x
-    inx
 
-    ; offset+=40;
+    lda #%01010101
+    sta __screen,y        ; [_screen+offset+y]
+    ; inx
+
+    ; screen+=40;
     CLC               ; tmp1 is 40 already
     LDA __screen+0
     ADC __tmp1+0
@@ -122,6 +132,7 @@ loop_y:
     LDA __screen+1
     ADC __tmp1+1
     STA __screen+1
+    CLC
 
    ; }
     ldy ty
