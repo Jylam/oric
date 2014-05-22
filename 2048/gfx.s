@@ -9,10 +9,10 @@ __color
 .db $0
 
 
-__screen
-.dw SCREEN
+screen
+.dsb 2
 __tmp1
-.dw $0
+.dsb 2
 
 __offset
 __offset_l
@@ -88,19 +88,19 @@ _set_entry_color
 
     ldx  #0
 
-    LDA #<SCREEN      ; __screen = SCREEN
-    STA __screen+0
+    LDA #<SCREEN      ; screen = SCREEN
+    STA screen+0
     LDA #>SCREEN
-    STA __screen+1
+    STA screen+1
 
     ; screen = screen + offset
     CLC               ; tmp1 is 40 already
-    LDA __screen+0
+    LDA screen+0
     ADC __offset+0
-    STA __screen+0
-    LDA __screen+1
+    STA screen+0
+    LDA screen+1
     ADC __offset+1
-    STA __screen+1
+    STA screen+1
 
 
 
@@ -121,18 +121,18 @@ loop_y:
     ; screen[offset+2] = color;
 
     lda #%01010101
-    sta __screen,y        ; [_screen+offset+y]
+    sta screen,y        ; [_screen+offset+y]
     ; inx
 
     ; screen+=40;
-    CLC               ; tmp1 is 40 already
-    LDA __screen+0
-    ADC __tmp1+0
-    STA __screen+0
-    LDA __screen+1
-    ADC __tmp1+1
-    STA __screen+1
-    CLC
+;    CLC               ; tmp1 is 40 already
+;    LDA screen+0
+;    ADC __tmp1+0
+;    STA screen,y
+;    LDA screen+1
+;    ADC __tmp1+1
+;    STA screen+1
+;    CLC
 
    ; }
     ldy ty
