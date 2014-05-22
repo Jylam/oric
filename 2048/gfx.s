@@ -8,11 +8,12 @@ __y
 __color
 .db $0
 
+ .zero
+ _zp_start_
 
-screen
-.dsb 2
-__tmp1
-.dsb 2
+
+screen .dsb 2
+__tmp1 .dsb 2
 
 __offset
 __offset_l
@@ -27,6 +28,9 @@ __offset2_h
 
 ty
 .db $0
+
+_zp_end_
+.text
 
 
 _set_entry_color
@@ -93,12 +97,13 @@ _set_entry_color
     LDA #>SCREEN
     STA screen+1
 
+
     ; screen = screen + offset
     CLC               ; tmp1 is 40 already
-    LDA screen+0
+    LDA #<screen
     ADC __offset+0
     STA screen+0
-    LDA screen+1
+    LDA #>screen+1
     ADC __offset+1
     STA screen+1
 
@@ -121,20 +126,19 @@ loop_y:
     ; screen[offset+2] = color;
 
     lda #%01010101
-    sta screen,y        ; [_screen+offset+y]
-    ; inx
+    sta (screen),y        ; [_screen+offset+y]
 
     ; screen+=40;
-;    CLC               ; tmp1 is 40 already
-;    LDA screen+0
-;    ADC __tmp1+0
-;    STA screen,y
-;    LDA screen+1
-;    ADC __tmp1+1
-;    STA screen+1
-;    CLC
+    CLC               ; tmp1 is 40 already
+    LDA screen+0
+    ADC __tmp1+0
+    STA screen,y
+    LDA screen+1
+    ADC __tmp1+1
+    STA screen+1
+    CLC
 
-   ; }
+; }
     ldy ty
     dey
     bne loop_y
