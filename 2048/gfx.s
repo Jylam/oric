@@ -1,33 +1,25 @@
 ;#define SCREEN $BF68
 #define SCREEN $A000
 
-__x
-.db $0
-__y
-.db $0
-__color
-.db $0
+.zero
+_zp_start_
 
- .zero
- _zp_start_
+__x         .db $0
+__y         .db $0
+__color     .db $0
 
 
-screen .dsb 2
-__tmp1 .dsb 2
+screen      .dsb 2
+__tmp1      .dsb 2
 
-__offset
-__offset_l
-.db $0
-__offset_h
-.db $0
-__offset2
-__offset2_l
-.db $0
-__offset2_h
-.db $0
+offset
+offset_l  .db $0
+offset_h  .db $0
+offset2
+offset2_l .db $0
+offset2_h .db $0
 
-ty
-.db $0
+ty          .db $0
 
 _zp_end_
 .text
@@ -49,43 +41,43 @@ _set_entry_color
 
     ;offset = (y<<5) + (y<<3);
     lda __y
-    sta __offset_l
-    sta __offset2_l
+    sta offset_l
+    sta offset2_l
     clc
-    asl __offset_l   ; y << 5
-    rol __offset_h
-    asl __offset_l
-    rol __offset_h
-    asl __offset_l
-    rol __offset_h
-    asl __offset_l
-    rol __offset_h
-    asl __offset_l
-    rol __offset_h
+    asl offset_l   ; y << 5
+    rol offset_h
+    asl offset_l
+    rol offset_h
+    asl offset_l
+    rol offset_h
+    asl offset_l
+    rol offset_h
+    asl offset_l
+    rol offset_h
 
     clc
-    asl __offset2_l   ; y << 3
-    rol __offset2_h
-    asl __offset2_l
-    rol __offset2_h
-    asl __offset2_l
-    rol __offset2_h
+    asl offset2_l   ; y << 3
+    rol offset2_h
+    asl offset2_l
+    rol offset2_h
+    asl offset2_l
+    rol offset2_h
 
-    lda __offset_l   ; offset+=offset2
-    adc __offset2_l
-    sta __offset_l
-    lda __offset_h
-    adc __offset2_h
-    sta __offset_h
+    lda offset_l   ; offset+=offset2
+    adc offset2_l
+    sta offset_l
+    lda offset_h
+    adc offset2_h
+    sta offset_h
     clc
 
     ; offset+=x
-    lda __offset_l
+    lda offset_l
     adc __x
-    sta __offset_l
-    lda __offset_h
+    sta offset_l
+    lda offset_h
     adc #0           ; Add carry
-    sta __offset_h
+    sta offset_h
     clc
 
 	; for(ty=0;ty<40; ty++) {
@@ -101,12 +93,11 @@ _set_entry_color
     ; screen = screen + offset
     CLC               ; tmp1 is 40 already
     LDA #<screen
-    ADC __offset+0
+    ADC offset+0
     STA screen+0
     LDA #>screen+1
-    ADC __offset+1
+    ADC offset+1
     STA screen+1
-
 
 
     LDA #<40      ; tmp1 = 40
