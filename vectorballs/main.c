@@ -7,12 +7,19 @@ unsigned char *screen_text = (unsigned char*)0xbf68;
 extern void draw_sprite(unsigned char x, unsigned char y, unsigned char color);
 
 int main(int argc, char *argv[]) {
-    int x, y;
+    unsigned char x, y;
+    int t;
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-    draw_sprite(0x13, 0x37, 0x55);
+    while(1) {
+        for(x = 0; x < 32; x++) {
+            for(t=0; t < 1000; t++);
+                draw_sprite(x, x, 0b01100001);
+
+        }
+    }
 }
 
 
