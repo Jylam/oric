@@ -31,24 +31,21 @@ _draw_sprite
     sta color
 
 
-    ; Set offset to table_y[_y]
-    ; table_y is an int, so *2 y
-    ; offset2 = y
-    ; offset2 <<= 1
-    ; offset2 = table_y+offset2
-
+    ; table_y[y] contains the address of the line y on the screen
     lda _y
     sta offset2+0
     lda #0
     sta offset2+1
     clc
-    asl offset2+0   ; y<<1
+    asl offset2+0   ; y*2, table_y is a word
     rol offset2+1
     clc
-    lda #<(_table_y)  ;offset2 = table_y+(y<<1)
+
+    lda _table_y    ; LSB
     adc offset2+0
     sta screen+0
-    lda #>(_table_y)
+    ldy #1
+    lda _table_y, y ; ; MSB
     adc offset2+1
     sta screen+1
 
