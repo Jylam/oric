@@ -12,12 +12,13 @@ unsigned int table_y[200];
 int main(int argc, char *argv[]) {
     unsigned char x=0, y=0, oldx=0, oldy=0;
     char tx=1, ty=1;
-    int t=0;
+    unsigned int t=0;
 
-    for(ty=0 ; ty<200; ty++) {
-        table_y[ty] = t;
+    for(y=0 ; y<200; y++) {
+        table_y[y] = t;
         t+=40;
     }
+    y = 0;
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
         if(x==32) tx = -1;
         if(y==0)   ty =  5;
         if(y==200) ty = -5;
-        x+=tx;
+        //x+=tx;
         y+=ty;
 
         for(t=0; t < 1000; t++);

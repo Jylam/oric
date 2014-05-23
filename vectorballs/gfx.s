@@ -21,7 +21,7 @@ _zp_end_
 _draw_sprite
     ldy #0      ; Load argument x
     lda (sp),y  ;
-    sta _x     ; Store x into __x
+    sta _x      ; Store x into _x
     ldy #2
     lda (sp),y  ; Load argument y
     sta _y
@@ -29,44 +29,34 @@ _draw_sprite
     lda (sp),y  ; Load argument color
     sta color
 
-    lda #0
-    sta offset+0
-    sta offset+1
-    ;offset = (y<<5) + (y<<3);  ( *40)
+
+    ; Set offset to table_y[_y]
+    ; table_y is an int, so *2 y
+    ; offset2 = y
+    ; offset2 <<= 1
+    ; offset2 = table_y+offset2
+
     lda _y
-    sta offset+0
     sta offset2+0
-    clc
-    asl offset+0   ; y << 5
-    rol offset+1
-    asl offset+0
-    rol offset+1
-    asl offset+0
-    rol offset+1
-
-    lda offset+0   ; we have y<<3 here
-    sta offset2+0
-    lda offset+1
+    lda #0
     sta offset2+1
-
-    asl offset+0
-    rol offset+1
-    asl offset+0
-    rol offset+1   ; and y<<5 here
-
-
     clc
-    lda offset+0   ; offset+=offset2
+    asl offset2+0   ; y<<1
+    rol offset2+1
+    clc
+    lda #<_table_y  ;offset2 = table_y+(y<<1)
     adc offset2+0
-    sta offset+0
-    lda offset+1
+    lda #>_table_y
     adc offset2+1
+
+
+    lda #<(offset2) ;offset = table_y[y]
+    sta offset+0
+    lda #>(offset2)
     sta offset+1
 
-
-
     clc
-    lda #<SCREEN      ; screen = SCREEN
+    lda #<SCREEN      ; screen = SCREEN + table_y[y]
     adc offset+0
     sta screen+0
     clc
