@@ -15,6 +15,8 @@ screen      .dsb 2
 offset      .dsb 2
 offset2      .dsb 2
 
+_ptr_table_y .dsb 2
+
 _zp_end_
 .text
 
@@ -41,23 +43,27 @@ _draw_sprite
     rol offset2+1
     clc
 
-    lda _table_y    ; LSB
+    ldy offset2
+    lda _table_y, y
     adc offset2+0
-    sta screen+0
-    ldy #1
-    lda _table_y, y ; ; MSB
+    sta screen_ptr+1   ; screen_ptr -> sta $0123,y
+    iny
+    lda _table_y,y ; ; MSB
     adc offset2+1
-    sta screen+1
+    sta screen_ptr+2
 
 
 
-    ldx #8     ; Width
+    ldx #1     ; Width
     stx tx
     ldy _x
 
 loop_x:
     lda color
-    sta (screen),y
+
+    ; $0123 is modified
+screen_ptr
+    sta $ffff
     clc
     iny
     ldx tx

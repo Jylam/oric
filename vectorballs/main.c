@@ -7,17 +7,21 @@ unsigned char *screen_text = (unsigned char*)0xbf68;
 extern void draw_sprite(unsigned char x, unsigned char y, unsigned char color);
 
 unsigned int table_y[200];
+extern unsigned int *ptr_table_y;
 
 
 int main(int argc, char *argv[]) {
     unsigned char x=0, y=0, oldx=0, oldy=0;
     unsigned int t=0xa000;
     char tx=1, ty=1;
+    ptr_table_y = (unsigned int *) &table_y;
 
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
+//        printf("%d:  0x%x\n", y, t);
         t+=40;
     }
+  //  while(1);
     y = 0;
 
     hires();
@@ -28,13 +32,13 @@ int main(int argc, char *argv[]) {
         if(x==32) tx = -1;
         if(y==0)   ty =  1;
         if(y==200) ty = -1;
-        x+=tx;
+//        x+=tx;
         y+=ty;
 
         for(t=0; t < 1000; t++);
         // Clear the old one
         draw_sprite(oldx, oldy, 0b01000000);
-        draw_sprite(x, y, 0b01100001);
+        draw_sprite(x, y, 0b01111111);
         oldx = x;
         oldy = y;
     }
