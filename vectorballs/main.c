@@ -11,8 +11,8 @@ unsigned int table_y[200];
 
 int main(int argc, char *argv[]) {
     unsigned char x=0, y=0, oldx=0, oldy=0;
+    unsigned int t=0xa000;
     char tx=1, ty=1;
-    unsigned int t=0;
 
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
@@ -26,9 +26,9 @@ int main(int argc, char *argv[]) {
     while(1) {
         if(x==0)  tx =  1;
         if(x==32) tx = -1;
-        if(y==0)   ty =  5;
-        if(y==200) ty = -5;
-        //x+=tx;
+        if(y==0)   ty =  1;
+        if(y==200) ty = -1;
+        x+=tx;
         y+=ty;
 
         for(t=0; t < 1000; t++);

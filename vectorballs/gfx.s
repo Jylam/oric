@@ -19,6 +19,7 @@ _zp_end_
 .text
 
 _draw_sprite
+    sei
     ldy #0      ; Load argument x
     lda (sp),y  ;
     sta _x      ; Store x into _x
@@ -46,19 +47,9 @@ _draw_sprite
     clc
     lda #<_table_y  ;offset2 = table_y+(y<<1)
     adc offset2+0
-    sta offset+0
+    sta screen+0
     lda #>_table_y
     adc offset2+1
-    sta offset+1
-
-
-    clc
-    lda #<SCREEN      ; screen = SCREEN + table_y[y]
-    adc offset+0
-    sta screen+0
-    clc
-    lda #>SCREEN
-    adc offset+1
     sta screen+1
 
 
