@@ -45,12 +45,13 @@ _draw_sprite
     asl offset2+0   ; y<<1
     rol offset2+1
     clc
-    lda #<_table_y  ;offset2 = table_y+(y<<1)
+    lda #<(_table_y)  ;offset2 = table_y+(y<<1)
     adc offset2+0
     sta screen+0
-    lda #>_table_y
+    lda #>(_table_y)
     adc offset2+1
     sta screen+1
+
 
 
     ldx #8     ; Width
