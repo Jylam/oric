@@ -46,14 +46,11 @@ _draw_sprite
     clc
     lda #<_table_y  ;offset2 = table_y+(y<<1)
     adc offset2+0
+    sta offset+0
     lda #>_table_y
     adc offset2+1
-
-
-    lda #<(offset2) ;offset = table_y[y]
-    sta offset+0
-    lda #>(offset2)
     sta offset+1
+
 
     clc
     lda #<SCREEN      ; screen = SCREEN + table_y[y]
