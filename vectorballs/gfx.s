@@ -14,8 +14,6 @@ tx          .db $0
 screen      .dsb 2
 offset      .dsb 2
 
-_ptr_table_y .dsb 2
-
 _zp_end_
 .text
 
@@ -58,16 +56,16 @@ break
 
 
 
-    ldx #1     ; Width
+    ldx #8     ; Width
     stx tx
     ldy _x
 
 loop_x:
     lda color
 
-    ; $0123 is modified
+    ; $0123 is modified with the address from table_y
 screen_ptr
-    sta $ffff
+    sta $ffff,y
     clc
     iny
     ldx tx
