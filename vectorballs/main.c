@@ -14,14 +14,12 @@ int main(int argc, char *argv[]) {
     unsigned char x=0, y=0, oldx=0, oldy=0;
     unsigned int t=0xa000;
     char tx=1, ty=1;
-    ptr_table_y = (unsigned int *) &table_y;
+    ptr_table_y = (unsigned int *) table_y;
 
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
-//        printf("%d:  0x%x\n", y, t);
         t+=40;
     }
-  //  while(1);
     y = 0;
 
     hires();

@@ -13,7 +13,6 @@ tx          .db $0
 
 screen      .dsb 2
 offset      .dsb 2
-offset2      .dsb 2
 
 _ptr_table_y .dsb 2
 
@@ -32,24 +31,29 @@ _draw_sprite
     lda (sp),y  ; Load argument color
     sta color
 
-
+break
     ; table_y[y] contains the address of the line y on the screen
     lda _y
-    sta offset2+0
+    sta offset+0
     lda #0
-    sta offset2+1
+    sta offset+1
     clc
-    asl offset2+0   ; y*2, table_y is a word
-    rol offset2+1
+    asl offset+0   ; y*2, table_y is a pointer on words
+    rol offset+1
     clc
 
-    ldy offset2
-    lda _table_y, y
-    adc offset2+0
+    lda #<_table_y
+    adc offset+0
+    sta offset+0
+    lda #>_table_y ; ; MSB
+    adc offset+1
+    sta offset+1
+
+    ldy #0
+    lda (offset),y
     sta screen_ptr+1   ; screen_ptr -> sta $0123,y
-    iny
-    lda _table_y,y ; ; MSB
-    adc offset2+1
+    ldy #1
+    lda (offset),y
     sta screen_ptr+2
 
 
