@@ -1,19 +1,24 @@
 #define NULL ((void*)0)
 #include <sys/graphics.h>
 #include <lib.h>
+#include "sprite.h"
 
-unsigned char *screen = (unsigned char*)0xa000;
-unsigned char *screen_text = (unsigned char*)0xbf68;
-extern void draw_sprite(unsigned char x, unsigned char y, unsigned char color);
-
-unsigned int table_y[200];
+#define NB_SPRITES 5
+#define SPRITE_W 2
+#define SPRITE_H 5
 
 typedef struct {
     unsigned char x, y, oldx, oldy;
     char tx, ty;
 } sprite;
 
-#define NB_SPRITES 5
+extern void draw_sprite(unsigned char x, unsigned char y, unsigned char w, unsigned char h);
+
+unsigned char *screen = (unsigned char*)0xa000;
+unsigned char *screen_text = (unsigned char*)0xbf68;
+unsigned int table_y[200];
+
+
 sprite sprites[NB_SPRITES];
 
 int main(int argc, char *argv[]) {
@@ -38,6 +43,14 @@ int main(int argc, char *argv[]) {
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
+#if 1
+    while(1) {
+        for(x=0;x<20; x++) {
+            draw_sprite(10, x, SPRITE_W, SPRITE_H);
+            for(t=0; t < 1000; t++);
+        }
+    }
+#else
     while(1) {
         for(s=0;s<NB_SPRITES;s++) {
 
@@ -56,6 +69,7 @@ int main(int argc, char *argv[]) {
         }
         for(t=0; t < 1000; t++);
     }
+#endif
 }
 
 

@@ -25,6 +25,9 @@ all:
 	cat gfx_p_c.asm 2048.asm > go2.asm
 	$(LINKER) -d $(LINKLIB) go2.asm -o go.asm
 	$(ASM) -bt 0x500 -C -W -v -l symbols.txt go.asm  -o 2048.bin
+sprite:
+	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball ~/code/oric/perso/vectorballs/sprite.png  sprite.h
+
 tap:
 	$(OSDK)/osdk/main/header/header -a1 2048.bin test.tap 0x500
 	cp symbols.txt test.tap $(ORICULATOR_TAPES)

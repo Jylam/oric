@@ -4,12 +4,14 @@
 .zero
 _zp_start_
 
-_x         .db $0
-_y         .db $0
-color     .db $0
+_x          .db $0
+_y          .db $0
+width       .db $0
+height      .db $0
 _tmp1       .dw $0
 
 tx          .db $0
+ty          .db $0
 
 screen      .dsb 2
 offset      .dsb 2
@@ -26,8 +28,11 @@ _draw_sprite
     lda (sp),y  ; Load argument y
     sta _y
     ldy #4
-    lda (sp),y  ; Load argument color
-    sta color
+    lda (sp),y  ; Load argument width
+    sta width
+    ldy #6
+    lda (sp),y  ; Load argument height
+    sta height
 
 break
     ; table_y[y] contains the address of the line y on the screen
@@ -55,24 +60,39 @@ break
     sta screen_ptr+2
 
 
+    clc
 
-    ldx #8     ; Width
+    ldx height    ; Height
+    stx ty
+loop_y:
+    ldx width     ; Width
     stx tx
-    ldy _x
-
+    ldy #0
 loop_x:
-    lda color
-
     ; $0123 is modified with the address from table_y
 screen_ptr
-    sta $ffff,y
+        lda #%01100001
+        sta $ffff,y
+        iny
+
+        ; loop_x
+        ldx tx
+        dex
+        stx tx
+        bne loop_x
+
+    ;; Each line we add 40-width to the screen pointer
     clc
-    iny
-    ldx tx
-    clc
+;    lda screen_ptr+1
+ ;   adc #38
+  ;  sta screen_ptr+1
+   ; lda screen_ptr+2
+   ; adc #00
+   ; sta screen_ptr+2
+    ldx ty
     dex
-    stx tx
-    bne loop_x
+    stx ty
+    bne loop_y
     rts
 
 
