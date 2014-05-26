@@ -28,11 +28,10 @@ int main(int argc, char *argv[]) {
 
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
-        printf("%y: %x\n", y, t);
         t+=40;
     }
+
     y = 0;
-    while(1);
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 1;
         sprites[s].x = rand()&0x0F;
@@ -49,11 +48,13 @@ int main(int argc, char *argv[]) {
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-#if 0
+#if 1
     while(1) {
-        for(x=0;x<10; x++) {
-            draw_sprite(x, x*20, SPRITE_W, SPRITE_H);
-            for(t=0; t < 1000; t++);
+        for(y=0;y<188; y+=12) {
+            for(x=0;x<40; x+=2) {
+                draw_sprite(x, y, SPRITE_W, SPRITE_H);
+//                for(t=0; t < 1000; t++);
+            }
         }
     }
 #else
