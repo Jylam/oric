@@ -3,7 +3,7 @@
 #include <lib.h>
 #include "sprite.h"
 
-#define NB_SPRITES 5
+#define NB_SPRITES 1
 #define SPRITE_W 2
 #define SPRITE_H 12
 
@@ -28,17 +28,23 @@ int main(int argc, char *argv[]) {
 
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
+        printf("%y: %x\n", y, t);
         t+=40;
     }
     y = 0;
-
+    while(1);
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 1;
         sprites[s].x = rand()&0x0F;
-        sprites[s].y = rand()&0x7F;
-        sprites[s].tx = (rand()&0x01)+1;
-        sprites[s].ty = (rand()&0x07)+1;
+        sprites[s].y = rand()&0x70;
+        sprites[s].tx = (rand()&0x02)-1;
+        if(sprites[s].tx == 0) sprites[s].tx = 1;
+        sprites[s].ty = (rand()&0x03)-1;
+        if(sprites[s].ty == 0) sprites[s].ty = 1;
+
     }
+
+
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
@@ -54,16 +60,18 @@ int main(int argc, char *argv[]) {
     while(1) {
         for(s=0;s<NB_SPRITES;s++) {
 
-            if(sprites[s].x<=0)   sprites[s].tx =   -sprites[s].tx;
-            if(sprites[s].x>=32)  sprites[s].tx =   -sprites[s].ty;
-            if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
-            if(sprites[s].y>=189) sprites[s].ty =  -sprites[s].ty;
             sprites[s].x+=sprites[s].tx;
             sprites[s].y+=sprites[s].ty;
-
+            if(sprites[s].x<=0)   sprites[s].tx =  -sprites[s].tx;
+            if(sprites[s].x>=30)  sprites[s].tx =  -sprites[s].tx;
+            if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
+            if(sprites[s].y>=150) sprites[s].ty =  -sprites[s].ty;
+            sprintf(screen_text, "%d,%d  ", sprites[s].x, sprites[s].y);
             // Clear the old one
             clear_sprite(sprites[s].oldx, sprites[s].oldy, SPRITE_W, SPRITE_H);
-            draw_sprite( sprites[s].x,    sprites[s].y,    SPRITE_W, SPRITE_H);
+            draw_sprite(
+                    sprites[s].x,
+                    sprites[s].y,    SPRITE_W, SPRITE_H);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
         }

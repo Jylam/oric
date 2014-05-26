@@ -20,7 +20,6 @@ _zp_end_
 .text
 
 _draw_sprite
-    sei
     ldy #0      ; Load argument x
     lda (sp),y  ;
     sta _x
@@ -42,8 +41,8 @@ _draw_sprite
     clc
     asl offset+0   ; y*2, table_y is a pointer on words
     rol offset+1
-    clc
 
+    clc
     lda #<_table_y
     adc offset+0
     sta offset+0
@@ -52,6 +51,7 @@ _draw_sprite
     sta offset+1
 
     ; Store table_y[offset] into screen_ptr
+    clc
     ldy #0
     lda (offset),y
     adc _x
@@ -59,14 +59,13 @@ _draw_sprite
     ldy #1
     lda (offset),y
     sta screen_ptr+2
-    clc
 
     ; Store sprite address into sprite_ptr
+    clc
     lda #<_ball
     sta sprite_ptr+1   ; screen_ptr -> sta $0123,y
     lda #>_ball
     sta sprite_ptr+2
-    clc
 
 
     ldx height    ; Height
@@ -76,11 +75,13 @@ loop_y:
     stx tx
     ldy #0
 loop_x:
-    ; $ffff is modified with the address from table_y
 sprite_ptr
+        ; $1234 is modified with the address of sprite+40*y
         lda $1234,y  ; Load sprite byte
 screen_ptr
+        ; $ffff is modified with the address from table_y
         sta $ffff,y  ; Store into screen
+        clc
         iny
 
         ; loop_x
@@ -91,6 +92,7 @@ screen_ptr
         bne loop_x
 
     ;; Each line we add 40 to the screen pointer
+    clc
     lda screen_ptr+1
     adc #40
     sta screen_ptr+1
@@ -99,6 +101,7 @@ screen_ptr
     sta screen_ptr+2
 
     ;; We do the same on the sprite pointer
+    clc
     lda sprite_ptr+1
     adc #40
     sta sprite_ptr+1
@@ -112,11 +115,14 @@ screen_ptr
     dex
     stx ty
     bne loop_y
+break
     rts
 
 
+
+
+
 _clear_sprite
-    sei
     ldy #0      ; Load argument x
     lda (sp),y  ;
     sta _x
@@ -166,7 +172,6 @@ loop_yc:
 loop_xc:
     ; $ffff is modified with the address from table_y
         lda #%01000000
-break
 screen_ptr_c
         sta $ffff,y  ; Store into screen
         iny
