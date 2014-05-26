@@ -84,16 +84,16 @@ screen_ptr
         bne loop_x
 
     ;; Each line we add 40-width to the screen pointer
-   ; lda screen_ptr+1
-   ; adc #38
-   ; sta screen_ptr+1
-   ; lda screen_ptr+2
-   ; adc #00
-   ; sta screen_ptr+2
-    ;ldx ty
-    ;dex
-    ;stx ty
-    ;bne loop_y
+    lda screen_ptr+1
+    adc #40
+    sta screen_ptr+1
+    lda screen_ptr+2
+    adc #00
+    sta screen_ptr+2
+    ldx ty
+    dex
+    stx ty
+    bne loop_y
     rts
 
 
