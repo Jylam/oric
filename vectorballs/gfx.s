@@ -61,7 +61,6 @@ _draw_sprite
     sta screen_ptr+2
     clc
 
-break
     ; Store sprite address into sprite_ptr
     lda #<_ball
     sta sprite_ptr+1   ; screen_ptr -> sta $0123,y
@@ -166,8 +165,9 @@ loop_yc:
     ldy #0
 loop_xc:
     ; $ffff is modified with the address from table_y
+        lda #%01000000
+break
 screen_ptr_c
-        lda #%0100000
         sta $ffff,y  ; Store into screen
         iny
 

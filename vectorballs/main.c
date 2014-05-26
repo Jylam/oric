@@ -62,8 +62,8 @@ int main(int argc, char *argv[]) {
             sprites[s].y+=sprites[s].ty;
 
             // Clear the old one
-//            clear_sprite(sprites[s].oldx, sprites[s].oldy, SPRITE_W, SPRITE_H);
-            draw_sprite(sprites[s].x, sprites[s].y, SPRITE_W, SPRITE_H);
+            clear_sprite(sprites[s].oldx, sprites[s].oldy, SPRITE_W, SPRITE_H);
+            draw_sprite( sprites[s].x,    sprites[s].y,    SPRITE_W, SPRITE_H);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
         }
