@@ -3,7 +3,7 @@
 #include <lib.h>
 #include "sprite.h"
 
-#define NB_SPRITES 1
+#define NB_SPRITES 10
 #define SPRITE_W 2
 #define SPRITE_H 12
 
@@ -12,11 +12,11 @@ typedef struct {
     char tx, ty;
 } sprite;
 
-extern void draw_sprite(unsigned char x, unsigned char y, unsigned char w, unsigned char h);
+extern void draw_sprite(unsigned char x, unsigned char y);
 
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
-unsigned int table_y[200];
+volatile unsigned int table_y[200];
 
 
 sprite sprites[NB_SPRITES];
@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
         t+=40;
     }
 
+#if 1
     y = 0;
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 1;
@@ -42,20 +43,21 @@ int main(int argc, char *argv[]) {
         if(sprites[s].ty == 0) sprites[s].ty = 1;
 
     }
-
+#endif
 
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-#if 1
+#if 0
     while(1) {
         for(y=0;y<188; y+=12) {
-            for(x=0;x<40; x+=2) {
-                draw_sprite(x, y, SPRITE_W, SPRITE_H);
-//                for(t=0; t < 1000; t++);
+            for(x=0;x<40; x+=SPRITE_W) {
+                draw_sprite(x, y);
+                for(t=0; t < 1; t++);
             }
         }
+        while(1);
     }
 #else
     while(1) {
@@ -64,15 +66,14 @@ int main(int argc, char *argv[]) {
             sprites[s].x+=sprites[s].tx;
             sprites[s].y+=sprites[s].ty;
             if(sprites[s].x<=0)   sprites[s].tx =  -sprites[s].tx;
-            if(sprites[s].x>=30)  sprites[s].tx =  -sprites[s].tx;
+            if(sprites[s].x>=38)  sprites[s].tx =  -sprites[s].tx;
             if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
-            if(sprites[s].y>=150) sprites[s].ty =  -sprites[s].ty;
-            sprintf(screen_text, "%d,%d  ", sprites[s].x, sprites[s].y);
+            if(sprites[s].y>=188) sprites[s].ty =  -sprites[s].ty;
             // Clear the old one
-            clear_sprite(sprites[s].oldx, sprites[s].oldy, SPRITE_W, SPRITE_H);
+            clear_sprite(sprites[s].oldx, sprites[s].oldy);
             draw_sprite(
                     sprites[s].x,
-                    sprites[s].y,    SPRITE_W, SPRITE_H);
+                    sprites[s].y);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
         }
