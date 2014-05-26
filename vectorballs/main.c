@@ -57,12 +57,12 @@ int main(int argc, char *argv[]) {
             if(sprites[s].x<=0)   sprites[s].tx =   -sprites[s].tx;
             if(sprites[s].x>=32)  sprites[s].tx =   -sprites[s].ty;
             if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
-            if(sprites[s].y>=199) sprites[s].ty =  -sprites[s].ty;
+            if(sprites[s].y>=189) sprites[s].ty =  -sprites[s].ty;
             sprites[s].x+=sprites[s].tx;
             sprites[s].y+=sprites[s].ty;
 
             // Clear the old one
-//            draw_sprite(sprites[s].oldx, sprites[s].oldy, 0b01000000);
+//            clear_sprite(sprites[s].oldx, sprites[s].oldy, SPRITE_W, SPRITE_H);
             draw_sprite(sprites[s].x, sprites[s].y, SPRITE_W, SPRITE_H);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
