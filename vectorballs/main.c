@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 #if 1
     while(1) {
         for(x=0;x<20; x++) {
-            draw_sprite(10, x, SPRITE_W, SPRITE_H);
+            draw_sprite(x, x*9, SPRITE_W, SPRITE_H);
             for(t=0; t < 1000; t++);
         }
     }

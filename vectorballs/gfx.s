@@ -23,7 +23,7 @@ _draw_sprite
     sei
     ldy #0      ; Load argument x
     lda (sp),y  ;
-    sta _x      ; Store x into _x
+    sta _x
     ldy #2
     lda (sp),y  ; Load argument y
     sta _y
@@ -54,6 +54,7 @@ break
 
     ldy #0
     lda (offset),y
+    adc _x
     sta screen_ptr+1   ; screen_ptr -> sta $0123,y
     ldy #1
     lda (offset),y
@@ -69,30 +70,30 @@ loop_y:
     stx tx
     ldy #0
 loop_x:
-    ; $0123 is modified with the address from table_y
-screen_ptr
+    ; $ffff is modified with the address from table_y
         lda #%01100001
+screen_ptr
         sta $ffff,y
         iny
 
         ; loop_x
         ldx tx
+        clc
         dex
         stx tx
         bne loop_x
 
     ;; Each line we add 40-width to the screen pointer
-    clc
-;    lda screen_ptr+1
- ;   adc #38
-  ;  sta screen_ptr+1
+   ; lda screen_ptr+1
+   ; adc #38
+   ; sta screen_ptr+1
    ; lda screen_ptr+2
    ; adc #00
    ; sta screen_ptr+2
-    ldx ty
-    dex
-    stx ty
-    bne loop_y
+    ;ldx ty
+    ;dex
+    ;stx ty
+    ;bne loop_y
     rts
 
 
