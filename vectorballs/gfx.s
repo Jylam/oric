@@ -34,7 +34,6 @@ _draw_sprite
     lda (sp),y  ; Load argument height
     sta height
 
-break
     ; table_y[y] contains the address of the line y on the screen
     lda _y
     sta offset+0
@@ -52,6 +51,7 @@ break
     adc offset+1
     sta offset+1
 
+    ; Store table_y[offset] into screen_ptr
     ldy #0
     lda (offset),y
     adc _x
@@ -59,9 +59,16 @@ break
     ldy #1
     lda (offset),y
     sta screen_ptr+2
-
-
     clc
+
+break
+    ; Store sprite address into sprite_ptr
+    lda #<_ball
+    sta sprite_ptr+1   ; screen_ptr -> sta $0123,y
+    lda #>_ball
+    sta sprite_ptr+2
+    clc
+
 
     ldx height    ; Height
     stx ty
@@ -71,9 +78,10 @@ loop_y:
     ldy #0
 loop_x:
     ; $ffff is modified with the address from table_y
-        lda #%01100001
+sprite_ptr
+        lda $1234,y  ; Load sprite byte
 screen_ptr
-        sta $ffff,y
+        sta $ffff,y  ; Store into screen
         iny
 
         ; loop_x
@@ -83,19 +91,27 @@ screen_ptr
         stx tx
         bne loop_x
 
-    ;; Each line we add 40-width to the screen pointer
+    ;; Each line we add 40 to the screen pointer
     lda screen_ptr+1
     adc #40
     sta screen_ptr+1
     lda screen_ptr+2
     adc #00
     sta screen_ptr+2
+
+    ;; We do the same on the sprite pointer
+    lda sprite_ptr+1
+    adc #40
+    sta sprite_ptr+1
+    lda sprite_ptr+2
+    adc #00
+    sta sprite_ptr+2
+
+    ; while(ty-- != 0) goto loop_y
+    clc
     ldx ty
     dex
     stx ty
     bne loop_y
     rts
-
-
-
 

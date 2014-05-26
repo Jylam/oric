@@ -5,7 +5,7 @@
 
 #define NB_SPRITES 5
 #define SPRITE_W 2
-#define SPRITE_H 5
+#define SPRITE_H 12
 
 typedef struct {
     unsigned char x, y, oldx, oldy;
@@ -43,10 +43,10 @@ int main(int argc, char *argv[]) {
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-#if 1
+#if 0
     while(1) {
-        for(x=0;x<20; x++) {
-            draw_sprite(x, x*9, SPRITE_W, SPRITE_H);
+        for(x=0;x<10; x++) {
+            draw_sprite(x, x*20, SPRITE_W, SPRITE_H);
             for(t=0; t < 1000; t++);
         }
     }
@@ -62,8 +62,8 @@ int main(int argc, char *argv[]) {
             sprites[s].y+=sprites[s].ty;
 
             // Clear the old one
-            draw_sprite(sprites[s].oldx, sprites[s].oldy, 0b01000000);
-            draw_sprite(sprites[s].x, sprites[s].y, 0b01001100);
+//            draw_sprite(sprites[s].oldx, sprites[s].oldy, 0b01000000);
+            draw_sprite(sprites[s].x, sprites[s].y, SPRITE_W, SPRITE_H);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
         }
