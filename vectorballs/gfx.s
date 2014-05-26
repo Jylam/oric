@@ -9,7 +9,7 @@ py          .db $0
 
 tx          .db $0
 ty          .db $0
-
+tmp_color   .db $0
 screen      .dsb 2
 offset      .dsb 2
 
@@ -61,7 +61,7 @@ _draw_sprite
     sta sprite_ptr+2
 
 
-    ldx #12    ; Height
+    ldx #11    ; Height
     stx ty
 loop_y:
     ldx #2     ; Width
@@ -71,9 +71,14 @@ loop_x:
 sprite_ptr
         ; $1234 is modified with the address of sprite+40*y
         lda $1234,y  ; Load sprite byte
+        sta tmp_color
 screen_ptr
         ; $ffff is modified with the address from table_y
-        sta $ffff,y  ; Store into screen
+        lda $ffff,y  ; Load screen value
+        clc
+        ora tmp_color  ; inclusive OR
+screen_ptr_2
+        sta $9999,y  ; Store into screen
         clc
         iny
 
@@ -89,9 +94,11 @@ screen_ptr
     lda screen_ptr+1
     adc #40
     sta screen_ptr+1
+    sta screen_ptr_2+1
     lda screen_ptr+2
     adc #00
     sta screen_ptr+2
+    sta screen_ptr_2+2
 
     ;; We do the same on the sprite pointer, $1234
     clc
@@ -108,7 +115,6 @@ screen_ptr
     dex
     stx ty
     bne loop_y
-break
     rts
 
 

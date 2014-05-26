@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
 #if 0
     while(1) {
-        for(y=0;y<188; y+=12) {
+        for(y=0;y<188; y+=6) {
             for(x=0;x<40; x+=SPRITE_W) {
                 draw_sprite(x, y);
                 for(t=0; t < 1; t++);
@@ -62,6 +62,9 @@ int main(int argc, char *argv[]) {
 #else
     while(1) {
         for(s=0;s<NB_SPRITES;s++) {
+            clear_sprite(sprites[s].oldx, sprites[s].oldy);
+        }
+        for(s=0;s<NB_SPRITES;s++) {
 
             sprites[s].x+=sprites[s].tx;
             sprites[s].y+=sprites[s].ty;
@@ -69,15 +72,11 @@ int main(int argc, char *argv[]) {
             if(sprites[s].x>=38)  sprites[s].tx =  -sprites[s].tx;
             if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
             if(sprites[s].y>=188) sprites[s].ty =  -sprites[s].ty;
-            // Clear the old one
-            clear_sprite(sprites[s].oldx, sprites[s].oldy);
-            draw_sprite(
-                    sprites[s].x,
-                    sprites[s].y);
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
+
+            draw_sprite(sprites[s].x, sprites[s].y);
         }
-        for(t=0; t < 1000; t++);
     }
 #endif
 }
