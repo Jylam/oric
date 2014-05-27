@@ -21,6 +21,19 @@ volatile unsigned int table_y[200];
 
 sprite sprites[NB_SPRITES];
 
+
+void set_colors(void) {
+    unsigned int y;
+
+    for(y=0; y<200; y++) {
+        screen[(y*40)+0] = A_FWYELLOW;
+
+        if(y&0x04) screen[(y*40)+1] = A_BGRED;
+        else       screen[(y*40)+1] = A_BGBLACK;
+    }
+
+}
+
 int main(int argc, char *argv[]) {
     unsigned char x=0, y=0, oldx=0, oldy=0;
     unsigned int t=0xa000;
@@ -35,7 +48,7 @@ int main(int argc, char *argv[]) {
     y = 0;
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 1;
-        sprites[s].x = rand()&0x0F;
+        sprites[s].x = (rand()&0x0F)+2;
         sprites[s].y = rand()&0x70;
         sprites[s].tx = (rand()&0x02)-1;
         if(sprites[s].tx == 0) sprites[s].tx = 4;
@@ -44,7 +57,6 @@ int main(int argc, char *argv[]) {
 
     }
 #endif
-
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
@@ -60,6 +72,7 @@ int main(int argc, char *argv[]) {
         while(1);
     }
 #else
+    set_colors();
     while(1) {
         for(s=0;s<NB_SPRITES;s++) {
             clear_sprite(sprites[s].oldx, sprites[s].oldy);
@@ -68,7 +81,7 @@ int main(int argc, char *argv[]) {
 
             sprites[s].x+=sprites[s].tx;
             sprites[s].y+=sprites[s].ty;
-            if(sprites[s].x<=0)   sprites[s].tx =  -sprites[s].tx;
+            if(sprites[s].x<=2)   sprites[s].tx =  -sprites[s].tx;
             if(sprites[s].x>=38)  sprites[s].tx =  -sprites[s].tx;
             if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
             if(sprites[s].y>=188) sprites[s].ty =  -sprites[s].ty;

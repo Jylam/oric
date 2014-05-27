@@ -134,7 +134,7 @@ screen_ptr
 
 
 
-
+; Unrolled. Take x,y arguments, and clears 2*12 bytes
 _clear_sprite
     ldy #0      ; Load argument x
     lda (sp),y  ;
@@ -175,7 +175,7 @@ _clear_sprite
 
 
 
-; Unrolled loop
+;;;;;;;;;; Start of unrolled loop
 
     lda #%01000000
     ldy #0
