@@ -8,6 +8,11 @@
 #define SPRITE_H 12
 
 typedef struct {
+    float x, y, z;
+} vec3;
+
+typedef struct {
+    vec3 pos;
     unsigned char x, y, oldx, oldy;
     char tx, ty;
 } sprite;
@@ -21,6 +26,45 @@ volatile unsigned int table_y[200];
 
 sprite sprites[NB_SPRITES];
 
+// 2^8 = 256
+#define FP_W 8
+// 255 (all LSB set, all MSB clear)
+#define FP_MASK ((1 << FP_W) - 1)
+
+#define FP(a) ((a)<<FP_W)
+#define INT(a) ((a)>>FP_W)
+
+#define FP_ADD(a, b) ((a)+(b))
+#define FP_SUB(a, b) ((a)-(b))
+#define FP_MUL(a, b) ((a)*INT((b)))
+#define FP_DIV(a, b) ((a)/INT((b)))
+
+#define FP_DEC(a)(((unsigned int)(a & FP_MASK)<<FP_W)/(1<<FP_W))
+
+void test_fp(void) {
+    unsigned int x = FP(1);
+    unsigned int y = FP(2);
+    unsigned int price;
+
+
+    while(1) {
+        price = FP_DIV(x, y);
+
+        printf("\n%d/%d\n", INT(x), INT(y));
+        printf("x     0x%x (%d)\n", x, x);
+        printf("y     0x%x (%d)\n", y, y);
+        printf("price 0x%x (%d)\n", price, price);
+        printf("dec   %d.%d\n", INT(price), FP_DEC(price));
+
+        if(INT(x) == 3) while(1);
+        x = FP(INT(x)+1);
+    }
+
+
+    while(1);
+
+}
+
 
 void set_colors(void) {
     unsigned int y;
@@ -29,19 +73,39 @@ void set_colors(void) {
         screen[(y*40)+0] = A_FWYELLOW;
         mask++;
         if((y&mask)>64) {
-            screen[(y*40)+1] = A_BGBLUE;
+        screen[(y*40)+1] = A_BGBLUE;
         } else {
             screen[(y*40)+1] = A_BGBLACK;
         }
     }
 
+    screen_text[0] = A_BGBLACK;
+    screen_text[1] = A_BGBLUE;
+    screen_text[40] = A_BGBLACK;
+    screen_text[41] = A_BGBLUE;
+    screen_text[80] = A_BGBLACK;
+    screen_text[81] = A_BGBLUE;
+
 }
 
 int main(int argc, char *argv[]) {
-    unsigned char x=2, y=0, oldx=2, oldy=0;
+    unsigned char y;
     unsigned int t=0xa000;
-    char tx=1, ty=1, s;
+    char tx=1, ty=1;
+    int s = 0;
+    unsigned int f;
 
+    test_fp();
+    for(s=0; s<NB_SPRITES; s++) {
+        f = 200.0f-s;
+        sprites[s].pos.x =  f;
+        printf("%d",        s);
+        printf(" %f   ",    sprites[s].pos.x);
+        printf("f is %f\n", f);
+        sprites[s].pos.y = 0.0f;
+        sprites[s].pos.z = 0.0f;
+    }
+while(1);
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
         t+=40;
