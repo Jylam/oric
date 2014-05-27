@@ -24,18 +24,21 @@ sprite sprites[NB_SPRITES];
 
 void set_colors(void) {
     unsigned int y;
-
+    unsigned char mask = 0;
     for(y=0; y<200; y++) {
         screen[(y*40)+0] = A_FWYELLOW;
-
-        if(y&0x04) screen[(y*40)+1] = A_BGRED;
-        else       screen[(y*40)+1] = A_BGBLACK;
+        mask++;
+        if((y&mask)>64) {
+            screen[(y*40)+1] = A_BGBLUE;
+        } else {
+            screen[(y*40)+1] = A_BGBLACK;
+        }
     }
 
 }
 
 int main(int argc, char *argv[]) {
-    unsigned char x=0, y=0, oldx=0, oldy=0;
+    unsigned char x=2, y=0, oldx=2, oldy=0;
     unsigned int t=0xa000;
     char tx=1, ty=1, s;
 
@@ -47,7 +50,7 @@ int main(int argc, char *argv[]) {
 #if 1
     y = 0;
     for(s=0;s<NB_SPRITES;s++) {
-        sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 1;
+        sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 2;
         sprites[s].x = (rand()&0x0F)+2;
         sprites[s].y = rand()&0x70;
         sprites[s].tx = (rand()&0x02)-1;

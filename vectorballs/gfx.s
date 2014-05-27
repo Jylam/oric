@@ -395,9 +395,6 @@ screen10_ptr_c2
 
 
 
-
-
-
     lda #%01000000
     ldy #0
 screen11_ptr_c
@@ -420,9 +417,6 @@ screen11_ptr_c2
 
 
 
-
-
-
     lda #%01000000
     ldy #0
 screen12_ptr_c
@@ -441,9 +435,6 @@ screen12_ptr_c2
     adc #00
     sta screen13_ptr_c+2
     sta screen13_ptr_c2+2
-
-
-
 
 
 
