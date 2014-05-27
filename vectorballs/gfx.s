@@ -175,12 +175,10 @@ _clear_sprite
 
 
 
-    ldx #12    ; Height
-    stx ty
-loop_y_c:
+; Unrolled loop
+
+    lda #%01000000
     ldy #0
-    ; $ffff is modified with the address from table_y
-        lda #%01000000
 screen_ptr_c
         sta $ffff,y  ; Store into screen
         iny
@@ -191,18 +189,273 @@ screen_ptr_c2
     ;; Each line we add 40 to the screen pointer
     lda screen_ptr_c+1
     adc #40
-    sta screen_ptr_c+1
-    sta screen_ptr_c2+1
+    sta screen2_ptr_c+1
+    sta screen2_ptr_c2+1
     lda screen_ptr_c+2
     adc #00
-    sta screen_ptr_c+2
-    sta screen_ptr_c2+2
+    sta screen2_ptr_c+2
+    sta screen2_ptr_c2+2
 
-    ; while(ty-- != 0) goto loop_y
+
+    lda #%01000000
+    ldy #0
+screen2_ptr_c
+        sta $ffff,y  ; Store into screen
+        iny
+screen2_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
     clc
-    ldx ty
-    dex
-    stx ty
-    bne loop_y_c
+    ;; Each line we add 40 to the screen pointer
+    lda screen2_ptr_c+1
+    adc #40
+    sta screen3_ptr_c+1
+    sta screen3_ptr_c2+1
+    lda screen2_ptr_c+2
+    adc #00
+    sta screen3_ptr_c+2
+    sta screen3_ptr_c2+2
+    ; while(ty-- != 0) goto loop_y
+
+
+
+    lda #%01000000
+    ldy #0
+screen3_ptr_c
+        sta $ffff,y  ; Store into screen
+        iny
+screen3_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen3_ptr_c+1
+    adc #40
+    sta screen4_ptr_c+1
+    sta screen4_ptr_c2+1
+    lda screen3_ptr_c+2
+    adc #00
+    sta screen4_ptr_c+2
+    sta screen4_ptr_c2+2
+
+
+
+    lda #%01000000
+    ldy #0
+screen4_ptr_c
+        sta $ffff,y  ; Store into screen
+        iny
+screen4_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen4_ptr_c+1
+    adc #40
+    sta screen5_ptr_c+1
+    sta screen5_ptr_c2+1
+    lda screen4_ptr_c+2
+    adc #00
+    sta screen5_ptr_c+2
+    sta screen5_ptr_c2+2
+
+
+
+    lda #%01000000
+    ldy #0
+screen5_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen5_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen4_ptr_c+1
+    adc #40
+    sta screen6_ptr_c+1
+    sta screen6_ptr_c2+1
+    lda screen4_ptr_c+2
+    adc #00
+    sta screen6_ptr_c+2
+    sta screen6_ptr_c2+2
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen6_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen6_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen6_ptr_c+1
+    adc #40
+    sta screen7_ptr_c+1
+    sta screen7_ptr_c2+1
+    lda screen6_ptr_c+2
+    adc #00
+    sta screen7_ptr_c+2
+    sta screen7_ptr_c2+2
+
+
+
+    lda #%01000000
+    ldy #0
+screen7_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen7_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen7_ptr_c+1
+    adc #40
+    sta screen8_ptr_c+1
+    sta screen8_ptr_c2+1
+    lda screen7_ptr_c+2
+    adc #00
+    sta screen8_ptr_c+2
+    sta screen8_ptr_c2+2
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen8_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen8_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen8_ptr_c+1
+    adc #40
+    sta screen9_ptr_c+1
+    sta screen9_ptr_c2+1
+    lda screen8_ptr_c+2
+    adc #00
+    sta screen9_ptr_c+2
+    sta screen9_ptr_c2+2
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen9_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen9_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen9_ptr_c+1
+    adc #40
+    sta screen10_ptr_c+1
+    sta screen10_ptr_c2+1
+    lda screen9_ptr_c+2
+    adc #00
+    sta screen10_ptr_c+2
+    sta screen10_ptr_c2+2
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen10_ptr_c
+        sta $ffff,y  ; Store into screen
+         iny
+screen10_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen10_ptr_c+1
+    adc #40
+    sta screen11_ptr_c+1
+    sta screen11_ptr_c2+1
+    lda screen10_ptr_c+2
+    adc #00
+    sta screen11_ptr_c+2
+    sta screen11_ptr_c2+2
+
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen11_ptr_c
+    sta $ffff,y  ; Store into screen
+    iny
+screen11_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen11_ptr_c+1
+    adc #40
+    sta screen12_ptr_c+1
+    sta screen12_ptr_c2+1
+    lda screen11_ptr_c+2
+    adc #00
+    sta screen12_ptr_c+2
+    sta screen12_ptr_c2+2
+
+
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen12_ptr_c
+    sta $ffff,y  ; Store into screen
+    iny
+screen12_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+    clc
+    ;; Each line we add 40 to the screen pointer
+    lda screen12_ptr_c+1
+    adc #40
+    sta screen13_ptr_c+1
+    sta screen13_ptr_c2+1
+    lda screen12_ptr_c+2
+    adc #00
+    sta screen13_ptr_c+2
+    sta screen13_ptr_c2+2
+
+
+
+
+
+
+
+    lda #%01000000
+    ldy #0
+screen13_ptr_c
+    sta $ffff,y  ; Store into screen
+    iny
+screen13_ptr_c2
+        sta $ffff,y  ; Store into screen+1
+
+
     rts
 
