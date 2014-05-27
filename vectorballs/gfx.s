@@ -165,39 +165,38 @@ _clear_sprite
     lda (offset),y
     adc px
     sta screen_ptr_c+1   ; screen_ptr -> sta $0123,y
+    sta screen_ptr_c2+1
     ldy #1
     lda (offset),y
     adc #0
     sta screen_ptr_c+2
+    sta screen_ptr_c2+2
     clc
+
+
 
     ldx #12    ; Height
     stx ty
 loop_y_c:
-    ldx #2     ; Width
-    stx tx
     ldy #0
-loop_x_c:
     ; $ffff is modified with the address from table_y
         lda #%01000000
 screen_ptr_c
         sta $ffff,y  ; Store into screen
         iny
+screen_ptr_c2
+        sta $ffff,y  ; Store into screen+1
 
-        ; loop_x
-        ldx tx
-        clc
-        dex
-        stx tx
-        bne loop_x_c
 
     ;; Each line we add 40 to the screen pointer
     lda screen_ptr_c+1
     adc #40
     sta screen_ptr_c+1
+    sta screen_ptr_c2+1
     lda screen_ptr_c+2
     adc #00
     sta screen_ptr_c+2
+    sta screen_ptr_c2+2
 
     ; while(ty-- != 0) goto loop_y
     clc
