@@ -61,7 +61,7 @@ _draw_sprite
     sta sprite_ptr+2
 
 
-    ldx #11    ; Height
+    ldx #12    ; Height
     stx ty
 loop_y:
     ldx #2     ; Width
@@ -72,12 +72,12 @@ sprite_ptr
         ; $1234 is modified with the address of sprite+40*y
         lda $1234,y  ; Load sprite byte
         sta tmp_color
-screen_ptr
+screen_ptr_2
         ; $ffff is modified with the address from table_y
         lda $ffff,y  ; Load screen value
         clc
         ora tmp_color  ; inclusive OR
-screen_ptr_2
+screen_ptr
         sta $9999,y  ; Store into screen
         clc
         iny
