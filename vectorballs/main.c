@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
         sprites[s].x = rand()&0x0F;
         sprites[s].y = rand()&0x70;
         sprites[s].tx = (rand()&0x02)-1;
-        if(sprites[s].tx == 0) sprites[s].tx = 1;
+        if(sprites[s].tx == 0) sprites[s].tx = 4;
         sprites[s].ty = (rand()&0x03)-1;
-        if(sprites[s].ty == 0) sprites[s].ty = 1;
+        if(sprites[s].ty == 0) sprites[s].ty = 4;
 
     }
 #endif
