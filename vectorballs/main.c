@@ -45,12 +45,11 @@ sprite sprites[NB_SPRITES];
 void test_fp(void) {
     unsigned int x = FP(100);
     unsigned int y = FP(30);
-    unsigned int price = FP(1);
+    unsigned int price;
 
-    for(x=0; x<10; x++) {
-        price = sin[x];
-        printf("%d\n", INT(price));
-    }
+    x = 100;
+    price = sin[x];
+    printf("sin(%d) = %d\n", x, INT(price));
 
     while(1);
 
