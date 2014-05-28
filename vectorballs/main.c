@@ -1,6 +1,7 @@
 #define NULL ((void*)0)
 #include <sys/graphics.h>
 #include <lib.h>
+#include "tables.h"
 #include "sprite.h"
 
 #define NB_SPRITES 10
@@ -42,24 +43,14 @@ sprite sprites[NB_SPRITES];
 #define FP_DEC(a)(((unsigned int)(a & FP_MASK)<<FP_W)/(1<<FP_W))
 
 void test_fp(void) {
-    unsigned int x = FP(1);
-    unsigned int y = FP(2);
-    unsigned int price;
+    unsigned int x = FP(100);
+    unsigned int y = FP(30);
+    unsigned int price = FP(1);
 
-
-    while(1) {
-        price = FP_DIV(x, y);
-
-        printf("\n%d/%d\n", INT(x), INT(y));
-        printf("x     0x%x (%d)\n", x, x);
-        printf("y     0x%x (%d)\n", y, y);
-        printf("price 0x%x (%d)\n", price, price);
-        printf("dec   %d.%d\n", INT(price), FP_DEC(price));
-
-        if(INT(x) == 3) while(1);
-        x = FP(INT(x)+1);
+    for(x=0; x<10; x++) {
+        price = sin[x];
+        printf("%d\n", INT(price));
     }
-
 
     while(1);
 

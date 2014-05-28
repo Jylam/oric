@@ -33,3 +33,6 @@ tap:
 	cp symbols.txt test.tap $(ORICULATOR_TAPES)
 clean:
 	rm -f 2048.asm 2048_preproc.c 2048_preproc 2048.preproc  2048.temp_asm 2048.bin 2048_m.asm 1.asm go.asm
+
+tables:
+	gcc make_tables.c -o make_tables -lm
