@@ -36,3 +36,4 @@ clean:
 
 tables:
 	gcc make_tables.c -o make_tables -lm
+	./make_tables > tables.h
