@@ -2,7 +2,7 @@
 #include <math.h>
 #define FP_W 8
 
-#define FIXED signed short
+#define FIXED unsigned short
 
 // 255 (all LSB set, all MSB clear)
 #define FP_MASK ((1 << FP_W) - 1)
@@ -59,17 +59,25 @@ void test_fp(void) {
 }
 
 void gen_tables(void) {
-    float x = 10;
-    float y = 0;
-    float x2, y2;
-    FIXED angle = FP(0);
+    FIXED x = FP(10);
+    FIXED y = FP(0);
+    FIXED x2, y2;
+    float angle;
     float a;
+    int i = 0;
 
-    for(angle = FP(0); angle < FLOAT_TO_FP(120.0f); angle+=FP(10)) {
-        a = FP_TO_FLOAT(angle*M_PI/180.0f);
-        x2 = x*cos(a) - y*sin(a);
-        y2 = x*sin(a) + y*cos(a);
-        printf("Angle %f,   x = %f,  y = %f\n", FP_TO_FLOAT(angle), x2, y2);
+    for(i=0; i<256; i++) {
+        FIXED cosa, sina;
+        angle+=(360.0f/256.0f);
+
+        a = angle*M_PI/180.0f;
+        cosa = FLOAT_TO_FP(cos(a));
+        sina = FLOAT_TO_FP(sin(a));
+
+        x2 = FP_MUL(x, cosa) - FP_MUL(y, sina);
+        y2 = FP_MUL(x, sina) + FP_MUL(y, cosa);
+
+        printf("%d: Angle %f (FP %f, should be %f),\tx = %f,\ty = %f\n", i, angle, FP_TO_FLOAT(a), angle*M_PI/180.0f,FP_TO_FLOAT((signed short)x2), FP_TO_FLOAT((signed short)y2));
     }
 
 }
