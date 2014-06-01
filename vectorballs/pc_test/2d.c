@@ -62,14 +62,14 @@ void gen_tables(void) {
     float x = 10;
     float y = 0;
     float x2, y2;
-    float angle = 0;
+    FIXED angle = FP(0);
     float a;
 
-    for(angle = 0; angle < 360.0f; angle+=10.0f) {
-        a = angle*M_PI/180.0f;
+    for(angle = FP(0); angle < FLOAT_TO_FP(120.0f); angle+=FP(10)) {
+        a = FP_TO_FLOAT(angle*M_PI/180.0f);
         x2 = x*cos(a) - y*sin(a);
         y2 = x*sin(a) + y*cos(a);
-        printf("Angle %f,   x = %f,  y = %f\n", angle, x2, y2);
+        printf("Angle %f,   x = %f,  y = %f\n", FP_TO_FLOAT(angle), x2, y2);
     }
 
 }
