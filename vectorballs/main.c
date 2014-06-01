@@ -18,7 +18,10 @@ typedef struct {
     char tx, ty;
 } sprite;
 
+extern void VSync(void);
 extern void draw_sprite(unsigned char x, unsigned char y);
+extern void clear_sprite(unsigned char x, unsigned char y);
+extern void IrqOff(void);
 
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
@@ -42,16 +45,25 @@ sprite sprites[NB_SPRITES];
 
 #define FP_DEC(a)(((unsigned int)(a & FP_MASK)<<FP_W)/(1<<FP_W))
 
+
+void rotateX(unsigned int x, unsigned int y) {
+    // x' = x*cos(theta) - y*sin(theta)
+    // y' = x*sin(theta) + y*cos(theta)
+    unsigned int x2;
+    unsigned int y2;
+
+
+}
+
 void test_fp(void) {
-    unsigned int x = FP(100);
-    unsigned int y = FP(30);
-    unsigned int price;
+    unsigned int x = FP(100), x2;
+    unsigned int y = FP(30), y2;
 
-    x = 100;
-    price = sin[x];
-    printf("sin(%d) = %d\n", x, INT(price));
+    while(1) {
+        rotateX();
 
-    while(1);
+        printf("%d   %d\n", INT(x), INT(y));
+    }
 
 }
 
@@ -85,6 +97,7 @@ int main(int argc, char *argv[]) {
     int s = 0;
     unsigned int f;
 
+#if 1
     test_fp();
     for(s=0; s<NB_SPRITES; s++) {
         f = 200.0f-s;
@@ -95,7 +108,7 @@ int main(int argc, char *argv[]) {
         sprites[s].pos.y = 0.0f;
         sprites[s].pos.z = 0.0f;
     }
-while(1);
+#endif
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
         t+=40;
@@ -130,10 +143,15 @@ while(1);
     }
 #else
     set_colors();
+    IrqOff();
+
     while(1) {
+        // clear the old ones
+        VSync();
         for(s=0;s<NB_SPRITES;s++) {
             clear_sprite(sprites[s].oldx, sprites[s].oldy);
         }
+        // Draw the new ones
         for(s=0;s<NB_SPRITES;s++) {
 
             sprites[s].x+=sprites[s].tx;

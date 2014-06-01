@@ -16,6 +16,18 @@ offset      .dsb 2
 _zp_end_
 .text
 
+_VSync
+    lda $300
+vsync_wait
+    lda $30D
+    and #%00010000 ;test du bit cb1 du registre d'indicateur d'IRQ
+    beq vsync_wait
+    rts
+
+_IrqOff
+    sei
+    rts
+
 _draw_sprite
     ldy #0      ; Load argument x
     lda (sp),y  ;
