@@ -8,6 +8,8 @@
 #define SPRITE_W 2
 #define SPRITE_H 12
 
+#define FIXED unsigned int
+
 typedef struct {
     float x, y, z;
 } vec3;
@@ -25,7 +27,7 @@ extern void IrqOff(void);
 
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
-volatile unsigned int table_y[200];
+volatile FIXED table_y[200];
 
 
 sprite sprites[NB_SPRITES];
@@ -43,33 +45,37 @@ sprite sprites[NB_SPRITES];
 #define FP_MUL(a, b) ((a)*INT((b)))
 #define FP_DIV(a, b) ((a)/INT((b)))
 
-#define FP_DEC(a)(((unsigned int)(a & FP_MASK)<<FP_W)/(1<<FP_W))
+#define FP_DEC(a)(((FIXED)(a & FP_MASK)<<FP_W)/(1<<FP_W))
+
+#include "pc_test/tables.h"
+
+void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina) {
+    FIXED x2, y2;
 
 
-void rotateX(unsigned int x, unsigned int y) {
-    // x' = x*cos(theta) - y*sin(theta)
-    // y' = x*sin(theta) + y*cos(theta)
-    unsigned int x2;
-    unsigned int y2;
+//    printf("cos %04X  sin %04X  (%f %f)\n", (unsigned short)cosa, (unsigned short)sina, FP_TO_FLOAT(cosa), FP_TO_FLOAT(sina));
+    x2 = ((x*cosa)>>FP_W)-((y*sina)>>FP_W);
+    y2 = ((x*sina)>>FP_W)+((y*cosa)>>FP_W);
 
-
+    printf("%d  %d\n", INT(x2), INT(y2));
 }
 
 void test_fp(void) {
-    unsigned int x = FP(100), x2;
-    unsigned int y = FP(30), y2;
+   FIXED x = FP(10);
+    FIXED y = FP(0);
+    FIXED x2, y2;
+    int i = 0;
 
-    while(1) {
-        rotateX();
-
-        printf("%d   %d\n", INT(x), INT(y));
+    for(i=0; i<256; i++) {
+        rotateX(x, y, cosa88[i], sina88[i]);
     }
+
 
 }
 
 
 void set_colors(void) {
-    unsigned int y;
+    FIXED y;
     unsigned char mask = 0;
     for(y=0; y<200; y++) {
         screen[(y*40)+0] = A_FWYELLOW;
@@ -92,13 +98,14 @@ void set_colors(void) {
 
 int main(int argc, char *argv[]) {
     unsigned char y;
-    unsigned int t=0xa000;
+    FIXED t=0xa000;
     char tx=1, ty=1;
     int s = 0;
-    unsigned int f;
+    FIXED f;
 
 #if 1
     test_fp();
+while(1);
     for(s=0; s<NB_SPRITES; s++) {
         f = 200.0f-s;
         sprites[s].pos.x =  f;
