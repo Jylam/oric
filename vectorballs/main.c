@@ -45,38 +45,75 @@ sprite sprites[NB_SPRITES];
 #include "pc_test/tables.h"
 
 
-void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
-
+//x' = x*cos q - y*sin q
+//y' = x*sin q + y*cos q
+//z' = z
+void rotateZ(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
     *x2 = ((x/cosa))-((y/sina));
     *y2 = ((x/sina))+((y/cosa));
-
-//    printf("%d  %d (%x %x)\n", x2, y2, x2, y2);
+}
+//y' = y*cos q - z*sin q
+//z' = y*sin q + z*cos q
+//x' = x
+void rotateX(FIXED y, FIXED z, FIXED cosa, FIXED sina, FIXED *y2, FIXED *z2) {
+    *y2 = ((y/cosa))-((z/sina));
+    *z2 = ((y/sina))+((z/cosa));
+}
+// z' = z*cos q - x*sin q
+// x' = z*sin q + x*cos q
+// y' = y
+void rotateY(FIXED x, FIXED z, FIXED cosa, FIXED sina, FIXED *x2, FIXED *z2) {
+    *x2 = ((z/cosa))-((x/sina));
+    *z2 = ((z/sina))+((x/cosa));
 }
 
 
-void test_fp(void) {
+void vectorballs(void) {
     unsigned char i = 0;
-    static FIXED x2, y2;
+    static FIXED x2, y2, z2;
     unsigned char s = 0;
 
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = FP(s*8);
         sprites[s].y = FP(0);
+        sprites[s].z = 0;
     }
 
-    hires();
 
     s = 0;
-    for(i=0; ; i++) {
-        for(s=0; s<NB_SPRITES; s++) {
+    for(i=0; ; i+=4) {
+        for(s=NB_SPRITES-1; s>0; s--) {
+            if((sprites[s].oldx>2) && (sprites[s].oldy>0) && (sprites[s].oldx<36) && (sprites[s].oldy<200))
             clear_sprite(sprites[s].oldx, sprites[s].oldy);
         }
 
         for(s=0; s<NB_SPRITES; s++) {
-            rotateX(sprites[s].x, sprites[s].y, cosa88[i], sina88[i], &x2, &y2);
-            sprites[s].oldx = (x2/6)+20;
-            sprites[s].oldy = y2+100;
+
+            x2 = sprites[s].x;
+            y2 = sprites[s].y;
+            z2 = sprites[s].z;
+            rotateZ(sprites[s].x, sprites[s].y, cosa88[i], sina88[i], &x2, &y2);
+//            rotateY(sprites[s].x, sprites[s].z, cosa88[i], sina88[i], &x2, &z2);
+            x2 = FP(x2);
+            y2 = FP(y2);
+            z2 += 200;
+            z2 = z2; // Zoom
+
+            if(z2>0) {
+                x2 = x2/(z2);
+                y2 = y2/(z2);
+                sprites[s].oldx = ((x2)/6)+20;
+                sprites[s].oldy = (y2)+100;
+            } else {
+                sprites[s].oldx = 2;
+                sprites[s].oldy = 0;
+            }
+        }
+
+        for(s=0; s<NB_SPRITES; s++) {
+            if((sprites[s].oldx>2) && (sprites[s].oldy>0) && (sprites[s].oldx<36) && (sprites[s].oldy<200)) {
             draw_sprite(sprites[s].oldx, sprites[s].oldy);
+            }
         }
         VSync();
 
@@ -120,49 +157,12 @@ int main(int argc, char *argv[]) {
         table_y[y] = t;
         t+=40;
     }
-#if 1
-    test_fp();
-    while(1);
-#endif
 
-    y = 0;
-    for(s=0;s<NB_SPRITES;s++) {
-        sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 2;
-        sprites[s].x = FP(32);
-        sprites[s].y = FP(0);
-    }
-
-    //    hires();
-    //  setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
-
-    //    set_colors();
     IrqOff();
+    hires();
+    set_colors();
 
-    while(1) {
-        // clear the old ones
-        for(s=0;s<NB_SPRITES;s++) {
-            clear_sprite(sprites[s].oldx, sprites[s].oldy);
-        }
-        // Draw the new ones
-        for(s=0;s<NB_SPRITES;s++) {
-            //z' = z*cos q - x*sin q
-            //x' = z*sin q + x*cos q
-            //y' = y
-
-            rotateX(sprites[s].x, sprites[s].y, cosa88[angle], sina88[angle], &x2, &y2);
-            printf("%x %x %x\n", angle, x2, y2);
-            sprites[s].x = x2+100;
-            sprites[s].y = y2+100;
-
-            sprites[s].oldx = sprites[s].x;
-            sprites[s].oldy = sprites[s].y;
-
-            draw_sprite(sprites[s].x, sprites[s].y);
-        }
-        angle++;
-        angle=angle&0x0F;
-        VSync();
-    }
+    vectorballs();
 }
 
 
