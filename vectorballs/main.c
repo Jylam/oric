@@ -4,7 +4,7 @@
 #include "tables.h"
 #include "sprite.h"
 
-#define NB_SPRITES 1
+#define NB_SPRITES 8
 #define SPRITE_W 2
 #define SPRITE_H 12
 
@@ -55,23 +55,31 @@ void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
 
 
 void test_fp(void) {
-    FIXED x = FP(64);
-    FIXED y = FP(0);
     unsigned char i = 0;
-    int r = 2;
     static FIXED x2, y2;
-    FIXED oldx, oldy;
+    unsigned char s = 0;
+
+    for(s=0;s<NB_SPRITES;s++) {
+        sprites[s].x = FP(s*8);
+        sprites[s].y = FP(0);
+    }
 
     hires();
+
+    s = 0;
     for(i=0; ; i++) {
-        rotateX(x, y, cosa88[i], sina88[i], &x2, &y2);
-    //    printf("%d: %x %x\n", i, x2, y2);
-    //    curset(x2+100, y2+100,3);
-      //  circle(r,2);
-        clear_sprite(oldx, oldy);
-        oldx = (x2/6)+20;
-        oldy = y2+100;
-        draw_sprite(oldx, oldy);
+        for(s=0; s<NB_SPRITES; s++) {
+            clear_sprite(sprites[s].oldx, sprites[s].oldy);
+        }
+
+        for(s=0; s<NB_SPRITES; s++) {
+            rotateX(sprites[s].x, sprites[s].y, cosa88[i], sina88[i], &x2, &y2);
+            sprites[s].oldx = (x2/6)+20;
+            sprites[s].oldy = y2+100;
+            draw_sprite(sprites[s].oldx, sprites[s].oldy);
+        }
+        VSync();
+
     }
 
 
@@ -85,7 +93,7 @@ void set_colors(void) {
         screen[(y*40)+0] = A_FWYELLOW;
         mask++;
         if((y&mask)>64) {
-        screen[(y*40)+1] = A_BGBLUE;
+            screen[(y*40)+1] = A_BGBLUE;
         } else {
             screen[(y*40)+1] = A_BGBLACK;
         }
@@ -114,7 +122,7 @@ int main(int argc, char *argv[]) {
     }
 #if 1
     test_fp();
-while(1);
+    while(1);
 #endif
 
     y = 0;
@@ -124,10 +132,10 @@ while(1);
         sprites[s].y = FP(0);
     }
 
-//    hires();
-  //  setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
+    //    hires();
+    //  setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-//    set_colors();
+    //    set_colors();
     IrqOff();
 
     while(1) {
@@ -137,9 +145,9 @@ while(1);
         }
         // Draw the new ones
         for(s=0;s<NB_SPRITES;s++) {
-//z' = z*cos q - x*sin q
-//x' = z*sin q + x*cos q
-//y' = y
+            //z' = z*cos q - x*sin q
+            //x' = z*sin q + x*cos q
+            //y' = y
 
             rotateX(sprites[s].x, sprites[s].y, cosa88[angle], sina88[angle], &x2, &y2);
             printf("%x %x %x\n", angle, x2, y2);
@@ -151,9 +159,9 @@ while(1);
 
             draw_sprite(sprites[s].x, sprites[s].y);
         }
-            angle++;
-            angle=angle&0x0F;
-            VSync();
+        angle++;
+        angle=angle&0x0F;
+        VSync();
     }
 }
 
