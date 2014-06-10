@@ -22,7 +22,7 @@
 
 #define FP_DEC(a)(((FIXED)(a & FP_MASK)<<FP_W)/(1<<FP_W))
 
-#include "tables.h"
+//#include "tables.h"
 
 
 void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina) {
@@ -44,7 +44,7 @@ void test_fp(void) {
 
 
     for(i=0; i<256; i++) {
-        rotateX(x, y, cosa88[i], sina88[i]);
+        //rotateX(x, y, cosa88[i], sina88[i]);
     }
 
 }
@@ -64,7 +64,7 @@ void gen_tables(void) {
         float a = (angle*M_PI/180.0f);
         FIXED cosa = FLOAT_TO_FP((1.0f/cos(a)));
 
-//        printf("%04x, %f, ____  %f\n", cosa, FP_TO_FLOAT(cosa), 1.0f/cos(a));
+//        printf("%d, angle %f, %04x, %f, ____  %f\n", i, angle, cosa, FP_TO_FLOAT(cosa), 1.0f/cos(a));
         if(cosa != 0x0000)
         printf("0x%04x, ", cosa&0xFFFF, FP_TO_FLOAT(cosa));
         else

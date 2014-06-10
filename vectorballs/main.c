@@ -4,11 +4,11 @@
 #include "tables.h"
 #include "sprite.h"
 
-#define NB_SPRITES 10
+#define NB_SPRITES 1
 #define SPRITE_W 2
 #define SPRITE_H 12
 
-#define FIXED unsigned int
+#define FIXED int
 
 typedef struct {
     float x, y, z;
@@ -60,14 +60,14 @@ void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
 
 
 void test_fp(void) {
-    FIXED x = FP(63);
+    FIXED x = FP(128);
     FIXED y = FP(0);
     unsigned int i = 0;
     int r = 2;
     static FIXED x2, y2;
-    hires();
 
-    for(i=0; i<256; i++) {
+    hires();
+    for(i=0; i<255; i++) {
         rotateX(x, y, cosa88[i], sina88[i], &x2, &y2);
     //    printf("%d: %x %x\n", i, x2, y2);
         curset(x2+100, y2+100,3);
@@ -106,53 +106,33 @@ int main(int argc, char *argv[]) {
     char tx=1, ty=1;
     int s = 0;
     FIXED f;
+    unsigned char angle = 0;
+    static FIXED x2, y2;
 
-#if 1
+#if 0
     test_fp();
 while(1);
-    for(s=0; s<NB_SPRITES; s++) {
-        f = 200.0f-s;
-        sprites[s].pos.x =  f;
-        printf("%d",        s);
-        printf(" %f   ",    sprites[s].pos.x);
-        printf("f is %f\n", f);
-        sprites[s].pos.y = 0.0f;
-        sprites[s].pos.z = 0.0f;
-    }
 #endif
     for(y=0 ; y<200; y++) {
         table_y[y] = t;
         t+=40;
     }
 
-#if 1
     y = 0;
     for(s=0;s<NB_SPRITES;s++) {
         sprites[s].x = sprites[s].y = sprites[s].oldx = sprites[s].oldy = 2;
-        sprites[s].x = (rand()&0x0F)+2;
-        sprites[s].y = rand()&0x70;
+        sprites[s].x = FP(64);
+        sprites[s].y = FP(64);
         sprites[s].tx = (rand()&0x02)-1;
         if(sprites[s].tx == 0) sprites[s].tx = 4;
         sprites[s].ty = (rand()&0x03)-1;
         if(sprites[s].ty == 0) sprites[s].ty = 4;
 
     }
-#endif
 
     hires();
     setflags(getflags()&~(CURSOR|SCREEN)); // Disable cursor and scrolling
 
-#if 0
-    while(1) {
-        for(y=0;y<188; y+=6) {
-            for(x=0;x<40; x+=SPRITE_W) {
-                draw_sprite(x, y);
-                for(t=0; t < 1; t++);
-            }
-        }
-        while(1);
-    }
-#else
     set_colors();
     IrqOff();
 
@@ -164,20 +144,21 @@ while(1);
         }
         // Draw the new ones
         for(s=0;s<NB_SPRITES;s++) {
+//z' = z*cos q - x*sin q
+//x' = z*sin q + x*cos q
+//y' = y
 
-            sprites[s].x+=sprites[s].tx;
-            sprites[s].y+=sprites[s].ty;
-            if(sprites[s].x<=2)   sprites[s].tx =  -sprites[s].tx;
-            if(sprites[s].x>=38)  sprites[s].tx =  -sprites[s].tx;
-            if(sprites[s].y<=0)   sprites[s].ty =  -sprites[s].ty;
-            if(sprites[s].y>=188) sprites[s].ty =  -sprites[s].ty;
+            rotateX(sprites[s].x, sprites[s].y, cosa88[angle], sina88[angle], &x2, &y2);
+            sprites[s].x = x2+100;
+            sprites[s].y = y2+100;
+            angle++;
+
             sprites[s].oldx = sprites[s].x;
             sprites[s].oldy = sprites[s].y;
 
             draw_sprite(sprites[s].x, sprites[s].y);
         }
     }
-#endif
 }
 
 
