@@ -49,25 +49,29 @@ sprite sprites[NB_SPRITES];
 
 #include "pc_test/tables.h"
 
-void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina) {
-    FIXED x2, y2;
 
+void rotateX(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
 
-//    printf("cos %04X  sin %04X  (%f %f)\n", (unsigned short)cosa, (unsigned short)sina, FP_TO_FLOAT(cosa), FP_TO_FLOAT(sina));
-    x2 = ((x*cosa)>>FP_W)-((y*sina)>>FP_W);
-    y2 = ((x*sina)>>FP_W)+((y*cosa)>>FP_W);
+    *x2 = ((x/cosa))-((y/sina));
+    *y2 = ((x/sina))+((y/cosa));
 
-    printf("%d  %d\n", INT(x2), INT(y2));
+//    printf("%d  %d (%x %x)\n", x2, y2, x2, y2);
 }
 
+
 void test_fp(void) {
-   FIXED x = FP(10);
+    FIXED x = FP(63);
     FIXED y = FP(0);
-    FIXED x2, y2;
-    int i = 0;
+    unsigned int i = 0;
+    int r = 2;
+    static FIXED x2, y2;
+    hires();
 
     for(i=0; i<256; i++) {
-        rotateX(x, y, cosa88[i], sina88[i]);
+        rotateX(x, y, cosa88[i], sina88[i], &x2, &y2);
+    //    printf("%d: %x %x\n", i, x2, y2);
+        curset(x2+100, y2+100,3);
+        circle(r,2);
     }
 
 
