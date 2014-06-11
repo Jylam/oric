@@ -4,7 +4,7 @@
 #include "tables.h"
 #include "sprite.h"
 
-#define NB_SPRITES 8
+#define NB_SPRITES 9
 #define SPRITE_W 2
 #define SPRITE_H 12
 
@@ -70,7 +70,7 @@ void rotateY(FIXED x, FIXED z, FIXED cosa, FIXED sina, FIXED *x2, FIXED *z2) {
 
 
 void vectorballs(void) {
-    unsigned char i = 0;
+    unsigned char angle = 0;
     static FIXED x2, y2, z2;
     unsigned char s = 0;
 
@@ -82,15 +82,15 @@ void vectorballs(void) {
 
 
     s = 0;
-    for(i=0; ; i+=8) {
 
+    while(1) {
         for(s=0; s<NB_SPRITES; s++) {
 
             x2 = sprites[s].ox;
             y2 = sprites[s].oy;
             z2 = sprites[s].oz;
-            rotateZ(sprites[s].ox, sprites[s].oy, cosa88[i], sina88[i], &x2, &y2);
-//            rotateY(sprites[s].x, sprites[s].z, cosa88[i], sina88[i], &x2, &z2);
+            rotateZ(sprites[s].ox, sprites[s].oy, cosa88[angle], sina88[angle], &x2, &y2);
+//            rotateY(sprites[s].ox, sprites[s].oz, cosa88[angle], sina88[angle], &x2, &z2);
             x2 = FP(x2);
             y2 = FP(y2);
             z2 += 255;
@@ -119,7 +119,7 @@ void vectorballs(void) {
             sprites[s].oldy = sprites[s].y;
         }
         VSync();
-
+        angle+=8;
     }
 
 
