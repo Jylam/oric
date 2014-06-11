@@ -66,9 +66,9 @@ void gen_tables(void) {
 
 //        printf("%d, angle %f, %04x, %f, ____  %f\n", i, angle, cosa, FP_TO_FLOAT(cosa), 1.0f/cos(a));
         if(cosa != 0x0000)
-        printf("0x%04x, ", cosa&0xFFFF, FP_TO_FLOAT(cosa));
+        printf("0x%04x, /* %d */\n", cosa&0xFFFF, FP_TO_FLOAT(cosa), cosa);
         else
-        printf("0x0100, ");
+        printf("0x2896, /* %d */\n", cosa);
 
         angle+=(360.0f/256.0f);
     }
@@ -80,9 +80,9 @@ void gen_tables(void) {
         FIXED sina = FLOAT_TO_FP(1.0f/sin(a));
 
         if(sina != 0x0000)
-        printf("0x%04x, ", sina&0xFFFF);
+        printf("0x%04x, \n", sina&0xFFFF);
         else
-        printf("0x0100, ");
+        printf("0x2896, \n");
         angle+=(360.0f/256.0f);
     }
     printf("\n};\n");

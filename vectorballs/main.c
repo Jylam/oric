@@ -11,6 +11,7 @@
 #define FIXED int
 
 typedef struct {
+    FIXED ox, oy, oz;
     FIXED x, y, z;
     FIXED oldx, oldy, oldz;
 } sprite;
@@ -74,46 +75,48 @@ void vectorballs(void) {
     unsigned char s = 0;
 
     for(s=0;s<NB_SPRITES;s++) {
-        sprites[s].x = FP(s*8);
-        sprites[s].y = FP(0);
-        sprites[s].z = 0;
+        sprites[s].ox = FP(s*16)-FP((NB_SPRITES*16)/2);
+        sprites[s].oy = FP(0);
+        sprites[s].oz = 0;
     }
 
 
     s = 0;
-    for(i=0; ; i+=4) {
-        for(s=NB_SPRITES-1; s>0; s--) {
-            if((sprites[s].oldx>2) && (sprites[s].oldy>0) && (sprites[s].oldx<36) && (sprites[s].oldy<200))
-            clear_sprite(sprites[s].oldx, sprites[s].oldy);
-        }
+    for(i=0; ; i+=8) {
 
         for(s=0; s<NB_SPRITES; s++) {
 
-            x2 = sprites[s].x;
-            y2 = sprites[s].y;
-            z2 = sprites[s].z;
-            rotateZ(sprites[s].x, sprites[s].y, cosa88[i], sina88[i], &x2, &y2);
+            x2 = sprites[s].ox;
+            y2 = sprites[s].oy;
+            z2 = sprites[s].oz;
+            rotateZ(sprites[s].ox, sprites[s].oy, cosa88[i], sina88[i], &x2, &y2);
 //            rotateY(sprites[s].x, sprites[s].z, cosa88[i], sina88[i], &x2, &z2);
             x2 = FP(x2);
             y2 = FP(y2);
-            z2 += 200;
+            z2 += 255;
             z2 = z2; // Zoom
 
             if(z2>0) {
                 x2 = x2/(z2);
                 y2 = y2/(z2);
-                sprites[s].oldx = ((x2)/6)+20;
-                sprites[s].oldy = (y2)+100;
+                sprites[s].x = ((x2)/6)+20;
+                sprites[s].y = (y2)+100;
             } else {
-                sprites[s].oldx = 2;
-                sprites[s].oldy = 0;
+                sprites[s].x = 2;
+                sprites[s].y = 0;
             }
         }
 
         for(s=0; s<NB_SPRITES; s++) {
-            if((sprites[s].oldx>2) && (sprites[s].oldy>0) && (sprites[s].oldx<36) && (sprites[s].oldy<200)) {
-            draw_sprite(sprites[s].oldx, sprites[s].oldy);
+            if((sprites[s].oldx>2) && (sprites[s].oldy>0) && (sprites[s].oldx<36) && (sprites[s].oldy<200))
+            clear_sprite(sprites[s].oldx, sprites[s].oldy);
+        }
+        for(s=0; s<NB_SPRITES; s++) {
+            if((sprites[s].x>2) && (sprites[s].y>0) && (sprites[s].x<36) && (sprites[s].y<200)) {
+            draw_sprite(sprites[s].x, sprites[s].y);
             }
+            sprites[s].oldx = sprites[s].x;
+            sprites[s].oldy = sprites[s].y;
         }
         VSync();
 
