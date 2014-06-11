@@ -74,9 +74,14 @@ void vectorballs(void) {
     static FIXED x2, y2, z2;
     unsigned char s = 0;
 
-    for(s=0;s<NB_SPRITES;s++) {
-        sprites[s].ox = FP(s*16)-FP((NB_SPRITES*16)/2);
+    for(s=0;s<NB_SPRITES/2;s++) {
+        sprites[s].ox = FP(s*16)-FP(((NB_SPRITES/2)*16));
         sprites[s].oy = FP(0);
+        sprites[s].oz = 0;
+    }
+    for(s=NB_SPRITES/2;s<NB_SPRITES;s++) {
+        sprites[s].ox = FP(0);
+        sprites[s].oy = FP(s*16)-FP(((NB_SPRITES)*16));
         sprites[s].oz = 0;
     }
 
@@ -119,7 +124,7 @@ void vectorballs(void) {
             sprites[s].oldy = sprites[s].y;
         }
         VSync();
-        angle+=8;
+        angle+=1;
     }
 
 
