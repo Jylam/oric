@@ -3,6 +3,9 @@
 #include <math.h>
 #include <SDL.h>
 
+#define FOV 200
+#define WIDTH 40
+#define HEIGHT 200
 
 void rotateY(float x,   float y,   float z,
         float *x2, float *y2, float *z2,
@@ -30,19 +33,32 @@ void rotateZ(float x,   float y,   float z,
 }
 
 
+#define D 10.0f
+float cube[] = {-D,   D, -D,
+                 D,   D, -D,
+                 D,  -D, -D,
+                -D,  -D, -D,
+                -D,   D, D,
+                 D,   D, D,
+                 D,  -D, D,
+                -D,  -D, D,
+};
+
 int main(int argc, char*argv[]) {
 
-    float x=100.0f, y=0.0f, z=0.0f;
+    float x=100.0f, y=0.0f, z=100.0f;
     float x2, y2, z2;
     float x3, y3, z3;
     float xr, yr, zr;
     float px, py;
     float angle_x = 0.0f, angle_y = 0.0f, angle_z = 0.0f;
-    int i, quit=0;
+    float cam_x = 0.0f, cam_y = 0.0f, cam_z = -150.0f;
+    int quit=0, curframe = 0, outsize=0;
+    char *outbuf = NULL;
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event e;
-    SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
+    SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
 
     while(!quit) {
@@ -61,13 +77,66 @@ int main(int argc, char*argv[]) {
             }
         }
 
-        rotateX(x, y, z, &x2, &y2, &z2,    (angle_z*M_PI/180.0f));
-        rotateY(x2, y2, z2, &x3, &y3, &z3, (angle_y*M_PI/180.0f));
-        rotateZ(x3, y3, z3, &xr, &yr, &zr, (angle_z*M_PI/180.0f));
-        angle_z+=1.0f;
+        printf("Frame %d\n", curframe);
+        int p;
+        char tmpstr[1000];
+        int visible = 0;
+        outbuf = calloc(1,1);
+        for(p = 0; p < sizeof(cube)/sizeof(float); p+=3) {
+            x = cube[p];
+            y = cube[p+1];
+            z = cube[p+2];
 
-        SDL_RenderDrawPoint(renderer, xr+400, yr+300); //Renders on middle of screen.
+            rotateX(x,  y,  z,  &x2, &y2, &z2, (angle_x*M_PI/180.0f));
+            rotateY(x2, y2, z2, &x3, &y3, &z3, (angle_y*M_PI/180.0f));
+            rotateZ(x3, y3, z3, &xr, &yr, &zr, (angle_z*M_PI/180.0f));
+
+            xr-=cam_x;
+            yr-=cam_y;
+            zr-=cam_z;
+
+            yr*=3.0f;
+
+
+            if(zr>=0.0f) {
+                px = xr * FOV / zr;
+                py = yr * FOV / zr;
+                px+=WIDTH/2;
+                py+=HEIGHT/2;
+                if(px>=0.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
+
+                    SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
+                    sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
+                    outsize+=strlen(tmpstr)+1;
+                    outbuf = realloc(outbuf, outsize);
+                    strncat(outbuf, tmpstr, 1000);
+                    visible++;
+                }
+            } else {
+                tmpstr[0] = 0;
+            }
+        }
+        printf("%u points\n%s\n", visible, outbuf);
+        free(outbuf);
+        outbuf = NULL;
+        visible = 0;
+        angle_x+=1.0f;
+        angle_y+=.5f;
+        angle_z+=.5f;
+
+        if(angle_x >= 360.0f) {
+            angle_x = angle_y = angle_z = 0.0f;
+            exit(0);
+        }
+        if(angle_x>=360.0f) angle_x = 0.0f;
+        if(angle_y>=360.0f) angle_y = 0.0f;
+        if(angle_z>=360.0f) angle_z = 0.0f;
+
         SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer);
+        SDL_Delay(10);
+        curframe++;
+
     }
 
     return 0;
