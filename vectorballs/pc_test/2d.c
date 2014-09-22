@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <math.h>
 
-
 #define FP_W 8
 
 #define FIXED int16_t
