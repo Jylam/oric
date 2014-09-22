@@ -187,15 +187,24 @@ void animcube(void) {
         offset = 0;
         while(offset<sizeof(anim)) {
             int i;
-            int f;
             char count      = anim[offset];
+            int old_offset;
             offset++;
+            old_offset = offset;
             for(i=0; i<count; i++) {
-                //screen[anim[offset]+(anim[offset+1]*40)] = 0x55;
-                //
-                               draw_sprite(anim[offset], anim[offset+1]);
+                draw_sprite(anim[offset], anim[offset+1]);
                 offset+=3; // X,Y,Depth
             }
+            for(i=0; i<10; i++) {
+                sprintf(&screen_text[52], "YOOOO\n");
+            }
+            offset = old_offset;
+            for(i=0; i<count; i++) {
+                clear_sprite(anim[offset], anim[offset+1]);
+                offset+=3; // X,Y,Depth
+            }
+
+
         }
 
     }

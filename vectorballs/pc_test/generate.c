@@ -96,15 +96,14 @@ int main(int argc, char*argv[]) {
             yr-=cam_y;
             zr-=cam_z;
 
-            yr*=2.0f;
-            xr/=3.0f;
+            yr*=3.0f;
+            xr/=1.5f;
             if(zr>=0.0f) {
                 px = xr * FOV / zr;
                 py = yr * FOV / zr;
                 px+=WIDTH/2;
                 py+=HEIGHT/2;
                 if(px>=2.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
-
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
                     //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
                     sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
@@ -120,9 +119,9 @@ int main(int argc, char*argv[]) {
         free(outbuf);
         outbuf = NULL;
         visible = 0;
-        angle_x+=4.0f;
-        angle_y+=.5f;
-        angle_z+=.5f;
+        angle_x+= 4;
+        angle_y+= 2;
+        angle_z+= 2;
 
         if(angle_x >= 360.0f) {
             angle_x = angle_y = angle_z = 0.0f;
