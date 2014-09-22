@@ -1,8 +1,10 @@
 #define NULL ((void*)0)
 #include <sys/graphics.h>
 #include <lib.h>
-#include "tables.h"
+//#include "tables.h"
 #include "sprite.h"
+#include "pc_test/cube.h"
+
 
 #define NB_SPRITES 8
 #define SPRITE_W 2
@@ -158,6 +160,49 @@ void set_colors(void) {
 
 }
 
+void sleep(int v) {
+    int a, b, c, d;
+
+    a = b = c = d = v;
+
+    while(a--) {
+        b = v;
+        while(b--) {
+            c = v;
+            while(c--) {
+                d = v;
+                while(d--) {
+
+                }
+            }
+        }
+    }
+}
+
+
+void animcube(void) {
+    int t;
+    int offset = 0;
+    while(1) {
+        offset = 0;
+        while(offset<sizeof(anim)) {
+            int i;
+            int f;
+            char count      = anim[offset];
+            offset++;
+            for(i=0; i<count; i++) {
+                //screen[anim[offset]+(anim[offset+1]*40)] = 0x55;
+                //
+                               draw_sprite(anim[offset], anim[offset+1]);
+                offset+=3; // X,Y,Depth
+            }
+        }
+
+    }
+
+
+}
+
 int main(int argc, char *argv[]) {
     unsigned char y;
     FIXED t=0xa000;
@@ -174,8 +219,8 @@ int main(int argc, char *argv[]) {
     IrqOff();
     hires();
     set_colors();
-
-    vectorballs();
+    animcube();
+    //    vectorballs();
 }
 
 

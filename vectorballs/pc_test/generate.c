@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #define FOV 200
-#define WIDTH 40
+#define WIDTH 36
 #define HEIGHT 200
 
 void rotateY(float x,   float y,   float z,
@@ -60,7 +60,7 @@ int main(int argc, char*argv[]) {
     SDL_Event e;
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
-   printf("unsigned char anim[] {\n");
+   printf("unsigned char anim[] = {\n");
 
     while(!quit) {
         while (SDL_PollEvent(&e)){
@@ -96,33 +96,31 @@ int main(int argc, char*argv[]) {
             yr-=cam_y;
             zr-=cam_z;
 
-            yr*=3.0f;
-
-
+            yr*=2.0f;
+            xr/=3.0f;
             if(zr>=0.0f) {
                 px = xr * FOV / zr;
                 py = yr * FOV / zr;
                 px+=WIDTH/2;
                 py+=HEIGHT/2;
-                if(px>=0.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
+                if(px>=2.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
 
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
                     //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
-                    sprintf(tmpstr, "0x%02X,0x%02X,0x%02X, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
+                    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
                     outsize+=strlen(tmpstr)+1;
                     outbuf = realloc(outbuf, outsize);
                     strncat(outbuf, tmpstr, 1000);
                     visible++;
                 }
             } else {
-                tmpstr[0] = 0;
             }
         }
         printf("%u,%s\n", visible, outbuf);
         free(outbuf);
         outbuf = NULL;
         visible = 0;
-        angle_x+=1.0f;
+        angle_x+=4.0f;
         angle_y+=.5f;
         angle_z+=.5f;
 
@@ -136,7 +134,7 @@ int main(int argc, char*argv[]) {
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
-        SDL_Delay(5);
+    //    SDL_Delay(50);
         curframe++;
     }
     printf("};\n");
