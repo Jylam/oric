@@ -4,7 +4,7 @@
 #include "tables.h"
 #include "sprite.h"
 
-#define NB_SPRITES 9
+#define NB_SPRITES 8
 #define SPRITE_W 2
 #define SPRITE_H 12
 
@@ -46,13 +46,6 @@ sprite sprites[NB_SPRITES];
 #include "pc_test/tables.h"
 
 
-//x' = x*cos q - y*sin q
-//y' = x*sin q + y*cos q
-//z' = z
-void rotateZ(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
-    *x2 = ((x/cosa))-((y/sina));
-    *y2 = ((x/sina))+((y/cosa));
-}
 //y' = y*cos q - z*sin q
 //z' = y*sin q + z*cos q
 //x' = x
@@ -67,10 +60,18 @@ void rotateY(FIXED x, FIXED z, FIXED cosa, FIXED sina, FIXED *x2, FIXED *z2) {
     *x2 = ((z/cosa))-((x/sina));
     *z2 = ((z/sina))+((x/cosa));
 }
+//x' = x*cos q - y*sin q    --->  x/(1/cos q) - y/(1/sin q)
+//y' = x*sin q + y*cos q
+//z' = z
+void rotateZ(FIXED x, FIXED y, FIXED cosa, FIXED sina, FIXED *x2, FIXED *y2) {
+    *x2 = ((x/cosa))-((y/sina));
+    *y2 = ((x/sina))+((y/cosa));
+}
 
 
 void vectorballs(void) {
     unsigned char angle = 0;
+    static FIXED x1, y1, z1;
     static FIXED x2, y2, z2;
     unsigned char s = 0;
 
@@ -91,21 +92,27 @@ void vectorballs(void) {
     while(1) {
         for(s=0; s<NB_SPRITES; s++) {
 
-            x2 = sprites[s].ox;
-            y2 = sprites[s].oy;
-            z2 = sprites[s].oz;
-            rotateZ(sprites[s].ox, sprites[s].oy, cosa88[angle], sina88[angle], &x2, &y2);
-//            rotateY(sprites[s].ox, sprites[s].oz, cosa88[angle], sina88[angle], &x2, &z2);
+
+            y1 = sprites[s].oy;
+            rotateY(sprites[s].ox, sprites[s].oz, cosa88[angle], sina88[angle], &x1, &z1);
+            x1 = FP(x1);
+            z1 = FP(z1);
+
+#if 1
+            rotateZ(x1, y1, cosa88[angle], sina88[angle], &x2, &y2);
             x2 = FP(x2);
             y2 = FP(y2);
-            z2 += 255;
-            z2 = z2; // Zoom
-
+            z2 = z1+FP(64);
+#else
+            x2 = x1;
+            y2 = y1;
+            z2 = z1+FP(64);
+#endif
             if(z2>0) {
-                x2 = x2/(z2);
-                y2 = y2/(z2);
-                sprites[s].x = ((x2)/6)+20;
-                sprites[s].y = (y2)+100;
+                x2 = FP_DIV(x2,z2);
+                y2 = FP_DIV(y2,z2);
+                sprites[s].x = INT((x2)/6)+20;
+                sprites[s].y = INT(y2)    +100;
             } else {
                 sprites[s].x = 2;
                 sprites[s].y = 0;
@@ -124,10 +131,8 @@ void vectorballs(void) {
             sprites[s].oldy = sprites[s].y;
         }
         VSync();
-        angle+=1;
+        angle+=8;
     }
-
-
 }
 
 
