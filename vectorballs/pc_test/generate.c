@@ -60,6 +60,7 @@ int main(int argc, char*argv[]) {
     SDL_Event e;
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
+   printf("unsigned char anim[] {\n");
 
     while(!quit) {
         while (SDL_PollEvent(&e)){
@@ -77,7 +78,7 @@ int main(int argc, char*argv[]) {
             }
         }
 
-        printf("Frame %d\n", curframe);
+//        printf("Frame %d\n", curframe);
         int p;
         char tmpstr[1000];
         int visible = 0;
@@ -106,7 +107,8 @@ int main(int argc, char*argv[]) {
                 if(px>=0.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
 
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
-                    sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
+                    //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
+                    sprintf(tmpstr, "0x%02X,0x%02X,0x%02X, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
                     outsize+=strlen(tmpstr)+1;
                     outbuf = realloc(outbuf, outsize);
                     strncat(outbuf, tmpstr, 1000);
@@ -116,7 +118,7 @@ int main(int argc, char*argv[]) {
                 tmpstr[0] = 0;
             }
         }
-        printf("%u points\n%s\n", visible, outbuf);
+        printf("%u,%s\n", visible, outbuf);
         free(outbuf);
         outbuf = NULL;
         visible = 0;
@@ -126,7 +128,7 @@ int main(int argc, char*argv[]) {
 
         if(angle_x >= 360.0f) {
             angle_x = angle_y = angle_z = 0.0f;
-            exit(0);
+            quit = 1;
         }
         if(angle_x>=360.0f) angle_x = 0.0f;
         if(angle_y>=360.0f) angle_y = 0.0f;
@@ -134,10 +136,9 @@ int main(int argc, char*argv[]) {
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
-        SDL_Delay(10);
+        SDL_Delay(5);
         curframe++;
-
     }
-
+    printf("};\n");
     return 0;
 }
