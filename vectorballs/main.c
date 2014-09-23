@@ -195,8 +195,8 @@ void animcube(void) {
                 draw_sprite(anim[offset], anim[offset+1]);
                 offset+=3; // X,Y,Depth
             }
-            for(i=0; i<10; i++) {
-                sprintf(&screen_text[52], "YOOOO\n");
+            for(i=0; i<5; i++) {
+                sprintf(&screen_text[52], "Oui, ca clignotte.\n");
             }
             offset = old_offset;
             for(i=0; i<count; i++) {
