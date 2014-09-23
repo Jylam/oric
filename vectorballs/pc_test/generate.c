@@ -121,11 +121,11 @@ int main(int argc, char*argv[]) {
         free(outbuf);
         outbuf = NULL;
         visible = 0;
-        angle_x+= 4;
-        angle_y+= 2;
-        angle_z+= 2;
+        //angle_x+= 4.2;
+        angle_y+= 3.5;
+        angle_z+= 1;
 
-        if(angle_x >= 360.0f) {
+        if(angle_z >= 360.0f) {
             angle_x = angle_y = angle_z = 0.0f;
             quit = 1;
         }

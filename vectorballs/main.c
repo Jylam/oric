@@ -9,6 +9,7 @@ extern void draw_sprite_at_address(unsigned char addrl, unsigned char addrh );
 extern void clear_sprite_at_address(unsigned char x, unsigned char y);
 extern void draw_sprite(unsigned char x, unsigned char y);
 extern void clear_sprite(unsigned char x, unsigned char y);
+extern void push_sprite_on_stack(void);
 extern void IrqOff(void);
 
 unsigned char *screen = (unsigned char*)0xa000;
@@ -87,8 +88,11 @@ void animcube(void) {
 void animcube_address(void) {
     int t;
     int offset = 0;
+    int frame = 0;
+
     while(1) {
         offset = 0;
+        frame = 0;
         while(offset<sizeof(anim)) {
             int i;
             char count      = anim[offset];
@@ -96,18 +100,19 @@ void animcube_address(void) {
             offset++;
             old_offset = offset;
             for(i=0; i<count; i++) {
+                push_sprite_on_stack();
                 draw_sprite_at_address(anim[offset], anim[offset+1]);
                 offset+=2; // 16bits address
             }
+            //VSync();
+            sprintf(&screen_text[52], "Frame %d\n", frame);
 
-            for(i=0; i<5; i++) {
-                sprintf(&screen_text[52], "Oui, ca clignotte.\n");
-            }
             offset = old_offset;
             for(i=0; i<count; i++) {
                 clear_sprite_at_address(anim[offset], anim[offset+1]);
                 offset+=2; // X,Y,Depth
             }
+            frame++;
         }
     }
 }

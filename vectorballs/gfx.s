@@ -462,6 +462,46 @@ screen13_ptr_c2
 
     rts
 
+_push_sprite_on_stack
+    tsx ; Save SP in x
+    txa ; Put X into A
+    tay ; Put A into Y
+
+    ldx #$78 ; This place seems unused
+    txs ; Set SP to $78
+
+
+    lda #$55
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+    pha
+
+    tya ; Restore SP
+    tax ;
+    txs ;
+
+    rts
 
 _draw_sprite_at_address
     ldy #0      ; Load add_l
@@ -471,14 +511,30 @@ _draw_sprite_at_address
     lda (sp),y  ; Load add_h
     sta screen+1
 
-    ; Address of screen in px:py
     ; Put the first half
+    ;; lda #$55
+    ; a stores the color
+    ;;;;;;;;;;
+    ; Get sprite pixel value
+    ; Set SP
+    tsx ; Save SP in x
+    txa ; Put X into A
+    tay ; Put A into Y
+
+    ldx #$60 ; $78 - 24 elements
+    txs ; Set SP to $78
+
+    tya ; Put old SP in A
+    tax ; Put old SP in X
+
+    pla ; Get pixel value
+    ;;;;;;;;;;
     ldy #0
-    lda #$55
-    sta (screen),y
+    sta (screen),y ; Store pixel on screen
+
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
 
     ; ----------- END OF LINE 0 -----------
@@ -495,11 +551,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 1 -----------
     ; Add 40 to the screen address
@@ -515,11 +571,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 2 -----------
     ; Add 40 to the screen address
@@ -535,11 +591,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 3 -----------
     ; Add 40 to the screen address
@@ -555,11 +611,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 4 -----------
     ; Add 40 to the screen address
@@ -575,11 +631,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 5 -----------
     ; Add 40 to the screen address
@@ -595,11 +651,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 6 -----------
     ; Add 40 to the screen address
@@ -615,11 +671,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 7 -----------
     ; Add 40 to the screen address
@@ -635,11 +691,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 8 -----------
     ; Add 40 to the screen address
@@ -655,11 +711,11 @@ _draw_sprite_at_address
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 9 -----------
     ; Add 40 to the screen address
@@ -671,18 +727,18 @@ _draw_sprite_at_address
     lda screen+1
     adc #0
     sta screen+1
-
     ; Address of screen in px:py
     ; Put the first half
     ldy #0
-    lda #$55
+    pla
     sta (screen),y
     ; And the second half
     ldy #1
-    lda #$55
+    pla
     sta (screen),y
     ; ----------- END OF LINE 10 -----------
 
+    txs ; Restore SP
     rts;
 
 
@@ -905,6 +961,7 @@ _clear_sprite_at_address
     lda #%01000000
     sta (screen),y
     ; ----------- END OF LINE 10 -----------
+
 
     rts;
 
