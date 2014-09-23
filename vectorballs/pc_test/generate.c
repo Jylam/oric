@@ -104,7 +104,7 @@ int main(int argc, char*argv[]) {
                 px+=WIDTH/2;
                 py+=HEIGHT/2;
                 if(px>=2.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
-                    unsigned int address = 0xa000 + (px+(py*40));
+                    unsigned int address = 0xa000 + (((unsigned int)px)+(((unsigned int)py)*40));
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
                     //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
                 //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
