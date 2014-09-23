@@ -27,7 +27,7 @@ vsync_wait
 _IrqOff
     sei
     rts
-
+dd;slkd;s
 _draw_sprite
     ldy #0      ; Load argument x
     lda (sp),y  ;
@@ -462,3 +462,22 @@ screen13_ptr_c2
 
     rts
 
+
+_draw_sprite_at_address
+    ldy #0      ; Load add_l
+    lda (sp),y  ;
+    sta screen+0
+    ldy #2
+    lda (sp),y  ; Load add_h
+    sta screen+1
+
+    ldy #0
+    lda #$55
+    sta (screen),y
+
+    ; Address of screen in px:py
+
+
+
+
+    rts;
