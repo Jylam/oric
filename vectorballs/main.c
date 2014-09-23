@@ -6,6 +6,7 @@
 
 extern void VSync(void);
 extern void draw_sprite_at_address(unsigned char addrl, unsigned char addrh );
+extern void clear_sprite_at_address(unsigned char x, unsigned char y);
 extern void draw_sprite(unsigned char x, unsigned char y);
 extern void clear_sprite(unsigned char x, unsigned char y);
 extern void IrqOff(void);
@@ -99,16 +100,14 @@ void animcube_address(void) {
                 offset+=2; // 16bits address
             }
 
-#if 0
             for(i=0; i<5; i++) {
                 sprintf(&screen_text[52], "Oui, ca clignotte.\n");
             }
             offset = old_offset;
             for(i=0; i<count; i++) {
-                clear_sprite(anim[offset], anim[offset+1]);
-                offset+=3; // X,Y,Depth
+                clear_sprite_at_address(anim[offset], anim[offset+1]);
+                offset+=2; // X,Y,Depth
             }
-#endif
         }
     }
 }

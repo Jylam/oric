@@ -471,13 +471,443 @@ _draw_sprite_at_address
     lda (sp),y  ; Load add_h
     sta screen+1
 
+    ; Address of screen in px:py
+    ; Put the first half
     ldy #0
     lda #$55
     sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+
+    ; ----------- END OF LINE 0 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
 
     ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 1 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
 
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 2 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
 
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 3 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
 
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 4 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 5 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 6 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 7 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 8 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 9 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #$55
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #$55
+    sta (screen),y
+    ; ----------- END OF LINE 10 -----------
 
     rts;
+
+
+_clear_sprite_at_address
+    ldy #0      ; Load add_l
+    lda (sp),y  ;
+    sta screen+0
+    ldy #2
+    lda (sp),y  ; Load add_h
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+
+    ; ----------- END OF LINE 0 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 1 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 2 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 3 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 4 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 5 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 6 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 7 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 8 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 9 -----------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    lda screen+0
+    adc #40
+    sta screen+0
+    lda screen+1
+    adc #0
+    sta screen+1
+
+    ; Address of screen in px:py
+    ; Put the first half
+    ldy #0
+    lda #%01000000
+    sta (screen),y
+    ; And the second half
+    ldy #1
+    lda #%01000000
+    sta (screen),y
+    ; ----------- END OF LINE 10 -----------
+
+    rts;
+
+
+
+
