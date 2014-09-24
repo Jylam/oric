@@ -55,6 +55,7 @@ int main(int argc, char*argv[]) {
     float cam_x = 0.0f, cam_y = 0.0f, cam_z = -150.0f;
     int quit=0, curframe = 0, outsize=0;
     char *outbuf = NULL;
+    unsigned int size = 0;
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event e;
@@ -109,6 +110,7 @@ int main(int argc, char*argv[]) {
                     //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
                 //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
                     sprintf(tmpstr, "0x%02X,0x%02X, ", address&0xFF, address>>8);
+                    size+=2;
                     outsize+=strlen(tmpstr)+1;
                     outbuf = realloc(outbuf, outsize);
                     strncat(outbuf, tmpstr, 1000);
@@ -117,18 +119,22 @@ int main(int argc, char*argv[]) {
             } else {
             }
         }
-        printf("%u,%s\n", visible, outbuf);
+        size++;
+        printf("%u,%s // Size %d\n", visible, outbuf, size);
         free(outbuf);
         outbuf = NULL;
         visible = 0;
-        //angle_x+= 4.2;
+        angle_x+= 1;
         angle_y+= 3.5;
-        angle_z+= 1;
+        angle_z+= 0.5;
 
-        if(angle_z >= 360.0f) {
-            angle_x = angle_y = angle_z = 0.0f;
+        if(curframe>=1000) {
             quit = 1;
         }
+        //if(angle_z >= 360.0f) {
+        //    angle_x = angle_y = angle_z = 0.0f;
+        //    quit = 1;
+        //}
         if(angle_x>=360.0f) angle_x = 0.0f;
         if(angle_y>=360.0f) angle_y = 0.0f;
         if(angle_z>=360.0f) angle_z = 0.0f;
@@ -138,6 +144,6 @@ int main(int argc, char*argv[]) {
     //    SDL_Delay(50);
         curframe++;
     }
-    printf("};\n");
+    printf("};// Size %d\n", size);
     return 0;
 }

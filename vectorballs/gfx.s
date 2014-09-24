@@ -131,21 +131,6 @@ screen_ptr
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ; Unrolled. Take x,y arguments, and clears 2*12 bytes
 _clear_sprite
     ldy #0      ; Load argument x
@@ -470,31 +455,53 @@ _push_sprite_on_stack
     ldx #$78 ; This place seems unused
     txs ; Set SP to $78
 
-
-    lda #$55
+    lda _ball+23
     pha
+    lda _ball+22
     pha
+    lda _ball+21
     pha
+    lda _ball+20
     pha
+    lda _ball+19
     pha
+    lda _ball+18
     pha
+    lda _ball+17
     pha
+    lda _ball+16
     pha
+    lda _ball+15
     pha
+    lda _ball+14
     pha
+    lda _ball+13
     pha
+    lda _ball+12
     pha
+    lda _ball+11
     pha
+    lda _ball+10
     pha
+    lda _ball+9
     pha
+    lda _ball+8
     pha
+    lda _ball+7
     pha
+    lda _ball+6
     pha
+    lda _ball+5
     pha
+    lda _ball+4
     pha
+    lda _ball+3
     pha
+    lda _ball+2
     pha
+    lda _ball+1
     pha
+    lda _ball
     pha
 
     tya ; Restore SP
@@ -503,6 +510,8 @@ _push_sprite_on_stack
 
     rts
 
+; Unrolled
+; Takes 2 bytes arguments, the 16bits address of the current sprite on the screen
 _draw_sprite_at_address
     ldy #0      ; Load add_l
     lda (sp),y  ;
@@ -512,17 +521,13 @@ _draw_sprite_at_address
     sta screen+1
 
     ; Put the first half
-    ;; lda #$55
-    ; a stores the color
-    ;;;;;;;;;;
-    ; Get sprite pixel value
-    ; Set SP
+    ; Set SP to the sprite location
     tsx ; Save SP in x
     txa ; Put X into A
     tay ; Put A into Y
 
-    ldx #$60 ; $78 - 24 elements
-    txs ; Set SP to $78
+    ldx #$60 ; $78 - 24 elements, the stack is reversed
+    txs ; Set SP to x
 
     tya ; Put old SP in A
     tax ; Put old SP in X

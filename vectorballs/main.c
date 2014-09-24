@@ -39,56 +39,12 @@ void set_colors(void) {
 
 }
 
-void sleep(int v) {
-    int a, b, c, d;
-
-    a = b = c = d = v;
-
-    while(a--) {
-        b = v;
-        while(b--) {
-            c = v;
-            while(c--) {
-                d = v;
-                while(d--) {
-
-                }
-            }
-        }
-    }
-}
-
-
-void animcube(void) {
-    int t;
-    int offset = 0;
-    while(1) {
-        offset = 0;
-        while(offset<sizeof(anim)) {
-            int i;
-            char count      = anim[offset];
-            int old_offset;
-            offset++;
-            old_offset = offset;
-            for(i=0; i<count; i++) {
-                draw_sprite(anim[offset], anim[offset+1]);
-                offset+=3; // X,Y,Depth
-            }
-            for(i=0; i<5; i++) {
-                sprintf(&screen_text[52], "Oui, ca clignotte.\n");
-            }
-            offset = old_offset;
-            for(i=0; i<count; i++) {
-                clear_sprite(anim[offset], anim[offset+1]);
-                offset+=3; // X,Y,Depth
-            }
-        }
-    }
-}
 void animcube_address(void) {
     int t;
     int offset = 0;
     int frame = 0;
+
+    push_sprite_on_stack();
 
     while(1) {
         offset = 0;
@@ -100,40 +56,28 @@ void animcube_address(void) {
             offset++;
             old_offset = offset;
             for(i=0; i<count; i++) {
-                push_sprite_on_stack();
                 draw_sprite_at_address(anim[offset], anim[offset+1]);
                 offset+=2; // 16bits address
             }
-            //VSync();
-            sprintf(&screen_text[52], "Frame %d\n", frame);
+            sprintf(&screen_text[52], "Frame %d   \n", frame);
 
             offset = old_offset;
             for(i=0; i<count; i++) {
                 clear_sprite_at_address(anim[offset], anim[offset+1]);
                 offset+=2; // X,Y,Depth
             }
+            //VSync();
             frame++;
         }
     }
 }
 
-int main(int argc, char *argv[]) {
-    unsigned char y;
-    int t=0xa000;
-    int s = 0;
-    int f;
-    unsigned char angle = 0;
-
-    for(y=0 ; y<200; y++) {
-        table_y[y] = t;
-        t+=40;
-    }
-
+int main(int argc, char *argv[])
+{
     IrqOff();
     hires();
     set_colors();
     animcube_address();
-    //    vectorballs();
 }
 
 
