@@ -60,6 +60,14 @@ void animcube_address(void) {
                 offset+=2; // 16bits address
             }
             sprintf(&screen_text[52], "Frame %d   \n", frame);
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
+            sprintf(&screen_text[42+40], "Et ca clignotte vachement moins!   \n");
 
             offset = old_offset;
             for(i=0; i<count; i++) {

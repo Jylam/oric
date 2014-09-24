@@ -44,6 +44,31 @@ float cube[] = {-D,   D, -D,
                 -D,  -D, D,
 };
 
+void generate_sphere(float radius, unsigned int rings, unsigned int sectors)  {
+    float *vertices, *v;
+    float const R = 1./(float)(rings-1);
+    float const S = 1./(float)(sectors-1);
+    int r, s;
+    int size = ((int)rings) * (int)(sectors) * 3;
+//    printf("malloc %d\n", (size));
+//    vertices = malloc(((int)rings) * (int)(sectors) * 3);
+    vertices = malloc(10000);
+    v=vertices;
+
+    for(r = 0; r < rings; r++) {
+        for(s = 0; s < sectors; s++) {
+            float const y = sin( -M_PI_2 + M_PI * r * R );
+            float const x = cos(2*M_PI * s * S) * sin( M_PI * r * R );
+            float const z = sin(2*M_PI * s * S) * sin( M_PI * r * R );
+
+            *v++ = x * radius;
+            *v++ = y * radius;
+            *v++ = z * radius;
+        }
+    }
+//    free(vertices);
+}
+
 int main(int argc, char*argv[]) {
 
     float x=100.0f, y=0.0f, z=100.0f;
@@ -59,9 +84,10 @@ int main(int argc, char*argv[]) {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Event e;
+    generate_sphere(10, 4, 4);
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
-   printf("unsigned char anim[] = {\n");
+    printf("unsigned char anim[] = {\n");
 
     while(!quit) {
         while (SDL_PollEvent(&e)){
@@ -79,7 +105,7 @@ int main(int argc, char*argv[]) {
             }
         }
 
-//        printf("Frame %d\n", curframe);
+        //        printf("Frame %d\n", curframe);
         int p;
         char tmpstr[1000];
         int visible = 0;
@@ -108,7 +134,7 @@ int main(int argc, char*argv[]) {
                     unsigned int address = 0xa000 + (((unsigned int)px)+(((unsigned int)py)*40));
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
                     //sprintf(tmpstr, "\t%f\t%f\t%f\n", px, py, zr);
-                //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
+                    //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
                     sprintf(tmpstr, "0x%02X,0x%02X, ", address&0xFF, address>>8);
                     size+=2;
                     outsize+=strlen(tmpstr)+1;
@@ -141,7 +167,7 @@ int main(int argc, char*argv[]) {
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
-    //    SDL_Delay(50);
+        //    SDL_Delay(50);
         curframe++;
     }
     printf("};// Size %d\n", size);

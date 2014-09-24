@@ -90,13 +90,16 @@ _push_sprite_on_stack
 ; Unrolled
 ; Takes 2 bytes arguments, the 16bits address of the current sprite on the screen
 _draw_sprite_at_address
-    ldy #0      ; Load add_l
-    lda (sp),y  ;
-    sta screen+0
-    ldy #2
-    lda (sp),y  ; Load add_h
-    sta screen+1
 
+    ; Load screen address
+    ldy #0      ; Load add_l        2
+    lda (sp),y  ;                   5
+    sta screen+0 ;                  3
+    ldy #2       ;                  2
+    lda (sp),y  ; Load add_h        5
+    sta screen+1;                   3
+
+    ; ---------------- Line 0 ----------------
     ; Put the first half
     ; Set SP to the sprite location
     tsx ; Save SP in x
@@ -119,22 +122,22 @@ _draw_sprite_at_address
     pla
     sta (screen),y
 
-    ; ----------- END OF LINE 0 -----------
-    ; Add 40 to the screen address
+    ; ---------------- Line 1 ----------------
+    ; Add 40 to
     ; to get to the next line
-    clc
-    tya
-    adc #39
+    clc                                     ; 2
+    tya                                     ; 2
+    adc #39                                 ; 2
     tay
     ; Put the first half
 
-    pla
+    pla                                     ; 4
     sta (screen),y
     ; And the second half
-    iny
-    pla
-    sta (screen),y
-    ; ----------- END OF LINE 1 -----------
+    iny                                     ; 2
+    pla                                     ; 4
+    sta (screen),y                          ; 6
+    ; ---------------- Line 2 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     tya
@@ -149,7 +152,22 @@ _draw_sprite_at_address
     iny
     pla
     sta (screen),y
-    ; ----------- END OF LINE 2 -----------
+    ; ---------------- Line 3 ----------------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    clc
+    tya
+    adc #39
+    tay
+
+    ; Put the first half
+    pla
+    sta (screen),y
+    ; And the second half
+    iny
+    pla
+    sta (screen),y
+    ; ---------------- Line 4 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
@@ -165,7 +183,7 @@ _draw_sprite_at_address
     iny
     pla
     sta (screen),y
-    ; ----------- END OF LINE 3 -----------
+    ; ---------------- Line 5 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
@@ -181,7 +199,7 @@ _draw_sprite_at_address
     iny
     pla
     sta (screen),y
-    ; ----------- END OF LINE 4 -----------
+    ; ---------------- Line 6 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
@@ -197,35 +215,21 @@ _draw_sprite_at_address
     iny
     pla
     sta (screen),y
-    ; ----------- END OF LINE 5 -----------
-    ; Add 40 to the screen address
-    ; to get to the next line
-    clc
-    tya
-    adc #39
-    tay
 
-    ; Address of screen in px:py
-    ; Put the first half
-    pla
-    sta (screen),y
-    ; And the second half
-    iny
-    pla
-    sta (screen),y
-    ; ----------- END OF LINE 6 -----------
-
+    ; ----------------------- ----------------
+    ; ----------------------- ----------------
     ; Now Y is 240, we need to move screen pointer further
-    clc
-    lda screen+0
-    adc #240
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    ; ----------------------- ----------------
+    ; ----------------------- ----------------
+    clc                    ; 2
+    lda screen+0           ; 4
+    adc #240               ; 2
+    sta screen+0           ; 3
+    lda screen+1           ; 4
+    adc #0                 ; 2
+    sta screen+1           ; 3
+    ; ---------------- Line 7 ----------------
     ldy #0
-
-    ; Address of screen in px:py
     ; Put the first half
     pla
     sta (screen),y
@@ -304,225 +308,194 @@ _draw_sprite_at_address
 
 
 _clear_sprite_at_address
-    ldy #0      ; Load add_l
-    lda (sp),y  ;
-    sta screen+0
-    ldy #2
-    lda (sp),y  ; Load add_h
-    sta screen+1
 
-    ; Address of screen in px:py
-    ; Put the first half
+    ; Load screen address
+    ldy #0      ; Load add_l        2
+    lda (sp),y  ;                   5
+    sta screen+0 ;                  3
+    ldy #2       ;                  2
+    lda (sp),y  ; Load add_h        5
+    sta screen+1;                   3
+
+    ; ---------------- Line 0 ----------------
+    ;;;;;;;;;;
     ldy #0
+    lda #%01000000
+    sta (screen),y ; Store pixel on screen
+
+    ; And the second half
+    ldy #1
+    sta (screen),y
+
+    ; ---------------- Line 1 ----------------
+    ; Add 40 to
+    ; to get to the next line
+    clc                                     ; 2
+    tya                                     ; 2
+    adc #39                                 ; 2
+    tay
+    ; Put the first half
+
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
+    iny                                     ; 2
+    sta (screen),y                          ; 6
+    ; ---------------- Line 2 ----------------
+    ; Add 40 to the screen address
+    ; to get to the next line
+    tya
+    adc #39
+    tay
+
+    ; Pixel value in stack
+    ; Put the first half
     lda #%01000000
     sta (screen),y
-
-    ; ----------- END OF LINE 0 -----------
+    ; And the second half
+    iny
+    sta (screen),y
+    ; ---------------- Line 3 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
-    ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
-    ; ----------- END OF LINE 1 -----------
+    ; ---------------- Line 4 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
-    ; ----------- END OF LINE 2 -----------
+    ; ---------------- Line 5 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
-    ; ----------- END OF LINE 3 -----------
+    ; ---------------- Line 6 ----------------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
-    ; ----------- END OF LINE 4 -----------
-    ; Add 40 to the screen address
-    ; to get to the next line
-    clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
 
-    ; Address of screen in px:py
-    ; Put the first half
+    ; ----------------------- ----------------
+    ; ----------------------- ----------------
+    ; Now Y is 240, we need to move screen pointer further
+    ; ----------------------- ----------------
+    ; ----------------------- ----------------
+    clc                    ; 2
+    lda screen+0           ; 4
+    adc #240               ; 2
+    sta screen+0           ; 3
+    lda screen+1           ; 4
+    adc #0                 ; 2
+    sta screen+1           ; 3
+    ; ---------------- Line 7 ----------------
     ldy #0
+    ; Put the first half
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
-    sta (screen),y
-    ; ----------- END OF LINE 5 -----------
-    ; Add 40 to the screen address
-    ; to get to the next line
-    clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
-
-    ; Address of screen in px:py
-    ; Put the first half
-    ldy #0
-    lda #%01000000
-    sta (screen),y
-    ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
     ; ----------- END OF LINE 6 -----------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
     ; ----------- END OF LINE 7 -----------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
     ; ----------- END OF LINE 8 -----------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
     ; ----------- END OF LINE 9 -----------
     ; Add 40 to the screen address
     ; to get to the next line
     clc
-    lda screen+0
-    adc #40
-    sta screen+0
-    lda screen+1
-    adc #0
-    sta screen+1
+    tya
+    adc #39
+    tay
 
     ; Address of screen in px:py
     ; Put the first half
-    ldy #0
     lda #%01000000
     sta (screen),y
     ; And the second half
-    ldy #1
-    lda #%01000000
+    iny
     sta (screen),y
     ; ----------- END OF LINE 10 -----------
-
 
     rts;
 
