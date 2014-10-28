@@ -91,6 +91,7 @@ _push_sprite_on_stack
 ; Takes 2 bytes arguments, the 16bits address of the current sprite on the screen
 _draw_sprite_at_address
 
+.byt $FF, $FF, $FF
     ; Load screen address
     ldy #0      ; Load add_l        2
     lda (sp),y  ;                   5
@@ -302,8 +303,8 @@ _draw_sprite_at_address
     pla
     sta (screen),y
     ; ----------- END OF LINE 10 -----------
-
     txs ; Restore SP
+.byt $FF, $FF, $FF
     rts;
 
 
@@ -501,4 +502,42 @@ _clear_sprite_at_address
 
 
 
+
+
+
+
+
+
+
+
+# Dbug
+_draw_sprite_at_xy
+        ; Setup the start of the drawing routine
+        lda DrawSpriteJumpTableLow,y
+        sta _auto_jsr+1
+        lda DrawSpriteJumpTableHigh,y
+        sta _auto_jsr+2
+
+        ; Setup the end of the drawing routine
+        lda DrawSpriteJumpTableLow+12,y
+        sta _auto_rts+1
+        sta _auto_pla+1
+        lda DrawSpriteJumpTableHigh+12,y
+        sta _auto_rts+2
+        sta _auto_pla+2
+
+        lda #$60                ; RTS opcode
+_auto_rts
+        sta $1234
+
+_auto_jsr
+        jsr $1234
+
+        lda #$68                ; PLA opcode
+_auto_pla
+        sta $1234
+        rts
+
+
+#include "drawsprite.asm"
 
