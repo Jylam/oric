@@ -48,10 +48,6 @@ void animcube_address(void) {
     push_sprite_on_stack();
 
     while(1) {
-        draw_sprite_at_xy();
-    }
-
-    while(1) {
         offset = 0;
         frame = 0;
         while(offset<sizeof(anim)) {
