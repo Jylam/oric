@@ -57,7 +57,7 @@ void animcube_address(void) {
             offset++;
             old_offset = offset;
             for(i=0; i<count; i++) {
-    //            draw_sprite_at_address(anim[offset], anim[offset+1]);
+                draw_sprite_at_address(anim[offset], anim[offset+1]);
                 offset+=2; // 16bits address
             }
             //sprintf(&screen_text[52], "Frame %d   \n", frame);

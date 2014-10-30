@@ -25,12 +25,19 @@ _IrqOff
 
 ;;; Push _ball 23 first bytes in stack at address $0178
 _push_sprite_on_stack
-    tsx ; Save SP in x
+
+    tsx ; Save SP in Y
     txa ; Put X into A
     tay ; Put A into Y
 
     ldx #$78 ; This place seems unused
     txs ; Set SP to $78
+
+    ; MAGIC
+    lda #>(_end_of_clear-1)
+    pha
+    lda #<(_end_of_clear-1)
+    pha
 
     lda _ball+23
     pha
@@ -81,6 +88,7 @@ _push_sprite_on_stack
     lda _ball
     pha
 
+
     tya ; Restore SP
     tax ;
     txs ;
@@ -90,8 +98,21 @@ _push_sprite_on_stack
 ; Unrolled
 ; Takes 2 bytes arguments, the 16bits address of the current sprite on the screen
 _draw_sprite_at_address
+    ; Load screen address
+    ldy #0      ; Load add_l        2
+    lda (sp),y  ;                   5
+    tax
+    ;sta screen+0 ;                  3
+    ldy #2       ;                  2
+    lda (sp),y  ; Load add_h        5
+    tay
+;    sta screen+1;                   3
 
-.byt $FF, $FF, $FF
+    txa
+    jsr _draw_sprite_at_xy
+    rts
+
+
     ; Load screen address
     ldy #0      ; Load add_l        2
     lda (sp),y  ;                   5
@@ -107,7 +128,7 @@ _draw_sprite_at_address
     txa
     tay
 
-    ldx #$60            ;$60 is $78 - 24 elements, the stack is reversed
+    ldx #$5E            ;$60 is $78 - 24 elements, the stack is reversed
     txs ; Set SP to x
 
     tya ; Put old SP in A
@@ -520,15 +541,20 @@ _clear_sprite_at_address
 # Dbug
 _draw_sprite_at_xy
 
+        ; x in A, y in Y, we use X for the stack saving
         ; Save old stack pointer
         tsx
-        txa
-        sta stack_pointer
+        stx stack_pointer
 
-        ldx #$60            ;$60 is $78 - 24 elements, the stack is reversed
+        ; We use X again to set the stack
+        ldx #$5E            ;$60 is $78 - 24 elements, the stack is reversed
         txs ; Set SP to x
-        ldy #5
-        ldx #5
+
+        ; A contains the x coordinate. Transfer it in X
+        tax
+
+        ; Maintenant faut regler le retour. Coller un JMP _end_of_clear
+
         ; Setup the start of the drawing routine
         lda DrawSpriteJumpTableLow,y
         sta _auto_jsr+1
@@ -544,11 +570,13 @@ _draw_sprite_at_xy
         sta _auto_pla+2
 
         lda #$60                ; RTS opcode
+
 _auto_rts
         sta $1234
 
 _auto_jsr
         jmp $1234
+_end_of_clear
 
         lda #$68                ; PLA opcode
 _auto_pla
@@ -588,7 +616,7 @@ _clear_sprite_at_xy
         lda #$60                ; RTS opcode
 _cauto_rts
         sta $1234
-        lda #$55
+        lda #%01000000
 _cauto_jsr
         jsr $1234
 
