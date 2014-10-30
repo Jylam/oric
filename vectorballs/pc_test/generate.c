@@ -145,7 +145,8 @@ int main(int argc, char*argv[]) {
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
             //        printf( "\t%f\t%f\t%f\n", px, py, zr);
                     //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
-                    sprintf(tmpstr, "0x%02X,0x%02X, ", address&0xFF, address>>8);
+                    //sprintf(tmpstr, "0x%02X,0x%02X, /* %d %d */", address&0xFF, address>>8, ((unsigned int)px),((unsigned int)py));
+                    sprintf(tmpstr, "0x%02X,0x%02X,\n", ((unsigned int)px),((unsigned int)py));
                     size+=2;
                     outsize+=strlen(tmpstr)+1;
                     outbuf = realloc(outbuf, outsize);

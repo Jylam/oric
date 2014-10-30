@@ -320,6 +320,7 @@ _clear_sprite_at_address
     tay
 ;    sta screen+1;                   3
 
+    txa
     jsr _clear_sprite_at_xy
     rts
 
@@ -559,17 +560,17 @@ _auto_pla
         rts
 
 
-
+savex  .dsb 1
 
 # Dbug
 _clear_sprite_at_xy
+
+        ; x in A, y in Y, we use X for the stack saving
         ; Save old stack pointer
         tsx
-        txa
-        sta stack_pointer
+        stx stack_pointer
+        tax
 
-        ldy #5
-        ldx #5
         ; Setup the start of the drawing routine
         lda ClearSpriteJumpTableLow,y
         sta _cauto_jsr+1
@@ -587,7 +588,7 @@ _clear_sprite_at_xy
         lda #$60                ; RTS opcode
 _cauto_rts
         sta $1234
-        lda #%01000000
+        lda #$55
 _cauto_jsr
         jsr $1234
 
