@@ -11,6 +11,7 @@ extern void draw_sprite(unsigned char x, unsigned char y);
 extern void clear_sprite(unsigned char x, unsigned char y);
 extern void push_sprite_on_stack(void);
 extern void IrqOff(void);
+extern void draw_sprite_at_xy(void);
 
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
@@ -45,6 +46,10 @@ void animcube_address(void) {
     int frame = 0;
 
     push_sprite_on_stack();
+
+    while(1) {
+        draw_sprite_at_xy();
+    }
 
     while(1) {
         offset = 0;

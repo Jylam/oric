@@ -2,10 +2,10 @@
 
 print("DrawSpriteJumpTableLow")
 for x in range(0,200):
-    print("\t.byt <DrawSpriteUnrolled+8*"+str(x))
+    print("\t.byt <(DrawSpriteUnrolled+"+str(8*x)+")")
 print("DrawSpriteJumpTableHigh")
 for x in range(0,200):
-    print("\t.byt <DrawSpriteUnrolled+8*"+str(x))
+    print("\t.byt >(DrawSpriteUnrolled+"+str(8*x)+")")
 
 
 print("; Assumes the stack pointer is on the graphics")

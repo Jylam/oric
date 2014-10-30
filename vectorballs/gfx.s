@@ -103,9 +103,9 @@ _draw_sprite_at_address
     ; ---------------- Line 0 ----------------
     ; Put the first half
     ; Set SP to the sprite location
-    tsx ; Save SP in x
-    txa ; Put X into A
-    tay ; Put A into Y
+    tsx ; Save SP in Y
+    txa
+    tay
 
     ldx #$60            ;$60 is $78 - 24 elements, the stack is reversed
     txs ; Set SP to x
@@ -512,6 +512,10 @@ _clear_sprite_at_address
 
 # Dbug
 _draw_sprite_at_xy
+        ldx #$60            ;$60 is $78 - 24 elements, the stack is reversed
+        txs ; Set SP to x
+        ldy #5
+        ldx #5
         ; Setup the start of the drawing routine
         lda DrawSpriteJumpTableLow,y
         sta _auto_jsr+1
