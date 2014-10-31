@@ -34,6 +34,7 @@ _push_sprite_on_stack
     txs ; Set SP to $78
 
     ; MAGIC
+    ; This address will be poped by the automodified RTS we put in _draw_sprite_at_xy
     lda #>(_end_of_clear-1)
     pha
     lda #<(_end_of_clear-1)
@@ -122,32 +123,28 @@ _clear_sprite_at_address
 
 # Dbug
 _draw_sprite_at_xy
-    ; Load screen address
-    ldy #0      ; Load add_l        2
-    lda (sp),y  ;                   5
-    tax
-    ;sta screen+0 ;                  3
-    ldy #2       ;                  2
-    lda (sp),y  ; Load add_h        5
-    tay
-;    sta screen+1;                   3
+        ; Load screen address
+        ldy #0      ; Load add_l        2
+        lda (sp),y  ;                   5
+        tax
+        ldy #2       ;                  2
+        lda (sp),y  ; Load add_h        5
+        tay
 
-    txa
+        txa
 
 
-        ; x in A, y in Y, we use X for the stack saving
+        ; x in A, y in Y, we use X to backup SP
         ; Save old stack pointer
         tsx
         stx stack_pointer
 
         ; We use X again to set the stack
-        ldx #$5E            ;$60 is $78 - 24 elements, the stack is reversed
+        ldx #$5E            ;$60 is $76 - 24 elements, the stack is reversed
         txs ; Set SP to x
 
         ; A contains the x coordinate. Transfer it in X
         tax
-
-        ; Maintenant faut regler le retour. Coller un JMP _end_of_clear
 
         ; Setup the start of the drawing routine
         lda DrawSpriteJumpTableLow,y
