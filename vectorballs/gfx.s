@@ -124,59 +124,59 @@ _clear_sprite_at_address
 # Dbug
 _draw_sprite_at_xy
         ; Load screen address
-        ldy #0      ; Load add_l        2
-        lda (sp),y  ;                   5
-        tax
-        ldy #2       ;                  2
-        lda (sp),y  ; Load add_h        5
-        tay
+    ldy #0      ; Load add_l        2
+    lda (sp),y  ;                   5
+    tax
+    ldy #2       ;                  2
+    lda (sp),y  ; Load add_h        5
+    tay
 
-        txa
+    txa
 
 
-        ; x in A, y in Y, we use X to backup SP
-        ; Save old stack pointer
-        tsx
-        stx stack_pointer
+    ; x in A, y in Y, we use X to backup SP
+    ; Save old stack pointer
+    tsx
+    stx stack_pointer
 
-        ; We use X again to set the stack
-        ldx #$5E            ;$60 is $76 - 24 elements, the stack is reversed
-        txs ; Set SP to x
+    ; We use X again to set the stack
+    ldx #$5E            ;$60 is $76 - 24 elements, the stack is reversed
+    txs ; Set SP to x
 
-        ; A contains the x coordinate. Transfer it in X
-        tax
+    ; A contains the x coordinate. Transfer it in X
+    tax
 
-        ; Setup the start of the drawing routine
-        lda DrawSpriteJumpTableLow,y
-        sta _auto_jsr+1
-        lda DrawSpriteJumpTableHigh,y
-        sta _auto_jsr+2
+    ; Setup the start of the drawing routine
+    lda DrawSpriteJumpTableLow,y
+    sta _auto_jsr+1
+    lda DrawSpriteJumpTableHigh,y
+    sta _auto_jsr+2
 
-        ; Setup the end of the drawing routine
-        lda DrawSpriteJumpTableLow+HEIGHT,y
-        sta _auto_rts+1
-        sta _auto_pla+1
-        lda DrawSpriteJumpTableHigh+HEIGHT,y
-        sta _auto_rts+2
-        sta _auto_pla+2
+    ; Setup the end of the drawing routine
+    lda DrawSpriteJumpTableLow+HEIGHT,y
+    sta _auto_rts+1
+    sta _auto_pla+1
+    lda DrawSpriteJumpTableHigh+HEIGHT,y
+    sta _auto_rts+2
+    sta _auto_pla+2
 
-        lda #$60                ; RTS opcode
+    lda #$60                ; RTS opcode
 
 _auto_rts
-        sta $1234
+    sta $1234
 
 _auto_jsr
-        jmp $1234
+    jmp $1234
 _end_of_clear
 
-        lda #$68                ; PLA opcode
+    lda #$68                ; PLA opcode
 _auto_pla
-        sta $1234
+    sta $1234
 
-        ; Restore stack pointer
-        ldx stack_pointer
-        txs
-        rts
+    ; Restore stack pointer
+    ldx stack_pointer
+    txs
+    rts
 
 
 savex  .dsb 1
@@ -184,41 +184,41 @@ savex  .dsb 1
 # Dbug
 _clear_sprite_at_xy
 
-        ; x in A, y in Y, we use X for the stack saving
-        ; Save old stack pointer
-        tsx
-        stx stack_pointer
-        tax
+    ; x in A, y in Y, we use X for the stack saving
+    ; Save old stack pointer
+    tsx
+    stx stack_pointer
+    tax
 
-        ; Setup the start of the drawing routine
-        lda ClearSpriteJumpTableLow,y
-        sta _cauto_jsr+1
-        lda ClearSpriteJumpTableHigh,y
-        sta _cauto_jsr+2
+    ; Setup the start of the drawing routine
+    lda ClearSpriteJumpTableLow,y
+    sta _cauto_jsr+1
+    lda ClearSpriteJumpTableHigh,y
+    sta _cauto_jsr+2
 
-        ; Setup the end of the drawing routine
-        lda ClearSpriteJumpTableLow+HEIGHT,y
-        sta _cauto_rts+1
-        sta _cauto_pla+1
-        lda ClearSpriteJumpTableHigh+HEIGHT,y
-        sta _cauto_rts+2
-        sta _cauto_pla+2
+    ; Setup the end of the drawing routine
+    lda ClearSpriteJumpTableLow+HEIGHT,y
+    sta _cauto_rts+1
+    sta _cauto_pla+1
+    lda ClearSpriteJumpTableHigh+HEIGHT,y
+    sta _cauto_rts+2
+    sta _cauto_pla+2
 
-        lda #$60                ; RTS opcode
+    lda #$60                ; RTS opcode
 _cauto_rts
-        sta $1234
-        lda #%01000000
+    sta $1234
+    lda #%01000000
 _cauto_jsr
-        jsr $1234
+    jsr $1234
 
-        lda #$9D                ; STA opcode absolute,X    STA oper,X    9D    3 bytes
+    lda #$9D                ; STA opcode absolute,X    STA oper,X    9D    3 bytes
 _cauto_pla
-        sta $1234
+    sta $1234
 
-        ; Restore stack pointer
-        ldx stack_pointer
-        txs
-        rts
+    ; Restore stack pointer
+    ldx stack_pointer
+    txs
+    rts
 
 
 

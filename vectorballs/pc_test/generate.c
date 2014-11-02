@@ -165,7 +165,7 @@ int main(int argc, char*argv[]) {
         angle_y+= 3;
         angle_z+= sin(curframe*M_PI/180.0);
 
-        if(curframe>=200) {
+        if(curframe>=400) {
             quit = 1;
         }
         //if(angle_z >= 360.0f) {
