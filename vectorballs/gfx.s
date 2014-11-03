@@ -1,10 +1,14 @@
 ;#define SCREEN $BF68
 #define SCREEN $A000
+#define HEIGHT 12
 
 .zero
 _zp_start_
-screen      .dsb 2
+screen        .dsb 2
 stack_pointer .dsb 1
+anim_ptr      .dsb 2
+anim_offset   .dsb 2
+sprite_count  .dsb 1
 _zp_end_
 .text
 
@@ -96,28 +100,7 @@ _push_sprite_on_stack
 
     rts
 
-; Unrolled
-; Takes 2 bytes arguments, the 16bits address of the current sprite on the screen
-_draw_sprite_at_address
 
-_clear_sprite_at_address
-
-    ; Load screen address
-    ldy #0      ; Load add_l        2
-    lda (sp),y  ;                   5
-    tax
-    ;sta screen+0 ;                  3
-    ldy #2       ;                  2
-    lda (sp),y  ; Load add_h        5
-    tay
-;    sta screen+1;                   3
-
-    txa
-    jsr _clear_sprite_at_xy
-    rts
-
-
-#define HEIGHT 12
 
 
 
@@ -183,7 +166,16 @@ savex  .dsb 1
 
 # Dbug
 _clear_sprite_at_xy
+#if 0
+    ldy #0      ; Load add_l        2
+    lda (sp),y  ;                   5
+    tax
+    ldy #2       ;                  2
+    lda (sp),y  ; Load add_h        5
+    tay
 
+    txa
+#endif
     ; x in A, y in Y, we use X for the stack saving
     ; Save old stack pointer
     tsx
@@ -224,6 +216,61 @@ _cauto_pla
 
 
 
+
+_clear_sprites
+            ; for(i=0; i<count; i++) {
+            ;    clear_sprite_at_xy(anim[offset], anim[offset+1]);
+            ;    offset+=2; // X,Y,Depth
+            ;}
+    clc
+
+    ; Clear anim_offset, could be done at boot time
+    ldy #0
+    sta anim_offset
+
+    ; Load animation offset
+    lda (sp),y  ; Y is alread $0
+    adc #<_anim
+    sta anim_ptr
+
+    ldy #1
+    lda (sp),y
+    adc #>_anim
+    sta anim_ptr+1
+
+    ; Assumes anim_ptr+max(y) stays in page boundary
+    ; Load sprite count in Y
+    ldy anim_offset
+    lda (anim_ptr),y
+    sta sprite_count
+    iny
+    sty anim_offset
+
+loop_offset
+    ; Load anim x in X
+    ldy anim_offset
+    lda (anim_ptr),y
+    tax
+    ; Load anim y in Y
+    iny
+    lda (anim_ptr),y
+    ; Save Y as the offset
+    iny
+    sty anim_offset
+
+    tay
+
+    ; _clear_sprite_at_xy waits for x coordinate in A
+    ; and trashes X right away
+    txa
+
+    jsr _clear_sprite_at_xy
+
+    lda sprite_count
+    cmp anim_offset
+    bcs loop_offset
+
+    rts
 
 
 

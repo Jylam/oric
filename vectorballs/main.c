@@ -12,7 +12,8 @@ extern void clear_sprite(unsigned char x, unsigned char y);
 extern void push_sprite_on_stack(void);
 extern void IrqOff(void);
 extern void draw_sprite_at_xy(unsigned char x, unsigned char y);
-
+extern void clear_sprite_at_xy(unsigned char x, unsigned char y);
+extern void clear_sprites(unsigned int offset);
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
 volatile int table_y[200];
@@ -52,7 +53,7 @@ void animcube_address(void) {
         frame = 0;
         while(offset<sizeof(anim)) {
             int i;
-            char count      = anim[offset];
+            char count      = anim[offset]/2;
             int old_offset;
             offset++;
             old_offset = offset;
@@ -60,15 +61,19 @@ void animcube_address(void) {
                 draw_sprite_at_xy(anim[offset], anim[offset+1]);
                 offset+=2; // 16bits address
             }
+            sprintf(&screen_text[42+40], "Count %d, offset %d   \n", count, old_offset);
             VSync();
-            //sprintf(&screen_text[52], "Frame %d   \n", frame);
-            //sprintf(&screen_text[42+40], "Count %d   \n", count);
-
             offset = old_offset;
+
+#if 0
             for(i=0; i<count; i++) {
-                clear_sprite_at_address(anim[offset], anim[offset+1]);
-                offset+=2; // X,Y,Depth
+                clear_sprite_at_xy(anim[offset], anim[offset+1]);
+                offset+=2; // 16bits address
             }
+#else
+            clear_sprites(offset-1);
+            offset+=(count*2);
+#endif
             frame++;
         }
     }
