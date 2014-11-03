@@ -95,7 +95,7 @@ int main(int argc, char*argv[]) {
     SDL_Renderer *renderer;
     SDL_Event e;
     //generate_sphere(15, 10, 15);
-    generate_sphere(10, 10, 10);
+    generate_sphere(4, 4, 4);
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
     printf("unsigned char anim[] = {\n");
@@ -158,7 +158,7 @@ int main(int argc, char*argv[]) {
             }
         }
         size++;
-        printf("%u,%s // Size %d\n", visible*2, outbuf, size);
+        printf("%u,%s // Offset %d\n", visible*2, outbuf, size);
         free(outbuf);
         outbuf = NULL;
         visible = 0;
