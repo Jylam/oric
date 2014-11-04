@@ -53,8 +53,7 @@ void animcube_address(void) {
         offset = 0;
         frame = 0;
         while(offset<sizeof(anim)) {
-            int i;
-            char count      = anim[offset]/2;
+            char count      = anim[offset]>>1;
 
             draw_sprites(offset);
 
@@ -63,7 +62,7 @@ void animcube_address(void) {
             VSync();
 
             clear_sprites(offset);
-            offset+=(count*2)+1;
+            offset+=(count<<1)+1;
 
             frame++;
         }

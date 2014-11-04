@@ -95,7 +95,7 @@ int main(int argc, char*argv[]) {
     SDL_Renderer *renderer;
     SDL_Event e;
     //generate_sphere(15, 10, 15);
-    generate_sphere(10, 8, 6);
+    generate_sphere(8, 6, 6);
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
     printf("unsigned char anim[] = {\n");
@@ -136,7 +136,7 @@ int main(int argc, char*argv[]) {
 
             yr*=4.0f;
             xr/=1.f;
-            if(zr+cam_z<=0.0f) {
+            if(zr+cam_z<=100.0f) {
                 px = xr * FOV / zr;
                 py = yr * FOV / zr;
                 px+=(double)WIDTH/2.0f;
@@ -166,7 +166,7 @@ int main(int argc, char*argv[]) {
         angle_y+= 3;
         angle_z+= sin(curframe*M_PI/180.0);
 
-        if(curframe>=800) {
+        if(curframe>=600) {
             quit = 1;
         }
         //if(angle_z >= 360.0f) {
