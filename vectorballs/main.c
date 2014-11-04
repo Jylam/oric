@@ -14,6 +14,7 @@ extern void IrqOff(void);
 extern void draw_sprite_at_xy(unsigned char x, unsigned char y);
 extern void clear_sprite_at_xy(unsigned char x, unsigned char y);
 extern void clear_sprites(unsigned int offset);
+extern void draw_sprites(unsigned int offset);
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
 volatile int table_y[200];
@@ -54,26 +55,16 @@ void animcube_address(void) {
         while(offset<sizeof(anim)) {
             int i;
             char count      = anim[offset]/2;
-            int old_offset;
-            old_offset = offset;
-            offset++;
-            for(i=0; i<count; i++) {
-                draw_sprite_at_xy(anim[offset], anim[offset+1]);
-                offset+=2; // 16bits address
-            }
-            //sprintf(&screen_text[42+40], "Count %d (next %d)\n", count, anim[old_offset]);
-            VSync();
-            offset = old_offset;
 
-#if 0
-            for(i=0; i<count; i++) {
-                clear_sprite_at_xy(anim[offset], anim[offset+1]);
-                offset+=2; // 16bits address
-            }
-#else
+            draw_sprites(offset);
+
+            VSync();
+            VSync();
+            VSync();
+
             clear_sprites(offset);
             offset+=(count*2)+1;
-#endif
+
             frame++;
         }
     }

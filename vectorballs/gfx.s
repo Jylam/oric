@@ -106,16 +106,6 @@ _push_sprite_on_stack
 
 # Dbug
 _draw_sprite_at_xy
-        ; Load screen address
-    ldy #0      ; Load add_l        2
-    lda (sp),y  ;                   5
-    tax
-    ldy #2       ;                  2
-    lda (sp),y  ; Load add_h        5
-    tay
-
-    txa
-
 
     ; x in A, y in Y, we use X to backup SP
     ; Save old stack pointer
@@ -217,6 +207,62 @@ _cauto_pla
 
 
 
+_draw_sprites
+            ; for(i=0; i<count; i++) {
+            ;    draw_sprite_at_xy(anim[offset], anim[offset+1]);
+            ;    offset+=2; // X,Y
+            ;}
+
+    ; Clear anim_offset (offset in anim_ptr, starting from size, then x y x x y x y ...)
+    ldy #0
+    sta anim_offset
+
+    ; Load offset, and add it to _anim, put result in anim_ptr
+    lda (sp),y  ; Y is alread $0
+    clc
+    adc #<_anim
+    sta anim_ptr
+
+    ldy #1
+    lda (sp),y
+    adc #>_anim
+    clc
+    sta anim_ptr+1
+
+    ; Load sprite count in Y
+    ldy #0
+    lda (anim_ptr),y
+    sta sprite_count
+    iny
+    sty anim_offset
+
+loop_offset
+    ; Load anim x in X
+    ldy anim_offset
+    lda (anim_ptr),y
+    tax
+    ; Load anim y in Y
+    iny
+    lda (anim_ptr),y
+    ; Save Y as the offset
+    iny
+    sty anim_offset
+
+    tay
+
+    ; _clear_sprite_at_xy waits for x coordinate in A, y coordinate in Y
+    ; and trashes X right away
+    txa
+    jsr _draw_sprite_at_xy
+
+    lda sprite_count
+    cmp anim_offset
+    bcs loop_offset
+
+    rts
+
+
+
 _clear_sprites
             ; for(i=0; i<count; i++) {
             ;    clear_sprite_at_xy(anim[offset], anim[offset+1]);
@@ -239,8 +285,7 @@ _clear_sprites
     clc
     sta anim_ptr+1
 
-    ; Assumes anim_ptr+max(y) stays in page boundary
-    ; -> Peut-etre pas :(
+    ; Assumes anim_ptr+max(y) stays within page boundary
     ; Load sprite count in Y
     ldy #0
     lda (anim_ptr),y
@@ -262,10 +307,9 @@ c_loop_offset
 
     tay
 
-    ; _clear_sprite_at_xy waits for x coordinate in A
+    ; _clear_sprite_at_xy waits for x coordinate in A, y coordinate in Y
     ; and trashes X right away
     txa
-
     jsr _clear_sprite_at_xy
 
     lda sprite_count
