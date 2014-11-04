@@ -61,7 +61,7 @@ void animcube_address(void) {
                 draw_sprite_at_xy(anim[offset], anim[offset+1]);
                 offset+=2; // 16bits address
             }
-            sprintf(&screen_text[42+40], "Count %d (next %d)\n", count, anim[old_offset]);
+            //sprintf(&screen_text[42+40], "Count %d (next %d)\n", count, anim[old_offset]);
             VSync();
             offset = old_offset;
 

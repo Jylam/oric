@@ -95,7 +95,7 @@ int main(int argc, char*argv[]) {
     SDL_Renderer *renderer;
     SDL_Event e;
     //generate_sphere(15, 10, 15);
-    generate_sphere(4, 4, 4);
+    generate_sphere(10, 5, 8);
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
     printf("unsigned char anim[] = {\n");

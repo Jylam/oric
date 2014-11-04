@@ -222,11 +222,12 @@ _clear_sprites
             ;    clear_sprite_at_xy(anim[offset], anim[offset+1]);
             ;    offset+=2; // X,Y,Depth
             ;}
-    ; Clear anim_offset, could be done at boot time
+
+    ; Clear anim_offset (offset in anim_ptr, starting from size, then x y x x y x y ...)
     ldy #0
     sta anim_offset
 
-    ; Load animation offset
+    ; Load offset, and add it to _anim, put result in anim_ptr
     lda (sp),y  ; Y is alread $0
     clc
     adc #<_anim
@@ -241,7 +242,7 @@ _clear_sprites
     ; Assumes anim_ptr+max(y) stays in page boundary
     ; -> Peut-etre pas :(
     ; Load sprite count in Y
-    ldy anim_offset
+    ldy #0
     lda (anim_ptr),y
     sta sprite_count
     iny
