@@ -248,7 +248,7 @@ _clear_sprites
     iny
     sty anim_offset
 
-loop_offset
+c_loop_offset
     ; Load anim x in X
     ldy anim_offset
     lda (anim_ptr),y
@@ -270,7 +270,7 @@ loop_offset
 
     lda sprite_count
     cmp anim_offset
-    bcs loop_offset
+    bcs c_loop_offset
 
     rts
 
