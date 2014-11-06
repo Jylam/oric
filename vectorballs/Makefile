@@ -28,6 +28,7 @@ all:
 sprite:
 #	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball sprite.png  sprite.h
 	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball sprite_2x8.png  sprite.h
+	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball_small sprite_2x4.png  sprite_small.h
 
 tap:
 	$(OSDK)/osdk/main/header/header -a1 2048.bin test.tap 0x500

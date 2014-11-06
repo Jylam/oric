@@ -47,7 +47,7 @@ double vertices[] = {-D,   D, -D,
                 -D,  -D, D,
 };
 
-int cube_size = sizeof(vertices)/sizeof(double);
+int vert_size = sizeof(vertices)/sizeof(double);
 #else
 double *vertices;
 int vert_size = 0;
@@ -95,7 +95,7 @@ int main(int argc, char*argv[]) {
     SDL_Renderer *renderer;
     SDL_Event e;
     //generate_sphere(15, 10, 15);
-    generate_sphere(15, 5, 5);
+    generate_sphere(10, 8, 5);
     SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
 
     printf("unsigned char anim[] = {\n");
@@ -134,7 +134,7 @@ int main(int argc, char*argv[]) {
             yr-=cam_y;
             zr-=cam_z;
 
-            yr*=4.0f;
+            yr*=6.0f;
             xr/=1.f;
             if(zr+cam_z<=100.0f) {
                 px = xr * FOV / zr;
@@ -166,7 +166,7 @@ int main(int argc, char*argv[]) {
         angle_y+= 3;
         angle_z+= sin(curframe*M_PI/180.0);
 
-        if(curframe>=600) {
+        if(curframe>=200) {
             quit = 1;
         }
         //if(angle_z >= 360.0f) {
