@@ -46,12 +46,20 @@ void clear_hires_screen(unsigned char bg) {
         screen[y*40] = A_BGBLACK;
         screen[1+y*40] = bg;
     }
+    screen_text[0] = A_BGBLACK;
+    screen_text[1] = A_FWBLUE;
+    screen_text[0+40] = A_BGBLACK;
+    screen_text[1+40] = A_FWBLUE;
+    screen_text[0+80] = A_BGBLACK;
+    screen_text[1+80] = A_FWBLUE;
+
+
 }
 
 
 void raster(unsigned char y) {
         int offset = 1+(y*40);
-        screen[offset] = A_BGBLUE;
+        screen[offset] = A_BGBLACK;
         offset+=40;
         screen[offset] = A_BGYELLOW;
         offset+=40;
@@ -67,7 +75,7 @@ void raster(unsigned char y) {
         offset+=40;
         screen[offset] = A_BGYELLOW;
         offset+=40;
-        screen[offset] = A_BGBLUE;
+        screen[offset] = A_BGBLACK;
         offset+=40;
 }
 
@@ -75,6 +83,7 @@ void rasters(void) {
     int y = 0;
     int diry = 1;
 
+    clear_hires_screen(A_BGBLACK);
     while(1) {
         raster(y);
         VSync();
@@ -90,7 +99,6 @@ int main(int argc, char *argv[])
 {
     IrqOff();
     hires();
-    clear_hires_screen(A_BGBLUE);
     rasters();
 }
 
