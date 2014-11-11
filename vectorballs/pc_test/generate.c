@@ -136,6 +136,16 @@ int main(int argc, char*argv[]) {
 
             yr*=6.0f;
             xr/=1.f;
+
+            px = xr * FOV / zr;
+            py = yr * FOV / zr;
+            px+=(double)WIDTH/2.0f;
+            py+=(double)HEIGHT/2.0f;
+            // void qsort (void *array, size_t count, size_t size, comparison_fn_t compare)
+        }
+
+        for(p = 0; p < vert_size; p+=3) {
+
             if(zr+cam_z<=100.0f) {
                 px = xr * FOV / zr;
                 py = yr * FOV / zr;
@@ -144,7 +154,7 @@ int main(int argc, char*argv[]) {
                 if(px>=2.0f && px<=WIDTH && py>=0.0f && py<=HEIGHT) {
                     unsigned int address = 0xa000 + (((unsigned int)px)+(((unsigned int)py)*40));
                     SDL_RenderDrawPoint(renderer, px, py); //Renders on middle of screen.
-            //        printf( "\t%f\t%f\t%f\n", px, py, zr);
+                    //        printf( "\t%f\t%f\t%f\n", px, py, zr);
                     //    sprintf(tmpstr, "%u,%u,%u, ", (unsigned int)px, (unsigned int)py, (unsigned int)zr);
                     //sprintf(tmpstr, "0x%02X,0x%02X, /* %d %d */", address&0xFF, address>>8, ((unsigned int)px),((unsigned int)py));
                     sprintf(tmpstr, "0x%02X,0x%02X,\n", ((unsigned int)px),((unsigned int)py));

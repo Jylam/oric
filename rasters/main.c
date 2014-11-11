@@ -1,8 +1,6 @@
 #define NULL ((void*)0)
 #include <sys/graphics.h>
 #include <lib.h>
-#include "sprite.h"
-#include "pc_test/cube.h"
 
 extern void VSync(void);
 extern void draw_sprite_at_address(unsigned char addrl, unsigned char addrh );
@@ -42,35 +40,58 @@ void set_colors(void) {
 
 }
 
-void animcube_address(void) {
-    int t;
-    int offset = 0;
+void clear_hires_screen(unsigned char bg) {
+    int y;
+    for(y=0; y<200; y++) {
+        screen[y*40] = A_BGBLACK;
+        screen[1+y*40] = bg;
+    }
+}
 
-    push_sprite_on_stack();
+
+void raster(unsigned char y) {
+        int offset = 1+(y*40);
+        screen[offset] = A_BGBLUE;
+        offset+=40;
+        screen[offset] = A_BGYELLOW;
+        offset+=40;
+        screen[offset] = A_BGYELLOW;
+        offset+=40;
+        screen[offset] = A_BGMAGENTA;
+        offset+=40;
+        screen[offset] = A_BGRED;
+        offset+=40;
+        screen[offset] = A_BGMAGENTA;
+        offset+=40;
+        screen[offset] = A_BGYELLOW;
+        offset+=40;
+        screen[offset] = A_BGYELLOW;
+        offset+=40;
+        screen[offset] = A_BGBLUE;
+        offset+=40;
+}
+
+void rasters(void) {
+    int y = 0;
+    int diry = 1;
 
     while(1) {
-        offset = 0;
-        while(offset<sizeof(anim)) {
-            char count      = anim[offset]>>1;
-
-            draw_sprites(offset);
-
-            VSync();
-            VSync();
-          //  VSync();
-
-            clear_sprites(offset);
-            offset+=(count<<1)+1;
+        raster(y);
+        VSync();
+        y+=diry;
+        if(y==190 || y==0) {
+            diry = diry==1?-1:1;
         }
     }
 }
+
 
 int main(int argc, char *argv[])
 {
     IrqOff();
     hires();
-    set_colors();
-    animcube_address();
+    clear_hires_screen(A_BGBLUE);
+    rasters();
 }
 
 

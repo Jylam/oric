@@ -1,0 +1,41 @@
+OSDK=/home/jylam/code/oric/public/pc/tools/
+#OSDK=/home/jylam/perso/oric/osdk/public/pc/tools/
+
+
+CC=$(OSDK)/osdk/main/compiler/compiler
+OSDK_INCLUDES=$(OSDK)/osdk/main/Osdk/_final_/include
+ASM=$(OSDK)/osdk/main/xa/xa
+MACROS=$(OSDK)/osdk/main/Osdk/_final_/macro/MACROS.H
+LINKER=$(OSDK)/osdk/main/link65/link65
+LINKLIB=$(OSDK)/osdk/main/Osdk/_final_/lib/
+HEADER=$(OSDK)/osdk/main/Osdk/_final_/lib/header.s
+TAIL=$(OSDK)/osdk/main/Osdk/_final_/lib/tail.s
+ORICULATOR_TAPES=/home/jylam/code/oric/emulators/oriculator-read-only/tapes
+
+all:
+	rm -f 2048.asm 2048_preproc.c 2048_preproc 2048.preproc 2048.temp_asm 2048_m.asm $(EUPHORIC_TAPES)/test.tap 1.asm go.asm
+	cpp -traditional-cpp -I$(OSDK_INCLUDES) main.c -o 2048_pre_comment.c
+	cpp -xc++ 2048_pre_comment.c -o 2048_pre.c
+	$(CC) -O1 2048_pre.c 2048_preproc.c
+	cpp -traditional-cpp -include $(MACROS) 2048_preproc.c -o 2048.temp_asm
+	cpp -traditional-cpp -include $(MACROS) gfx.s -o gfx_p.asm
+	grep -v '^#' 2048.temp_asm > 2048_m1.asm
+	grep -v '^#' gfx_p.asm > gfx_p_c.asm
+	$(OSDK)/osdk/main/macrosplitter/macrosplitter 2048_m1.asm 2048.asm
+	cat gfx_p_c.asm 2048.asm > go2.asm
+	$(LINKER) -d $(LINKLIB) go2.asm -o go.asm
+	$(ASM) -bt 0x500 -C -W -v -l symbols.txt go.asm  -o 2048.bin
+sprite:
+#	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball sprite.png  sprite.h
+	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball sprite_2x8.png  sprite.h
+	$(OSDK)/osdk/main/pictconv/pictconv -m0 -f0 -d0 -o3ball_small sprite_2x4.png  sprite_small.h
+
+tap:
+	$(OSDK)/osdk/main/header/header -a1 2048.bin test.tap 0x500
+	cp symbols.txt test.tap $(ORICULATOR_TAPES)
+clean:
+	rm -f 2048.asm 2048_preproc.c 2048_preproc 2048.preproc  2048.temp_asm 2048.bin 2048_m.asm 1.asm go.asm
+
+tables:
+	gcc make_tables.c -o make_tables -lm
+	./make_tables > tables.h
