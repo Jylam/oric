@@ -46,8 +46,9 @@ int abs(int v) {
     return v;
 }
 
-void line(int x0, int y0, int x1, int y1) {
+void line(u8 x0, u8 y0, u8 x1, u8 y1) {
 
+    // TODO Remove 16bit stuff, we can sort the coordinates instead and use u8
     int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
     int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1;
     int err = (dx>dy ? dx : -dy)/2, e2;
@@ -59,12 +60,14 @@ void line(int x0, int y0, int x1, int y1) {
     for(;;) {
         u8  nibble_offset, nibble_save;
         u16 screen_offset = y_offset+nibble;
-
-        nibble_save   = screen[screen_offset];
+        nibble_save       = screen[screen_offset];
 
         nibble_offset = x0 - table_mul6[nibble];
+
         old_nibble = table_nibble_offset[nibble_offset] | nibble_save;
+
         screen[screen_offset] = old_nibble;
+
         old_offset = screen_offset;
 
         if (x0==x1 && y0==y1) break;
