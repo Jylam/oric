@@ -29,8 +29,13 @@ void line(int x0, int y0, int x1, int y1) {
     int err = (dx>dy ? dx : -dy)/2, e2;
 
     for(;;){
-//        setPixel(x0,y0);
-        screen[(y0*40)+x0] = 0x20;
+        // x0/6 -> nibble
+        // x0-(x0/6) -> offset
+        unsigned char nibble = x0/6;
+        unsigned char offset = x0 - (nibble*6);
+        unsigned char nibble_save = screen[(y0*40)+(x0/6)];
+        screen[(y0*40)+(x0/6)] = (1<<(6-(offset+1))) | nibble_save;
+
         if (x0==x1 && y0==y1) break;
         e2 = err;
         if (e2 >-dx) { err -= dy; x0 += sx; }
@@ -47,7 +52,8 @@ void main()
     //screen[(100*40)+2] = 0x20; // 1px
     //screen[(101*40)+2] = 0x7E; // 6px
 
-    line(10, 10, 35, 100);
+    line(15, 10, 50, 180);
 
+    line(15, 50, 170, 20);
 
 }
