@@ -75,7 +75,16 @@ void main()
     hires();
     set_colors();
 
-    line(15, 10, 50, 180);
-    line(15, 50, 170, 20);
+
+    for(;;) {
+        u16 x0 = (rand()%0xDF)+13;
+        u16 y0 = rand()%0xBF;
+        u16 x1 = (rand()%0xDF)+13;
+        u16 y1 = rand()%0xBF;
+        line(x0, y0, x1, y1);
+    }
+
+    //line(15, 10, 50, 180);
+    //line(15, 50, 170, 20);
 
 }
