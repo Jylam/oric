@@ -51,23 +51,28 @@ void line(int x0, int y0, int x1, int y1) {
     int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
     int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1;
     int err = (dx>dy ? dx : -dy)/2, e2;
+    u16 y_offset = table_y[y0];
 
-    for(;;){
+    u16 old_offset = 0;
+    u8  old_nibble = 0;
+    u8 nibble = table_div6[x0];
+    for(;;) {
+        u8  nibble_offset, nibble_save;
+        u16 screen_offset = y_offset+nibble;
 
-        u8  nibble        = table_div6[x0];
-        u16 screen_offset = table_y[y0]+nibble;
-        u8  nibble_offset = x0 - table_mul6[nibble];
-        u8  nibble_save   = screen[screen_offset];
+        nibble_save   = screen[screen_offset];
 
-        screen[screen_offset] = table_nibble_offset[nibble_offset] | nibble_save;
+        nibble_offset = x0 - table_mul6[nibble];
+        old_nibble = table_nibble_offset[nibble_offset] | nibble_save;
+        screen[screen_offset] = old_nibble;
+        old_offset = screen_offset;
 
         if (x0==x1 && y0==y1) break;
         e2 = err;
-        if (e2 >-dx) { err -= dy; x0 += sx; }
-        if (e2 < dy) { err += dx; y0 += sy; }
+        if (e2 >-dx) { err -= dy; x0 += sx; nibble = table_div6[x0];}
+        if (e2 < dy) { err += dx; y0 += sy; y_offset = table_y[y0];}
     }
 }
-
 
 void main()
 {
@@ -83,8 +88,4 @@ void main()
         u16 y1 = rand()%0xBF;
         line(x0, y0, x1, y1);
     }
-
-    //line(15, 10, 50, 180);
-    //line(15, 50, 170, 20);
-
 }
