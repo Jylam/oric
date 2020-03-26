@@ -13,6 +13,7 @@ extern void draw_sprite_at_xy(unsigned char x, unsigned char y);
 extern void clear_sprite_at_xy(unsigned char x, unsigned char y);
 extern void clear_sprites(unsigned int offset);
 extern void draw_sprites(unsigned int offset);
+
 unsigned char *screen = (unsigned char*)0xa000;
 unsigned char *screen_text = (unsigned char*)0xbf68;
 volatile int table_y[200];
@@ -52,8 +53,6 @@ void clear_hires_screen(unsigned char bg) {
     screen_text[1+40] = A_FWBLUE;
     screen_text[0+80] = A_BGBLACK;
     screen_text[1+80] = A_FWBLUE;
-
-
 }
 
 
