@@ -1,10 +1,34 @@
 #include <lib.h>
 
+#define u8  unsigned char
+#define s8  signed char
+#define u16 unsigned int
+#define s16 signed int
+
 extern void IrqOff(void);
 
-unsigned char *screen = (unsigned char*)0xa000;
-unsigned char *screen_text = (unsigned char*)0xbf68;
-volatile int table_y[200];
+u8 *screen = (u8*)0xa000;
+u8 *screen_text = (u8*)0xbf68;
+
+volatile u16  table_y[200];
+volatile u8 table_mul6[240];
+volatile u8 table_div6[240];
+volatile u8 table_nibble_offset[6];
+
+// Precompute Y table (*40) and nibble offsets
+void gen_tables(void) {
+    int y;
+    for(y=0; y<200; y++) {
+        table_y[y] = y*40;
+    }
+    for(y=0; y<240; y++) {
+        table_div6[y] = y/6;
+        table_mul6[y] = y*6;
+    }
+    for(y=0; y<6; y++) {
+        table_nibble_offset[y] = 1<<(6-(y+1));
+    }
+}
 
 void set_colors(void) {
     int y;
@@ -29,12 +53,13 @@ void line(int x0, int y0, int x1, int y1) {
     int err = (dx>dy ? dx : -dy)/2, e2;
 
     for(;;){
-        // x0/6 -> nibble
-        // x0-(x0/6) -> offset
-        unsigned char nibble = x0/6;
-        unsigned char offset = x0 - (nibble*6);
-        unsigned char nibble_save = screen[(y0*40)+(x0/6)];
-        screen[(y0*40)+(x0/6)] = (1<<(6-(offset+1))) | nibble_save;
+
+        u8  nibble        = table_div6[x0];
+        u16 screen_offset = table_y[y0]+nibble;
+        u8  nibble_offset = x0 - table_mul6[nibble];
+        u8  nibble_save   = screen[screen_offset];
+
+        screen[screen_offset] = table_nibble_offset[nibble_offset] | nibble_save;
 
         if (x0==x1 && y0==y1) break;
         e2 = err;
@@ -46,14 +71,11 @@ void line(int x0, int y0, int x1, int y1) {
 
 void main()
 {
+    gen_tables();
     hires();
     set_colors();
 
-    //screen[(100*40)+2] = 0x20; // 1px
-    //screen[(101*40)+2] = 0x7E; // 6px
-
     line(15, 10, 50, 180);
-
     line(15, 50, 170, 20);
 
 }
