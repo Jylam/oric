@@ -13,7 +13,7 @@ u8 *screen_text = (u8*)0xbf68;
 volatile u16  table_y[200];
 volatile u8 table_mul6[240];
 volatile u8 table_div6[240];
-volatile u8 table_nibble_offset[6];
+volatile u8 table_pixel_value[6];
 
 // Precompute Y table (*40) and nibble offsets
 void gen_tables(void) {
@@ -26,7 +26,7 @@ void gen_tables(void) {
         table_mul6[y] = y*6;
     }
     for(y=0; y<6; y++) {
-        table_nibble_offset[y] = 1<<(6-(y+1));
+        table_pixel_value[y] = 1<<(6-(y+1));
     }
 }
 
@@ -48,31 +48,32 @@ int abs(int v) {
 
 void line(u8 x0, u8 y0, u8 x1, u8 y1) {
 
-    // TODO Remove 16bit stuff, we can sort the coordinates instead and use u8
+    // TODO try to replace int by u8, not sure it helps
     int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
     int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1;
+
     int err = (dx>dy ? dx : -dy)/2, e2;
     u16 y_offset = table_y[y0];
 
-    u16 old_offset = 0;
-    u8  old_nibble = 0;
-    u8 nibble = table_div6[x0];
+    u16 old_screen_offset = 0;
+    u8  old_sexel = 0;
+    u8  sexel_offset = table_div6[x0];
     for(;;) {
-        u8  nibble_offset, nibble_save;
-        u16 screen_offset = y_offset+nibble;
-        nibble_save       = screen[screen_offset];
+        u8  pixel_offset, sexel_save;
+        u16 screen_offset = y_offset+sexel_offset;
+        sexel_save       = screen[screen_offset];
 
-        nibble_offset = x0 - table_mul6[nibble];
+        pixel_offset = x0 - table_mul6[sexel_offset];
 
-        old_nibble = table_nibble_offset[nibble_offset] | nibble_save;
+        old_sexel = table_pixel_value[pixel_offset] | sexel_save;
 
-        screen[screen_offset] = old_nibble;
+        screen[screen_offset] = old_sexel;
 
-        old_offset = screen_offset;
+        old_screen_offset = screen_offset;
 
         if (x0==x1 && y0==y1) break;
         e2 = err;
-        if (e2 >-dx) { err -= dy; x0 += sx; nibble = table_div6[x0];}
+        if (e2 >-dx) { err -= dy; x0 += sx; sexel_offset = table_div6[x0];}
         if (e2 < dy) { err += dx; y0 += sy; y_offset = table_y[y0];}
     }
 }
