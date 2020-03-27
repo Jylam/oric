@@ -5,6 +5,8 @@
 #define u16 unsigned int
 #define s16 signed int
 
+#include "cube.h"
+
 extern void IrqOff(void);
 
 u8 *screen = (u8*)0xa000;
@@ -90,12 +92,49 @@ void line(u8 x0, u8 y0, u8 x1, u8 y1) {
     }
 }
 
+u8 cube_edges[] = { 0,1,
+                    1,2,
+                    2,3,
+                    3,0,
+                    1,5,
+                    5,6,
+                    6,2,
+                    0,4,
+                    4,5,
+                    3,7,
+                    7,6,
+                    7,4};
+
 void main()
 {
     u8 test = 0b10000001;
+    u16 anim_offset = 0;
     gen_tables();
     hires();
     set_colors();
+
+    for(;;) {
+        int e;
+
+        u8 *c = &cube_anim[anim_offset];
+
+        for(e = 0; e < (sizeof(cube_edges)/2); e++) {
+
+            u8 x0 = c[(cube_edges[(e*2)]*2)];
+            u8 y0 = c[(cube_edges[(e*2)]*2)+1];
+
+            u8 x1 = c[(cube_edges[(e*2)+1]*2)];
+            u8 y1 = c[(cube_edges[(e*2)+1]*2)+1];
+
+            line(x0, y0, x1, y1);
+
+        }
+
+        anim_offset+=16;
+        if(anim_offset >= sizeof(cube_anim)) {
+            anim_offset = 0;
+        }
+    }
 
     for(;;) {
         u16 x0 = (rand()%0xDF)+13;
