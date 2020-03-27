@@ -109,28 +109,35 @@ void main()
 {
     u8 test = 0b10000001;
     u16 anim_offset = 0;
+    int i;
+
     gen_tables();
     hires();
     set_colors();
 
+    // Precalc offset into vertices list
+    for(i = 0; i < sizeof(cube_edges); i++)
+        cube_edges[i] = cube_edges[i]*2;
+
     for(;;) {
-        int e;
-
         u8 *c = &cube_anim[anim_offset];
+        u8 *edges = cube_edges;
 
-        for(e = 0; e < (sizeof(cube_edges)/2); e++) {
+        for(i = 0; i < (sizeof(cube_edges)/2); i++) {
+            u8 x0, y0, x1, y1;
 
-            u8 x0 = c[(cube_edges[(e*2)]*2)];
-            u8 y0 = c[(cube_edges[(e*2)]*2)+1];
+            x0 = c[*edges];
+            y0 = c[*edges+1];
+            edges++;
 
-            u8 x1 = c[(cube_edges[(e*2)+1]*2)];
-            u8 y1 = c[(cube_edges[(e*2)+1]*2)+1];
+            x1 = c[*edges];
+            y1 = c[*edges+1];
+            edges++;
 
             line(x0, y0, x1, y1);
-
         }
 
-        anim_offset+=16;
+        anim_offset+=(16); // 16*speed
         if(anim_offset >= sizeof(cube_anim)) {
             anim_offset = 0;
         }
