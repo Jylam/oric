@@ -46,35 +46,48 @@ int abs(int v) {
     return v;
 }
 
+// Hires line, pixel coordinates
 void line(u8 x0, u8 y0, u8 x1, u8 y1) {
+    // Sexel <- one byte representing six pixels
+    // Pixel <- one pixel in a sexel (six of them, then)
 
-    // TODO try to replace int by u8, not sure it helps
-    int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
-    int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1;
-
-    int err = (dx>dy ? dx : -dy)/2, e2;
+    s16 dx = abs(x1-x0);
+    s16 dy = abs(y1-y0);
+    s8  sx = x0<x1 ? 1 : -1;
+    s8  sy = y0<y1 ? 1 : -1;
+    s16 err = (dx>dy ? dx : -dy)/2, e2;
     u16 y_offset = table_y[y0];
-
     u16 old_screen_offset = 0;
     u8  old_sexel = 0;
     u8  sexel_offset = table_div6[x0];
+
     for(;;) {
         u8  pixel_offset, sexel_save;
-        u16 screen_offset = y_offset+sexel_offset;
-        sexel_save       = screen[screen_offset];
+        u16 screen_offset;
 
-        pixel_offset = x0 - table_mul6[sexel_offset];
-
-        old_sexel = table_pixel_value[pixel_offset] | sexel_save;
-
+        screen_offset         = y_offset + sexel_offset;
+        sexel_save            = screen[screen_offset];
+        pixel_offset          = x0 - table_mul6[sexel_offset];
+        old_sexel             = table_pixel_value[pixel_offset] | sexel_save;
         screen[screen_offset] = old_sexel;
 
-        old_screen_offset = screen_offset;
+        if (x0==x1)
+            if (y0==y1) break;
 
-        if (x0==x1 && y0==y1) break;
+        old_screen_offset     = screen_offset;
+
         e2 = err;
-        if (e2 >-dx) { err -= dy; x0 += sx; sexel_offset = table_div6[x0];}
-        if (e2 < dy) { err += dx; y0 += sy; y_offset = table_y[y0];}
+
+        if (e2 >-dx) {
+            err -= dy;
+            x0 += sx;
+            sexel_offset = table_div6[x0];
+        }
+        if (e2 < dy) {
+            err += dx;
+            y0 += sy;
+            y_offset = table_y[y0];
+        }
     }
 }
 
