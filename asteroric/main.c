@@ -41,7 +41,7 @@ void set_colors(void) {
     screen_text[81] = A_BGBLUE;
 }
 
-int abs(int v) {
+s16 abs(s16 v) {
     if(v<0) return -v;
     return v;
 }
@@ -50,7 +50,6 @@ int abs(int v) {
 void line(u8 x0, u8 y0, u8 x1, u8 y1) {
     // Sexel <- one byte representing six pixels
     // Pixel <- one pixel in a sexel (six of them, then)
-
     s16 dx = abs(x1-x0);
     s16 dy = abs(y1-y0);
     s8  sx = x0<x1 ? 1 : -1;
@@ -80,12 +79,12 @@ void line(u8 x0, u8 y0, u8 x1, u8 y1) {
 
         if (e2 >-dx) {
             err -= dy;
-            x0 += sx;
+            x0  += sx;
             sexel_offset = table_div6[x0];
         }
         if (e2 < dy) {
             err += dx;
-            y0 += sy;
+            y0  += sy;
             y_offset = table_y[y0];
         }
     }
@@ -93,10 +92,10 @@ void line(u8 x0, u8 y0, u8 x1, u8 y1) {
 
 void main()
 {
+    u8 test = 0b10000001;
     gen_tables();
     hires();
     set_colors();
-
 
     for(;;) {
         u16 x0 = (rand()%0xDF)+13;
