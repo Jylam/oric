@@ -95,14 +95,10 @@ void clear_hires(void) {
     memset(screen, 64, 40*200);
 }
 
-
 #define HEIGHT 100
-#define BUFFER_COUNT 5
-
+#define BUFFER_COUNT 7
 
 u8 buffers[BUFFER_COUNT*HEIGHT*40];
-
-
 
 void main()
 {
@@ -113,7 +109,8 @@ void main()
     double vx = 0;
     double vy = 0;
     double t = 0;
-    u8 *cur_screen_ptr;
+    u8 *cur_buffer_ptr;
+    u8 *screen_ptr;
 
     gen_tables();
     hires();
@@ -121,18 +118,20 @@ void main()
 
     memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
 
+    screen_ptr = screen + table_y[((200-HEIGHT)/2)];
+
 
     for(;;) {
-        cur_screen_ptr = &buffers[active_screen*(40*HEIGHT)];
+        cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
         vx = (sin(t*M_PI/180.0)*90.0) + 90;
         x = vx;
-        vy = (sin((t*3.4)*M_PI/180.0)*(HEIGHT/3)) + (HEIGHT/3);
+        vy = (sin((t*3.4)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
         y = vy;
-        line(cur_screen_ptr, x+20, y, x+24, y+10);
-        line(cur_screen_ptr, x+24, y, x+20, y+10);
+        line(cur_buffer_ptr, x+20, y, x+24, y+10);
+        line(cur_buffer_ptr, x+24, y, x+20, y+10);
         t+=2.1;
 
-        memcpy(screen, cur_screen_ptr, 40*HEIGHT);
+        memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);
 
         active_screen++;
         if(active_screen == BUFFER_COUNT)
