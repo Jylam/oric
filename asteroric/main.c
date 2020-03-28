@@ -48,7 +48,7 @@ s16 abs(s16 v) {
     return v;
 }
 
-// Hires line, pixel coordinates
+// Hires line, pixel coordinates, ORed with the current content of the screen
 void line(u8 x0, u8 y0, u8 x1, u8 y1) {
     // Sexel <- one byte representing six pixels
     // Pixel <- one pixel in a sexel (six of them, then)
@@ -105,19 +105,33 @@ u8 cube_edges[] = { 0,1,
                     7,6,
                     7,4};
 
+void clear_hires(void) {
+    int x, y;
+    for(y=10; y<180; y++) {
+        memset(&screen[table_y[y]], 64, 38);
+    }
+}
+
 void main()
 {
     u8 test = 0b10000001;
     u16 anim_offset = 0;
-    int i;
+    int i, x, y;
+
+    IrqOff();
 
     gen_tables();
     hires();
     set_colors();
 
+
     // Precalc offset into vertices list
     for(i = 0; i < sizeof(cube_edges); i++)
         cube_edges[i] = cube_edges[i]*2;
+
+    // Scale the cube
+    //for(i = 0; i < sizeof(cube_anim); i++)
+    //    cube_anim[i] = (cube_anim[i]/2)+10;
 
     for(;;) {
         u8 *c = &cube_anim[anim_offset];
@@ -141,6 +155,7 @@ void main()
         if(anim_offset >= sizeof(cube_anim)) {
             anim_offset = 0;
         }
+        clear_hires();
     }
 
     for(;;) {
