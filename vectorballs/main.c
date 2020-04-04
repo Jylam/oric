@@ -45,22 +45,22 @@ void set_colors(void) {
 void animcube_address(void) {
     int t;
     int offset = 0;
+    int frame = 0;
 
     push_sprite_on_stack();
 
     while(1) {
         offset = 0;
+        frame = 0;
         while(offset<sizeof(anim)) {
             char count      = anim[offset]>>1;
 
             draw_sprites(offset);
 
-            VSync();
-            VSync();
-          //  VSync();
-
             clear_sprites(offset);
             offset+=(count<<1)+1;
+
+            frame++;
         }
     }
 }

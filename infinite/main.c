@@ -1,5 +1,6 @@
 #include <lib.h>
 #include <math.h>
+#include "sprite.h"
 
 #define u8  unsigned char
 #define s8  signed char
@@ -98,7 +99,39 @@ void clear_hires(void) {
 #define HEIGHT 100
 #define BUFFER_COUNT 7
 
-u8 buffers[BUFFER_COUNT*HEIGHT*40];
+u8 buffers[BUFFER_COUNT*HEIGHT*40]; // 7*100*40 -> 28 kbytes
+
+
+
+
+// 3 * 2 bytes -> 18x16 pixels
+void put_sprite(u8 *buf, u8 x, u8 y) {
+
+    u8  *screen_ptr;
+    u8  sx = 0, sy = 0; // Sprite X Y
+    u16 y_offset     = table_y[y];
+    u8  sexel_offset = table_div6[x];
+    u8  *sprite = &sprite0[0];
+
+    screen_ptr = buf + y_offset + sexel_offset;
+
+
+
+    while(sy<(2*8)) {
+        u8 pixels1 = sprite[(sy*2)];   // First byte of the line
+        u8 pixels2 = sprite[(sy*2)+1]; // Second byte of the line
+
+        u8 screen_offset_bit = sexel_offset-x;
+        u8 pixels_size       = 6-screen_offset_bit;
+
+
+
+        *screen_ptr = ;
+
+        screen_ptr += 40;
+        sy++;
+    }
+}
 
 void main()
 {
@@ -129,6 +162,9 @@ void main()
         y = vy;
         line(cur_buffer_ptr, x+20, y, x+24, y+10);
         line(cur_buffer_ptr, x+24, y, x+20, y+10);
+
+        put_sprite(cur_buffer_ptr, x+20, y);
+
         t+=2.1;
 
         memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);

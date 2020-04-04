@@ -104,7 +104,6 @@ _push_sprite_on_stack
 
 
 
-# Dbug
 _draw_sprite_at_xy
 
     ; x in A, y in Y, we use X to backup SP
@@ -154,7 +153,6 @@ _auto_pla
 
 savex  .dsb 1
 
-# Dbug
 _clear_sprite_at_xy
 #if 0
     ldy #0      ; Load add_l        2
@@ -213,7 +211,7 @@ _draw_sprites
             ;    offset+=2; // X,Y
             ;}
 
-    ; Clear anim_offset (offset in anim_ptr, starting from size, then x y x x y x y ...)
+    ; Clear anim_offset (offset in anim_ptr, starting from size, then x y x y x y ...)
     ldy #0
     sta anim_offset
 
