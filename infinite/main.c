@@ -146,14 +146,22 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     screen_ptr = buf + y_offset + sexel_offset;
 
     while(sy<(18*4)) {
-        *screen_ptr |= sprite[sy]&sprite_alpha[sy];
+        *screen_ptr &= sprite_alpha[sy];
+        *screen_ptr |= sprite[sy];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+1]&sprite_alpha[sy+1];
+
+        *screen_ptr &= sprite_alpha[sy+1];
+        *screen_ptr |= sprite[sy+1];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+2]&sprite_alpha[sy+2];
+
+        *screen_ptr &= sprite_alpha[sy+2];
+        *screen_ptr |= sprite[sy+2];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+3]&sprite_alpha[sy+3];
+
+        *screen_ptr &= sprite_alpha[sy+3];
+        *screen_ptr |= sprite[sy+3];
         screen_ptr += 37;
+
         sy+=4;
     }
 }
@@ -190,7 +198,7 @@ void main()
 
         put_sprite(cur_buffer_ptr, x+20, y);
 
-        t+=2.1;
+        t+=1.0;
 
         memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);
 
