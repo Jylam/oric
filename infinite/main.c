@@ -114,24 +114,31 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     u16 y_offset     = table_y[y];
     u8  sexel_offset = table_div6[x];
     u8  *sprite;
+    u8  *sprite_alpha;
     switch(x-(sexel_offset*6)) {
         case 0:
             sprite = sprite0;
+            sprite_alpha = sprite_alpha0;
             break;
         case 1:
             sprite = sprite1;
+            sprite_alpha = sprite_alpha1;
             break;
         case 2:
             sprite = sprite2;
+            sprite_alpha = sprite_alpha2;
             break;
         case 3:
             sprite = sprite3;
+            sprite_alpha = sprite_alpha3;
             break;
         case 4:
             sprite = sprite4;
+            sprite_alpha = sprite_alpha4;
             break;
         case 5:
             sprite = sprite5;
+            sprite_alpha = sprite_alpha5;
             break;
     }
 
@@ -139,13 +146,13 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     screen_ptr = buf + y_offset + sexel_offset;
 
     while(sy<(18*4)) {
-        *screen_ptr |= sprite[sy];
+        *screen_ptr |= sprite[sy]&sprite_alpha[sy];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+1];
+        *screen_ptr |= sprite[sy+1]&sprite_alpha[sy+1];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+2];
+        *screen_ptr |= sprite[sy+2]&sprite_alpha[sy+2];
         screen_ptr++;
-        *screen_ptr |= sprite[sy+3];
+        *screen_ptr |= sprite[sy+3]&sprite_alpha[sy+3];
         screen_ptr += 37;
         sy+=4;
     }
