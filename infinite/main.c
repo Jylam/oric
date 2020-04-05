@@ -1,11 +1,13 @@
 #include <lib.h>
 #include <math.h>
-#include "sprite.h"
 
 #define u8  unsigned char
 #define s8  signed char
 #define u16 unsigned int
 #define s16 signed int
+
+#include "sprite.h"
+
 
 extern void IrqOff(void);
 
@@ -111,25 +113,41 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     u8  sx = 0, sy = 0; // Sprite X Y
     u16 y_offset     = table_y[y];
     u8  sexel_offset = table_div6[x];
-    u8  *sprite = &sprite0[0];
+    u8  *sprite;
+    switch(x-(sexel_offset*6)) {
+        case 0:
+            sprite = sprite0;
+            break;
+        case 1:
+            sprite = sprite1;
+            break;
+        case 2:
+            sprite = sprite2;
+            break;
+        case 3:
+            sprite = sprite3;
+            break;
+        case 4:
+            sprite = sprite4;
+            break;
+        case 5:
+            sprite = sprite5;
+            break;
+    }
+
 
     screen_ptr = buf + y_offset + sexel_offset;
 
-
-
-    while(sy<(2*8)) {
-        u8 pixels1 = sprite[(sy*2)];   // First byte of the line
-        u8 pixels2 = sprite[(sy*2)+1]; // Second byte of the line
-
-        u8 screen_offset_bit = sexel_offset-x;
-        u8 pixels_size       = 6-screen_offset_bit;
-
-
-
-        *screen_ptr = ;
-
-        screen_ptr += 40;
-        sy++;
+    while(sy<(18*4)) {
+        *screen_ptr |= sprite[sy];
+        screen_ptr++;
+        *screen_ptr |= sprite[sy+1];
+        screen_ptr++;
+        *screen_ptr |= sprite[sy+2];
+        screen_ptr++;
+        *screen_ptr |= sprite[sy+3];
+        screen_ptr += 37;
+        sy+=4;
     }
 }
 
@@ -160,8 +178,8 @@ void main()
         x = vx;
         vy = (sin((t*3.4)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
         y = vy;
-        line(cur_buffer_ptr, x+20, y, x+24, y+10);
-        line(cur_buffer_ptr, x+24, y, x+20, y+10);
+        //line(cur_buffer_ptr, x+20, y, x+24, y+10);
+        //line(cur_buffer_ptr, x+24, y, x+20, y+10);
 
         put_sprite(cur_buffer_ptr, x+20, y);
 
