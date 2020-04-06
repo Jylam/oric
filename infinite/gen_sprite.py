@@ -8,13 +8,14 @@ import numpy
 def gen_image(filename, name):
     im = Image.open(filename)
     pix = im.load()
+    print("u8 %s[] = {"%(name))
     for i in range(0, 6):
-        print("u8 %s%d[] = {"%(name, i))
+        #print("u8 %s%d[] = {"%(name, i))
         for y in range(im.size[1]):
             curline = []
             for x in range(im.size[0]):
                 curline.append(pix[x,y])
-            if name == "sprite":
+            if name == "sprite_data":
                 curline.append(0)
                 curline.append(0)
                 curline.append(0)
@@ -43,8 +44,8 @@ def gen_image(filename, name):
                 print("%d"%line[c], end='')
             print(",")
 
-        print("};")
+    print("};")
 
-gen_image('boule_sprite.png', 'sprite')
-gen_image('boule_sprite_alpha.png', 'sprite_alpha')
+gen_image('boule_sprite.png', 'sprite_data')
+gen_image('boule_sprite_alpha.png', 'sprite_alpha_data')
 
