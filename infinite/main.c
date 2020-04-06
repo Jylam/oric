@@ -14,10 +14,10 @@ extern void IrqOff(void);
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
-volatile u16  table_y[200];
-volatile u8 table_mul6[240];
-volatile u8 table_div6[240];
-volatile u8 table_pixel_value[6];
+volatile u16 table_y[200];
+volatile u8  table_mul6[240];
+volatile u8  table_div6[240];
+volatile u8  table_pixel_value[6];
 
 // Precompute Y table (*40) and nibble offsets
 void gen_tables(void) {
@@ -146,7 +146,7 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     screen_ptr = buf + y_offset + sexel_offset;
 
     while(sy<(18*4)) {
-        *screen_ptr &= sprite_alpha[sy];
+        *screen_ptr = sprite_alpha[sy]&(*screen_ptr);
         *screen_ptr |= sprite[sy];
         screen_ptr++;
 

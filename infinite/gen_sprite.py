@@ -14,12 +14,20 @@ def gen_image(filename, name):
             curline = []
             for x in range(im.size[0]):
                 curline.append(pix[x,y])
-            curline.append(0)
-            curline.append(0)
-            curline.append(0)
-            curline.append(0)
-            curline.append(0)
-            curline.append(0)
+            if name == "sprite":
+                curline.append(0)
+                curline.append(0)
+                curline.append(0)
+                curline.append(0)
+                curline.append(0)
+                curline.append(0)
+            else:
+                curline.append(1)
+                curline.append(1)
+                curline.append(1)
+                curline.append(1)
+                curline.append(1)
+                curline.append(1)
             line = numpy.roll(curline, i)
             print("0b01", end='')
             for c in range(0, 6):
