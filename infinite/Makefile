@@ -6,7 +6,7 @@ BIN=infinite
 OBJ=$(SRC:.c=.o)
 OBJ+=$(SRC:.s=.o)
 
-include ../../public/rules.mk
+include ../public/rules.mk
 
 all: $(SRC) $(BIN)
 

@@ -1,0 +1,22 @@
+/* 16-bit code V1.38 */
+_main
+	ENTER(0,6)
+	ARGW_C(L130,(sp),0)
+	CALLV_C(_printf,2)
+	LEAVE
+L130
+	DB($48)
+	DB($65)
+	DB($6c)
+	DB($6c)
+	DB($6f)
+	DB($20)
+	DB($57)
+	DB($6f)
+	DB($72)
+	DB($6c)
+	DB($64)
+	DB($20)
+	DB($21)
+	DB($a)
+	DB($0)

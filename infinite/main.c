@@ -44,7 +44,7 @@ void gen_tables(void) {
     for(y=0; y<256; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
         pos_x_table[y] = v;
-        v = (sin(((i/255.0*360.0)*3.4)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
+        v = (sin(((i/255.0*360.0)*3.6)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
         pos_y_table[y] = v;
         i+=1.0;
     }
