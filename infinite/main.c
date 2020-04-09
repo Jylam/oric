@@ -34,13 +34,16 @@ void gen_tables(void) {
     for(y=0; y<200; y++) {
         table_y[y] = y*40;
     }
+    printf("and again ...");
     for(y=0; y<240; y++) {
         table_div6[y] = y/6;
         table_mul6[y] = y*6;
     }
+    printf("and again ...");
     for(y=0; y<6; y++) {
         table_pixel_value[y] = 1<<(6-(y+1));
     }
+    printf("and a last time ...");
     for(y=0; y<256; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
         pos_x_table[y] = v;
