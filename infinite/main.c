@@ -10,12 +10,15 @@
 
 
 extern void IrqOff(void);
+extern void put_sprite_asm(u8 *buf, u8 x, u8 y);
 
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
 volatile u16 table_y[200];
 volatile u8  table_mul6[240];
+volatile u16 sprite_ptrs[6];
+volatile u16 sprite_alpha_ptrs[6];
 volatile u8  table_div6[240];
 volatile u8  table_pixel_value[6];
 volatile u8  pos_x_table[256];
@@ -42,7 +45,11 @@ void gen_tables(void) {
     printf("and again ...");
     for(y=0; y<6; y++) {
         table_pixel_value[y] = 1<<(6-(y+1));
+        sprite_ptrs[y] = (u16) sprite_data +y*4*18;
+        sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
     }
+
+    /*
     printf("and a last time ...");
     for(y=0; y<256; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
@@ -51,6 +58,7 @@ void gen_tables(void) {
         pos_y_table[y] = v;
         i+=1.0;
     }
+    */
 }
 
 void set_colors(void) {
@@ -79,8 +87,10 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     u8  sexel_offset = table_div6[x];
 
     // Each array is 4*18*6 bytes
-    u8  *sprite = &sprite_data[(x-(table_mul6[sexel_offset]))*4*18];
-    u8  *sprite_alpha = &sprite_alpha_data[(x-(table_mul6[sexel_offset]))*4*18];
+    u8  pixel   = (x-(table_mul6[sexel_offset]));
+
+    u8  *sprite = (u8*)sprite_ptrs[pixel];//&sprite_data[soffset];
+    u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];//&sprite_alpha_data[soffset];
 
     screen_ptr = buf + y_offset + sexel_offset;
 
@@ -116,6 +126,7 @@ void main()
     u8 *screen_ptr;
 
     gen_tables();
+    IrqOff();
     hires();
     set_colors();
 
@@ -123,14 +134,21 @@ void main()
 
     screen_ptr = screen + table_y[((200-HEIGHT)/2)];
 
-
+    cur_buffer_ptr = screen_ptr;
+    put_sprite(cur_buffer_ptr, 50, 50);
+    put_sprite(cur_buffer_ptr, 51, 60);
+    put_sprite(cur_buffer_ptr, 52, 70);
+    put_sprite_asm(cur_buffer_ptr, 100, 50);
+    for(;;);
+#if 0
     for(;;) {
         x = pos_x_table[t];
         y = pos_y_table[t];
         t++;
 
         cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
-        put_sprite(cur_buffer_ptr, x+20, y);
+        //put_sprite(cur_buffer_ptr, x+20, y);
+        put_sprite_asm(cur_buffer_ptr, x+20, y);
 
         memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);
 
@@ -138,5 +156,5 @@ void main()
         if(active_screen == BUFFER_COUNT)
             active_screen = 0;
     }
-
+#endif
 }

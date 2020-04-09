@@ -1,6 +1,6 @@
 #NO_LIB=1
 
-SRC=main.c
+SRC=main.c sys.s sprite.s
 BIN=infinite
 
 OBJ=$(SRC:.c=.o)
