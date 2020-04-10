@@ -2,21 +2,22 @@ px              .dsb 1
 py              .dsb 1
 sexel_offset    .dsb 1
 pixel           .dsb 1
+sy              .dsb 1
 y_offset        .dsb 2
 sprite          .dsb 2
 sprite_alpha    .dsb 2
 soffset         .dsb 2
-buffer          .dsb 2
+buf             .dsb 2
 
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite_asm
 ;; Get *buffer
 ldy #0
 lda (sp),y
-sta buffer
+sta buf
 iny
 lda (sp),y
-sta buffer+1
+sta buf+1
 iny
 ;; Get X and Y
 lda (sp),y
@@ -37,8 +38,8 @@ lda _table_div6, y
 sta sexel_offset
 
 ;; u8  pixel   = (x-(table_mul6[sexel_offset]));
-tay
-lda _table_mul6, y
+tax
+lda _table_mul6, x
 sta pixel
 lda px
 sbc pixel
@@ -46,6 +47,7 @@ asl            ;; sprite_ptrs holds 16bit values
 sta pixel
 tay
 
+clc
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
 lda _sprite_ptrs, y
 sta sprite
@@ -54,6 +56,7 @@ lda _sprite_ptrs, y
 sta sprite+1
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 lda pixel
+tay
 lda _sprite_alpha_ptrs, y
 sta sprite_alpha
 iny
@@ -62,6 +65,29 @@ sta sprite_alpha+1
 
 
 ;; screen_ptr = buf + y_offset + sexel_offset;
+clc
+lda buf
+adc y_offset
+sta buf
+lda buf+1
+adc y_offset+1
+sta buf+1
+clc
+lda buf
+adc sexel_offset
+sta buf
+lda buf+1
+adc sexel_offset+1
+sta buf
+
+
+;; while(sy<(18*4)) {
+;; *screen_ptr &= sprite_alpha[sy];
+
+ldy sy
+lda sprite_alpha, y
+ldy #0
+sta buf, y
 
 rts
 
