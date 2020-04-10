@@ -138,7 +138,7 @@ void main()
     put_sprite(cur_buffer_ptr, 50, 50);
     put_sprite(cur_buffer_ptr, 51, 60);
     put_sprite(cur_buffer_ptr, 52, 70);
-    put_sprite_asm(cur_buffer_ptr, 100, 50);
+    put_sprite_asm(cur_buffer_ptr, 52, 70);
     for(;;);
 #if 0
     for(;;) {

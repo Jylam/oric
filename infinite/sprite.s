@@ -1,3 +1,5 @@
+.zero
+*= $50
 px              .dsb 1
 py              .dsb 1
 sexel_offset    .dsb 1
@@ -8,7 +10,9 @@ sprite          .dsb 2
 sprite_alpha    .dsb 2
 soffset         .dsb 2
 buf             .dsb 2
+screen_ptr      .dsb 2
 
+.text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite_asm
 ;; Get *buffer
@@ -68,26 +72,26 @@ sta sprite_alpha+1
 clc
 lda buf
 adc y_offset
-sta buf
+sta screen_ptr
 lda buf+1
 adc y_offset+1
-sta buf+1
+sta screen_ptr+1
 clc
-lda buf
+lda screen_ptr
 adc sexel_offset
-sta buf
-lda buf+1
+sta screen_ptr
+lda screen_ptr+1
 adc sexel_offset+1
-sta buf
+sta screen_ptr
 
 
 ;; while(sy<(18*4)) {
 ;; *screen_ptr &= sprite_alpha[sy];
-
+prout
 ldy sy
 lda sprite_alpha, y
 ldy #0
-sta buf, y
+sta (screen_ptr), y
 
 rts
 
