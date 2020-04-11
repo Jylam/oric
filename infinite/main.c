@@ -15,7 +15,6 @@ extern void put_sprite_asm(u8 *buf, u8 x, u8 y);
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
-volatile u16 table_y[200];
 volatile u8 table_yLOW[200];
 volatile u8 table_yHIGH[200];
 volatile u8  table_mul6[240];
@@ -37,7 +36,6 @@ void gen_tables(void) {
     double i = 0;
     printf("Please wait ...");
     for(y=0; y<200; y++) {
-        table_y[y] = y*40;
         table_yLOW[y]  = (y*40)&0x00FF;
         table_yHIGH[y] = ((y*40)&0xFF00)>>8;
     }
@@ -87,7 +85,7 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
 
     u8  *screen_ptr; // Current sexel in the display buffer
     u8  sy = 0;      // sprite current Y
-    u16 y_offset     = table_y[y];
+    u16 y_offset     = (table_yHIGH[y]<<8)|table_yLOW[y];
     u8  sexel_offset = table_div6[x];
 
     // Each array is 4*18*6 bytes
@@ -128,7 +126,7 @@ void main()
     u8 t = 0;
     u8 *cur_buffer_ptr;
     u8 *screen_ptr;
-
+    u16 y_offset = 0;
     gen_tables();
     IrqOff();
     hires();
@@ -136,7 +134,8 @@ void main()
 
     memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
 
-    screen_ptr = screen + table_y[((200-HEIGHT)/2)];
+    y_offset = (table_yHIGH[((200-HEIGHT)/2)]<<8)|(table_yLOW[((200-HEIGHT)/2)]);
+    screen_ptr = screen + y_offset;
 
     cur_buffer_ptr = screen_ptr;
     put_sprite(cur_buffer_ptr, 50, 50);
