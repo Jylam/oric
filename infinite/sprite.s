@@ -32,12 +32,12 @@ lda (sp),y
 sta py
 
 ;; u16 y_offset     = table_y[y];
-asl
+clc
 tay
-lda _table_y, y
+lda _table_yLOW, y
 sta y_offset+0
 iny
-lda _table_y, y
+lda _table_yHIGH, y
 sta y_offset+1
 
 ;; u8  sexel_offset = table_div6[x];
@@ -51,7 +51,9 @@ tax
 lda _table_mul6, x
 sta pixel
 lda px
+clc
 sbc pixel
+clc
 asl            ;; sprite_ptrs holds 16bit values
 sta pixel
 tay

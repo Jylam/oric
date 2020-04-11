@@ -16,6 +16,8 @@ u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
 volatile u16 table_y[200];
+volatile u8 table_yLOW[200];
+volatile u8 table_yHIGH[200];
 volatile u8  table_mul6[240];
 volatile u16 sprite_ptrs[6];
 volatile u16 sprite_alpha_ptrs[6];
@@ -36,6 +38,8 @@ void gen_tables(void) {
     printf("Please wait ...");
     for(y=0; y<200; y++) {
         table_y[y] = y*40;
+        table_yLOW[y]  = (y*40)&0x00FF;
+        table_yHIGH[y] = ((y*40)&0xFF00)>>8;
     }
     printf("and again ...");
     for(y=0; y<240; y++) {
