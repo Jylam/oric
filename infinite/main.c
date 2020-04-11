@@ -139,12 +139,11 @@ void main()
     put_sprite(cur_buffer_ptr, 51, 60);
     put_sprite(cur_buffer_ptr, 52, 70);
 
-    //x = 52;
-    //y = 70;
-    x = 0x55;
-    y = 0x66;
+    x = 52;
+    y = 30;
     printf("Buf: %x X %x Y %x", cur_buffer_ptr, x, y);
-    put_sprite_asm(cur_buffer_ptr, 0x55, 0x66);
+    put_sprite_asm(cur_buffer_ptr, x, y);
+    put_sprite_asm(cur_buffer_ptr, x, y+20);
     for(;;);
 #if 0
     for(;;) {

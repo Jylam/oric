@@ -32,9 +32,13 @@ lda (sp),y
 sta py
 
 ;; u16 y_offset     = table_y[y];
+asl
 tay
 lda _table_y, y
-sta y_offset
+sta y_offset+0
+iny
+lda _table_y, y
+sta y_offset+1
 
 ;; u8  sexel_offset = table_div6[x];
 lda px
