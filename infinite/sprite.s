@@ -1,5 +1,5 @@
 .zero
-*= $50
+*= $80
 px              .dsb 1
 py              .dsb 1
 sexel_offset    .dsb 1
@@ -27,6 +27,7 @@ iny
 lda (sp),y
 sta px
 iny
+iny ;; FIXME compiler pushes that as a 16bit value (??)
 lda (sp),y
 sta py
 

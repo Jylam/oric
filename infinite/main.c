@@ -119,7 +119,7 @@ void main()
 {
     u8 test = 0b10000001;
     u16 anim_offset = 0;
-    int x, y;
+    u8 x, y;
     u8 active_screen = 0;
     u8 t = 0;
     u8 *cur_buffer_ptr;
@@ -138,7 +138,13 @@ void main()
     put_sprite(cur_buffer_ptr, 50, 50);
     put_sprite(cur_buffer_ptr, 51, 60);
     put_sprite(cur_buffer_ptr, 52, 70);
-    put_sprite_asm(cur_buffer_ptr, 52, 70);
+
+    //x = 52;
+    //y = 70;
+    x = 0x55;
+    y = 0x66;
+    printf("Buf: %x X %x Y %x", cur_buffer_ptr, x, y);
+    put_sprite_asm(cur_buffer_ptr, 0x55, 0x66);
     for(;;);
 #if 0
     for(;;) {
