@@ -19,14 +19,18 @@ _put_sprite_asm
 ldy #0
 lda (sp),y
 sta buf
+clc
 iny
 lda (sp),y
 sta buf+1
+clc
 iny
 ;; Get X and Y
 lda (sp),y
 sta px
+clc
 iny
+clc
 iny ;; FIXME compiler pushes that as a 16bit value (??)
 lda (sp),y
 sta py
@@ -36,6 +40,7 @@ clc
 tay
 lda _table_yLOW, y
 sta y_offset+0
+clc
 iny
 lda _table_yHIGH, y
 sta y_offset+1
@@ -62,6 +67,7 @@ clc
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
 lda _sprite_ptrs, y
 sta sprite
+clc
 iny
 lda _sprite_ptrs, y
 sta sprite+1
@@ -70,6 +76,7 @@ lda pixel
 tay
 lda _sprite_alpha_ptrs, y
 sta sprite_alpha
+clc
 iny
 lda _sprite_alpha_ptrs, y
 sta sprite_alpha+1

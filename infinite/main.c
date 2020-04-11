@@ -15,8 +15,8 @@ extern void put_sprite_asm(u8 *buf, u8 x, u8 y);
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
-volatile u8 table_yLOW[200];
-volatile u8 table_yHIGH[200];
+volatile u8  table_yLOW[200];
+volatile u8  table_yHIGH[200];
 volatile u8  table_mul6[240];
 volatile u16 sprite_ptrs[6];
 volatile u16 sprite_alpha_ptrs[6];
