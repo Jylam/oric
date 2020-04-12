@@ -2,6 +2,7 @@
 *= $80
 px              .dsb 1
 py              .dsb 1
+tmpsa           .dsb 1
 sexel_offset    .dsb 1
 pixel           .dsb 1
 sy              .dsb 1
@@ -107,13 +108,37 @@ sta screen_ptr+1   ;; AC88 OK
 
 
 ;; while(sy<(18*4)) {
-;; *screen_ptr &= sprite_alpha[sy];
-prout
+ldx sy
+y_loop
+;;        *screen_ptr &= sprite_alpha[sy];
 lda sy
 tay
 lda sprite_alpha, y
+sta tmpsa
 ldy #0
-sta (screen_ptr), y
+lda screen_ptr, y
+and tmpsa
+sta screen_ptr, y
+;;        *screen_ptr |= sprite[sy];
+lda sy
+tay
+lda sprite, y
+sta tmpsa
+ldy #0
+lda screen_ptr, y
+ora tmpsa
+sta screen_ptr, y
+;;        screen_ptr++;
+lda screen_ptr
+clc
+ina
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
+
+
+
 
 rts
 

@@ -114,7 +114,6 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
         *screen_ptr &= sprite_alpha[sy+3];
         *screen_ptr |= sprite[sy+3];
         screen_ptr += 37;
-        printf("C sprite %x ", sprite_alpha);
         return;
 
         sy+=4;
