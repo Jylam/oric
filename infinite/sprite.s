@@ -110,7 +110,6 @@ sta screen_ptr+1   ;; AC88 OK
 ;; *screen_ptr &= sprite_alpha[sy];
 prout
 lda sy
-asl
 tay
 lda sprite_alpha, y
 ldy #0

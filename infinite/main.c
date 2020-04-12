@@ -96,8 +96,8 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 
     screen_ptr = buf + y_offset + sexel_offset;
-    printf("C sprite %x ", screen_ptr);
 
+    sy = 4;
     while(sy<(18*4)) {
         *screen_ptr &= sprite_alpha[sy];
         *screen_ptr |= sprite[sy];
@@ -114,6 +114,8 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
         *screen_ptr &= sprite_alpha[sy+3];
         *screen_ptr |= sprite[sy+3];
         screen_ptr += 37;
+        printf("C sprite %x ", sprite_alpha);
+        return;
 
         sy+=4;
     }
