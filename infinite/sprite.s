@@ -11,6 +11,7 @@ sprite_alpha    .dsb 2
 soffset         .dsb 2
 buf             .dsb 2
 screen_ptr      .dsb 2
+_pdbg           .dsb 2
 
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
@@ -53,24 +54,29 @@ sta sexel_offset
 
 ;; u8  pixel   = (x-(table_mul6[sexel_offset]));
 tax
-lda _table_mul6, x
+
+lda _table_mul6, x ;; 30 OK
 sta pixel
-lda px
-clc
+lda px             ;; 34 OK
+sec
 sbc pixel
-clc
 asl            ;; sprite_ptrs holds 16bit values
 sta pixel
 tay
 
-clc
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
 lda _sprite_ptrs, y
 sta sprite
 clc
 iny
 lda _sprite_ptrs, y
-sta sprite+1
+sta sprite+1           ;; 0768 OK
+
+lda #0
+sta _pdbg
+sta _pdbg+1
+
+
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 lda pixel
 tay
@@ -79,30 +85,33 @@ sta sprite_alpha
 clc
 iny
 lda _sprite_alpha_ptrs, y
-sta sprite_alpha+1
+sta sprite_alpha+1          ;; 0917 OK
 
 
 ;; screen_ptr = buf + y_offset + sexel_offset;
-clc
 lda buf
+clc
 adc y_offset
 sta screen_ptr
 lda buf+1
 adc y_offset+1
-sta screen_ptr+1
-clc
+sta screen_ptr+1   ;; AC80 OK
+
 lda screen_ptr
+clc
 adc sexel_offset
 sta screen_ptr
 lda screen_ptr+1
-adc sexel_offset+1
-sta screen_ptr
+adc #0
+sta screen_ptr+1   ;; AC88 OK
 
 
 ;; while(sy<(18*4)) {
 ;; *screen_ptr &= sprite_alpha[sy];
 prout
-ldy sy
+lda sy
+asl
+tay
 lda sprite_alpha, y
 ldy #0
 sta (screen_ptr), y

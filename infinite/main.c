@@ -11,6 +11,7 @@
 
 extern void IrqOff(void);
 extern void put_sprite_asm(u8 *buf, u8 x, u8 y);
+extern u16  pdbg;
 
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
@@ -91,10 +92,11 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     // Each array is 4*18*6 bytes
     u8  pixel   = (x-(table_mul6[sexel_offset]));
 
-    u8  *sprite = (u8*)sprite_ptrs[pixel];//&sprite_data[soffset];
-    u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];//&sprite_alpha_data[soffset];
+    u8  *sprite = (u8*)sprite_ptrs[pixel];
+    u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 
     screen_ptr = buf + y_offset + sexel_offset;
+    printf("C sprite %x ", screen_ptr);
 
     while(sy<(18*4)) {
         *screen_ptr &= sprite_alpha[sy];
@@ -138,15 +140,12 @@ void main()
     screen_ptr = screen + y_offset;
 
     cur_buffer_ptr = screen_ptr;
-    put_sprite(cur_buffer_ptr, 50, 50);
-    put_sprite(cur_buffer_ptr, 51, 60);
-    put_sprite(cur_buffer_ptr, 52, 70);
-
     x = 52;
     y = 30;
-    printf("Buf: %x X %x Y %x", cur_buffer_ptr, x, y);
+    put_sprite    (cur_buffer_ptr, x, y);
+
     put_sprite_asm(cur_buffer_ptr, x, y);
-    put_sprite_asm(cur_buffer_ptr, x, y+20);
+    printf("asm sprite %x", pdbg);
     for(;;);
 #if 0
     for(;;) {
