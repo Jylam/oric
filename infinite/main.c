@@ -146,7 +146,10 @@ void main()
     y = 30;
    // put_sprite    (cur_buffer_ptr, x, y);
 
-    put_sprite_asm(cur_buffer_ptr, x, y);
+    put_sprite_asm(cur_buffer_ptr, x,   y);
+    put_sprite_asm(cur_buffer_ptr, x+1, y);
+    put_sprite_asm(cur_buffer_ptr, x+1, y);
+    put_sprite_asm(cur_buffer_ptr, x+1, y);
     for(;;);
 #if 0
     for(;;) {

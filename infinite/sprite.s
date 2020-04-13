@@ -230,7 +230,6 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1
 
-rts
 ;; if sy>=72, end
 lda sy
 clc
