@@ -106,10 +106,11 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1   ;; AC88 OK
 
-lda #32
+lda #0
 sta sy
 ;; while(sy<(18*4)) {
 y_loop
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
 lda sy
 tay
@@ -136,24 +137,110 @@ sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;        *screen_ptr &= sprite_alpha[sy];
+lda sy
+clc
+adc #1
+sta sy
+tay
+lda (sprite_alpha), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+and tmpsa
+sta (screen_ptr), y
+;;        *screen_ptr |= sprite[sy];
+lda sy
+tay
+lda (sprite), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+ora tmpsa
+sta (screen_ptr), y
+;;        screen_ptr++;
+lda screen_ptr
+clc
+adc #1
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;        *screen_ptr &= sprite_alpha[sy];
+lda sy
+clc
+adc #1
+sta sy
+tay
+lda (sprite_alpha), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+and tmpsa
+sta (screen_ptr), y
+;;        *screen_ptr |= sprite[sy];
+lda sy
+tay
+lda (sprite), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+ora tmpsa
+sta (screen_ptr), y
+;;        screen_ptr++;
+lda screen_ptr
+clc
+adc #1
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;        *screen_ptr &= sprite_alpha[sy];
+lda sy
+clc
+adc #1
+sta sy
+tay
+lda (sprite_alpha), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+and tmpsa
+sta (screen_ptr), y
+;;        *screen_ptr |= sprite[sy];
+lda sy
+tay
+lda (sprite), y
+sta tmpsa
+ldy #0
+lda (screen_ptr), y
+ora tmpsa
+sta (screen_ptr), y
+;;        screen_ptr+=37;
+lda screen_ptr
+clc
+adc #37
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
 
 rts
-
-
-
-
-
-
-
-
+;; if sy>=72, end
 lda sy
+clc
 adc #1
 sta sy
 cmp #72
-bcc y_loop
 
-
+bcs end
+jmp y_loop
+end
 rts
 
 
