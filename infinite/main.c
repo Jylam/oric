@@ -150,14 +150,14 @@ void main()
     cur_buffer_ptr = screen_ptr;
     x = 52;
     y = 30;
-   // put_sprite    (cur_buffer_ptr, x, y);
+    //put_sprite    (cur_buffer_ptr, x, y);
 
-    for(t=0; t<6; t++)
-    for(y=0; y<80; y+=18)
-    for(x=20; x<200; x+=18) {
-        put_sprite_asm(cur_buffer_ptr, x, y+t);
-//        sleep(10);
-    }
+    put_sprite_asm(cur_buffer_ptr, 50, 20);
+    put_sprite_asm(cur_buffer_ptr, 51, 38);
+    put_sprite_asm(cur_buffer_ptr, 52, 56);
+    put_sprite_asm(cur_buffer_ptr, 53, 74);
+    put_sprite_asm(cur_buffer_ptr, 54, 92);
+    put_sprite_asm(cur_buffer_ptr, 55, 110);
     for(;;);
 #if 0
     for(;;) {
