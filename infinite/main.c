@@ -121,6 +121,12 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     }
 }
 
+void sleep(int t) {
+    int i = 0;
+    for(i = 0; i < t; i++) {
+        printf("Wait %d\n", i);
+    }
+}
 void main()
 {
     u8 test = 0b10000001;
@@ -146,10 +152,12 @@ void main()
     y = 30;
    // put_sprite    (cur_buffer_ptr, x, y);
 
-    put_sprite_asm(cur_buffer_ptr, x,   y);
-    put_sprite_asm(cur_buffer_ptr, x+1, y);
-    put_sprite_asm(cur_buffer_ptr, x+1, y);
-    put_sprite_asm(cur_buffer_ptr, x+1, y);
+    for(t=0; t<6; t++)
+    for(y=0; y<80; y+=18)
+    for(x=20; x<200; x+=18) {
+        put_sprite_asm(cur_buffer_ptr, x, y+t);
+//        sleep(10);
+    }
     for(;;);
 #if 0
     for(;;) {
