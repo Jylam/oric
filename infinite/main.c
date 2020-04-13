@@ -97,12 +97,13 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
 
     screen_ptr = buf + y_offset + sexel_offset;
 
-    sy = 4;
+    sy = 32;
     while(sy<(18*4)) {
         *screen_ptr &= sprite_alpha[sy];
+        printf("sptr %x ", sprite_alpha[sy]);
         *screen_ptr |= sprite[sy];
         screen_ptr++;
-
+        return;
         *screen_ptr &= sprite_alpha[sy+1];
         *screen_ptr |= sprite[sy+1];
         screen_ptr++;
@@ -114,7 +115,6 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
         *screen_ptr &= sprite_alpha[sy+3];
         *screen_ptr |= sprite[sy+3];
         screen_ptr += 37;
-        return;
 
         sy+=4;
     }
@@ -143,10 +143,10 @@ void main()
     cur_buffer_ptr = screen_ptr;
     x = 52;
     y = 30;
-    put_sprite    (cur_buffer_ptr, x, y);
+    //put_sprite    (cur_buffer_ptr, x, y);
 
     put_sprite_asm(cur_buffer_ptr, x, y);
-    printf("asm sprite %x", pdbg);
+    printf(" asm sprite %x", pdbg);
     for(;;);
 #if 0
     for(;;) {

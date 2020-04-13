@@ -17,6 +17,9 @@ _pdbg           .dsb 2
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite_asm
+lda #0
+sta _pdbg
+sta _pdbg+1
 ;; Get *buffer
 ldy #0
 lda (sp),y
@@ -73,9 +76,6 @@ iny
 lda _sprite_ptrs, y
 sta sprite+1           ;; 0768 OK
 
-lda #0
-sta _pdbg
-sta _pdbg+1
 
 
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
@@ -106,38 +106,52 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1   ;; AC88 OK
 
-
+lda #32
+sta sy
 ;; while(sy<(18*4)) {
-ldx sy
 y_loop
 ;;        *screen_ptr &= sprite_alpha[sy];
 lda sy
 tay
-lda sprite_alpha, y
+lda (sprite_alpha), y
 sta tmpsa
 ldy #0
-lda screen_ptr, y
+lda (screen_ptr), y
 and tmpsa
-sta screen_ptr, y
+sta (screen_ptr), y
 ;;        *screen_ptr |= sprite[sy];
 lda sy
 tay
-lda sprite, y
+lda (sprite), y
 sta tmpsa
 ldy #0
-lda screen_ptr, y
+lda (screen_ptr), y
 ora tmpsa
-sta screen_ptr, y
+sta (screen_ptr), y
 ;;        screen_ptr++;
 lda screen_ptr
 clc
-ina
+adc #1
 sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
 
 
+rts
+
+
+
+
+
+
+
+
+lda sy
+adc #1
+sta sy
+cmp #72
+bcc y_loop
 
 
 rts
