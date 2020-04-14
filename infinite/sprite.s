@@ -25,14 +25,13 @@ lda _table_yHIGH, y
 sta y_offset+1
 
 ;; u8  sexel_offset = table_div6[x];
-ldy _px
-lda _table_div6, y
-sta sexel_offset
+ldx _px
+ldy _table_div6, x
+sty sexel_offset
 
 ;; u8  pixel   = (x-(table_mul6[sexel_offset]));
-tax
 
-lda _table_mul6, x ;; 30 OK
+lda _table_mul6, y ;; 30 OK
 sta pixel
 lda _px             ;; 34 OK
 sec
@@ -49,10 +48,8 @@ lda _sprite_ptrs, y
 sta sprite+1           ;; 0768 OK
 
 
-
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
-lda pixel
-tay
+ldy pixel
 lda _sprite_alpha_ptrs, y
 sta sprite_alpha
 iny
@@ -106,61 +103,9 @@ sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;        *screen_ptr &= sprite_alpha[sy];
-ldy sy
-iny
-sty sy
-lda (sprite_alpha), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-and tmpsa
-sta (screen_ptr), y
-;;        *screen_ptr |= sprite[sy];
-ldy sy
-lda (sprite), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-ora tmpsa
-sta (screen_ptr), y
-;;        screen_ptr++;
-lda screen_ptr
-adc #1
-sta screen_ptr
-lda screen_ptr+1
-adc #0
-sta screen_ptr+1
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;        *screen_ptr &= sprite_alpha[sy];
-ldy sy
-clc
-iny
-sty sy
-lda (sprite_alpha), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-and tmpsa
-sta (screen_ptr), y
-;;        *screen_ptr |= sprite[sy];
-ldy sy
-lda (sprite), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-ora tmpsa
-sta (screen_ptr), y
-;;        screen_ptr++;
-lda screen_ptr
-clc
-adc #1
-sta screen_ptr
-lda screen_ptr+1
-adc #0
-sta screen_ptr+1
+#include "sprite_template.s"
+#include "sprite_template.s"
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];

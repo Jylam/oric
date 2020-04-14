@@ -156,7 +156,7 @@ void main()
     for(px=18; px<222; px+=18)
       put_sprite_asm();
     for(py=6;  py<182; py+=18)
-    for(px=24; px<222; px+=18)
+    for(px=24; px<222; px+=1)
       put_sprite_asm();
 #endif
 
