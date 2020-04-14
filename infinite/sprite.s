@@ -1,7 +1,5 @@
 .zero
 *= $80
-px              .dsb 1
-py              .dsb 1
 tmpsa           .dsb 1
 sexel_offset    .dsb 1
 pixel           .dsb 1
@@ -9,7 +7,6 @@ sy              .dsb 1
 y_offset        .dsb 2
 sprite          .dsb 2
 sprite_alpha    .dsb 2
-soffset         .dsb 2
 buf             .dsb 2
 screen_ptr      .dsb 2
 _pdbg           .dsb 2
@@ -24,26 +21,17 @@ sta buf
 iny
 lda (sp),y
 sta buf+1
-iny
-;; Get X and Y
-lda (sp),y
-sta px
-clc
-iny
-iny ;; FIXME compiler pushes that as a 16bit value (??)
-lda (sp),y
-sta py
+
+ldy _py
 
 ;; u16 y_offset     = table_y[y];
-tay
 lda _table_yLOW, y
 sta y_offset+0
 lda _table_yHIGH, y
 sta y_offset+1
 
 ;; u8  sexel_offset = table_div6[x];
-lda px
-tay
+ldy _px
 lda _table_div6, y
 sta sexel_offset
 
@@ -52,7 +40,7 @@ tax
 
 lda _table_mul6, x ;; 30 OK
 sta pixel
-lda px             ;; 34 OK
+lda _px             ;; 34 OK
 sec
 sbc pixel
 asl            ;; sprite_ptrs holds 16bit values

@@ -10,7 +10,7 @@
 
 
 extern void IrqOff(void);
-extern void put_sprite_asm(u8 *buf, u8 x, u8 y);
+extern void put_sprite_asm(u8 *buf); // Uses _px and _py
 extern u16  pdbg;
 
 u8 *screen = (u8*)0xa000;
@@ -25,6 +25,8 @@ volatile u8  table_div6[240];
 volatile u8  table_pixel_value[6];
 volatile u8  pos_x_table[256];
 volatile u8  pos_y_table[256];
+
+u8 px, py;
 
 #define HEIGHT 100
 #define BUFFER_COUNT 6
@@ -52,7 +54,7 @@ void gen_tables(void) {
         sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
     }
 
-
+#ifdef ANIM
     printf("and a last time ...");
     for(y=0; y<256; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
@@ -61,7 +63,7 @@ void gen_tables(void) {
         pos_y_table[y] = v;
         i+=1.0;
     }
-
+#endif
 }
 
 void set_colors(void) {
@@ -82,8 +84,8 @@ void clear_hires(void) {
 
 
 // 3 * 2 bytes -> 18x16 pixels
-void put_sprite(u8 *buf, u8 x, u8 y) {
-
+void put_sprite(u8 *buf) {
+    u8 x = px, y = py;
     u8  *screen_ptr; // Current sexel in the display buffer
     u8  sy = 0;      // sprite current Y
     u16 y_offset     = (table_yHIGH[y]<<8)|table_yLOW[y];
@@ -149,7 +151,16 @@ void main()
     x = 52;
     y = 30;
     //put_sprite    (cur_buffer_ptr, x, y);
+#if 1
+    for(py=0;  py<182; py+=18)
+    for(px=18; px<222; px+=18)
+      put_sprite_asm(screen);
+    for(py=6;  py<182; py+=18)
+    for(px=24; px<222; px+=18)
+      put_sprite_asm(screen);
+#endif
 
+#ifdef ANIM
     for(;;) {
         x = pos_x_table[t];
         y = pos_y_table[t];
@@ -165,4 +176,5 @@ void main()
         if(active_screen == BUFFER_COUNT)
             active_screen = 0;
     }
+#endif
 }
