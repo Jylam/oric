@@ -52,7 +52,7 @@ void gen_tables(void) {
         sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
     }
 
-    /*
+
     printf("and a last time ...");
     for(y=0; y<256; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
@@ -61,7 +61,7 @@ void gen_tables(void) {
         pos_y_table[y] = v;
         i+=1.0;
     }
-    */
+
 }
 
 void set_colors(void) {
@@ -150,14 +150,6 @@ void main()
     y = 30;
     //put_sprite    (cur_buffer_ptr, x, y);
 
-    put_sprite_asm(cur_buffer_ptr, 50, 20);
-    put_sprite_asm(cur_buffer_ptr, 51, 38);
-    put_sprite_asm(cur_buffer_ptr, 52, 56);
-    put_sprite_asm(cur_buffer_ptr, 53, 74);
-    put_sprite_asm(cur_buffer_ptr, 54, 92);
-    put_sprite_asm(cur_buffer_ptr, 55, 110);
-    for(;;);
-#if 0
     for(;;) {
         x = pos_x_table[t];
         y = pos_y_table[t];
@@ -173,5 +165,4 @@ void main()
         if(active_screen == BUFFER_COUNT)
             active_screen = 0;
     }
-#endif
 }
