@@ -53,7 +53,7 @@ void gen_tables(void) {
         sprite_ptrs[y] = (u16) sprite_data +y*4*18;
         sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
     }
-
+//#define ANIM
 #ifdef ANIM
     printf("and a last time ...");
     for(y=0; y<256; y++) {
@@ -151,16 +151,14 @@ void main()
     x = 52;
     y = 30;
     //put_sprite    (cur_buffer_ptr, x, y);
-#if 1
+#ifndef ANIM
     for(py=0;  py<182; py+=18)
     for(px=18; px<222; px+=18)
       put_sprite_asm();
     for(py=6;  py<182; py+=18)
     for(px=24; px<222; px+=1)
       put_sprite_asm();
-#endif
-
-#ifdef ANIM
+#else
     for(;;) {
         x = pos_x_table[t];
         y = pos_y_table[t];
@@ -168,7 +166,9 @@ void main()
 
         cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
 
-        put_sprite_asm(cur_buffer_ptr, x+20, y);
+        px =x+20;
+        py = y;
+        put_sprite_asm();
 
         memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);
 
