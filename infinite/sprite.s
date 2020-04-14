@@ -67,7 +67,6 @@ adc y_offset+1
 sta screen_ptr+1   ;; AC80 OK
 
 lda screen_ptr
-clc
 adc sexel_offset
 sta screen_ptr
 lda screen_ptr+1
@@ -131,8 +130,6 @@ sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
-clc
-
 
 
 
