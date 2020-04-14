@@ -1,27 +1,21 @@
 .zero
 *= $80
+_px             .dsb 1
+_py             .dsb 1
 tmpsa           .dsb 1
 sexel_offset    .dsb 1
 pixel           .dsb 1
 sy              .dsb 1
+_cur_buffer_ptr .dsb 2
 y_offset        .dsb 2
 sprite          .dsb 2
 sprite_alpha    .dsb 2
-buf             .dsb 2
 screen_ptr      .dsb 2
 _pdbg           .dsb 2
 
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite_asm
-;; Get *buffer
-ldy #0
-lda (sp),y
-sta buf
-iny
-lda (sp),y
-sta buf+1
-
 ldy _py
 
 ;; u16 y_offset     = table_y[y];
@@ -67,11 +61,11 @@ sta sprite_alpha+1          ;; 0917 OK
 
 
 ;; screen_ptr = buf + y_offset + sexel_offset;
-lda buf
+lda _cur_buffer_ptr
 clc
 adc y_offset
 sta screen_ptr
-lda buf+1
+lda _cur_buffer_ptr+1
 adc y_offset+1
 sta screen_ptr+1   ;; AC80 OK
 
