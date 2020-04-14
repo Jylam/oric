@@ -17,9 +17,6 @@ _pdbg           .dsb 2
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite_asm
-lda #0
-sta _pdbg
-sta _pdbg+1
 ;; Get *buffer
 ldy #0
 lda (sp),y
@@ -41,12 +38,9 @@ lda (sp),y
 sta py
 
 ;; u16 y_offset     = table_y[y];
-clc
 tay
 lda _table_yLOW, y
 sta y_offset+0
-clc
-iny
 lda _table_yHIGH, y
 sta y_offset+1
 

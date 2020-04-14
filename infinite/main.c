@@ -89,6 +89,7 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
     u16 y_offset     = (table_yHIGH[y]<<8)|table_yLOW[y];
     u8  sexel_offset = table_div6[x];
 
+
     // Each array is 4*18*6 bytes
     u8  pixel   = (x-(table_mul6[sexel_offset]));
 
@@ -97,7 +98,6 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
 
     screen_ptr = buf + y_offset + sexel_offset;
 
-    sy = 32;
     while(sy<(18*4)) {
         *screen_ptr &= sprite_alpha[sy];
         *screen_ptr |= sprite[sy];
@@ -114,8 +114,6 @@ void put_sprite(u8 *buf, u8 x, u8 y) {
         *screen_ptr &= sprite_alpha[sy+3];
         *screen_ptr |= sprite[sy+3];
         screen_ptr += 37;
-        printf("Cptr %x ", screen_ptr);
-        return;
 
         sy+=4;
     }
