@@ -89,8 +89,7 @@ sta sy
 y_loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-lda sy
-tay
+ldy sy
 lda (sprite_alpha), y
 sta tmpsa
 ldy #0
@@ -98,8 +97,7 @@ lda (screen_ptr), y
 and tmpsa
 sta (screen_ptr), y
 ;;        *screen_ptr |= sprite[sy];
-lda sy
-tay
+ldy sy
 lda (sprite), y
 sta tmpsa
 ldy #0
@@ -116,10 +114,9 @@ adc #0
 sta screen_ptr+1
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-lda sy
-adc #1
-sta sy
-tay
+ldy sy
+iny
+sty sy
 lda (sprite_alpha), y
 sta tmpsa
 ldy #0
@@ -127,8 +124,7 @@ lda (screen_ptr), y
 and tmpsa
 sta (screen_ptr), y
 ;;        *screen_ptr |= sprite[sy];
-lda sy
-tay
+ldy sy
 lda (sprite), y
 sta tmpsa
 ldy #0
@@ -145,11 +141,10 @@ sta screen_ptr+1
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-lda sy
+ldy sy
 clc
-adc #1
-sta sy
-tay
+iny
+sty sy
 lda (sprite_alpha), y
 sta tmpsa
 ldy #0
@@ -157,8 +152,7 @@ lda (screen_ptr), y
 and tmpsa
 sta (screen_ptr), y
 ;;        *screen_ptr |= sprite[sy];
-lda sy
-tay
+ldy sy
 lda (sprite), y
 sta tmpsa
 ldy #0
@@ -176,10 +170,9 @@ sta screen_ptr+1
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-lda sy
-adc #1
-sta sy
-tay
+ldy sy
+iny
+sty sy
 lda (sprite_alpha), y
 sta tmpsa
 ldy #0
@@ -187,8 +180,7 @@ lda (screen_ptr), y
 and tmpsa
 sta (screen_ptr), y
 ;;        *screen_ptr |= sprite[sy];
-lda sy
-tay
+ldy sy
 lda (sprite), y
 sta tmpsa
 ldy #0
@@ -204,10 +196,11 @@ adc #0
 sta screen_ptr+1
 
 ;; if sy>=72, end
-lda sy
+ldy sy
 clc
-adc #1
-sta sy
+iny
+sty sy
+tya
 cmp #72
 
 bcs end
