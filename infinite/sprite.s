@@ -90,11 +90,10 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1
 
-;ldy sy    ; 3
-;iny       ; 2
-;sty sy    ; 3
-inc sy     ; 5
-ldy sy     ; 3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+inc sy     ; 5 | 8
+ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr++;
 lda screen_ptr
@@ -105,9 +104,11 @@ adc #0
 sta screen_ptr+1
 clc
 
-ldy sy    ; 4
-iny
-sty sy
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+inc sy     ; 5 | 8
+ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr++;
 lda screen_ptr
@@ -118,9 +119,10 @@ adc #0
 sta screen_ptr+1
 clc
 
-ldy sy    ; 4
-iny
-sty sy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+inc sy     ; 5 | 8
+ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr+=37;
 lda screen_ptr
@@ -131,11 +133,12 @@ adc #0
 sta screen_ptr+1
 clc
 
+
+
+
 ;; if sy>=72, end
-ldy sy
-iny
-sty sy
-tya
+inc sy     ; 5 | 8
+lda sy     ; 3 |
 cmp #72
 
 bcs end
