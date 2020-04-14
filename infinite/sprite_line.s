@@ -1,7 +1,6 @@
 .(
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-ldy sy
 #include "sprite_template.s"
 ;;        screen_ptr++;
 inc screen_ptr
@@ -10,9 +9,6 @@ inc screen_ptr+1
 END1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-inc sy     ; 5 | 8
-ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr++;
 inc screen_ptr
@@ -23,8 +19,6 @@ END2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-inc sy     ; 5 | 8
-ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr++;
 inc screen_ptr
@@ -34,8 +28,6 @@ END3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-inc sy     ; 5 | 8
-ldy sy     ; 3 |
 #include "sprite_template.s"
 ;;        screen_ptr+=37;
 lda screen_ptr
@@ -46,5 +38,4 @@ adc #0
 sta screen_ptr+1
 
 
-inc sy     ; 5 | 8
 .)

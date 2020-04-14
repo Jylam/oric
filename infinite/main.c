@@ -53,7 +53,7 @@ void gen_tables(void) {
         sprite_ptrs[y] = (u16) sprite_data +y*4*18;
         sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
     }
-//#define ANIM
+#define ANIM
 #ifdef ANIM
     printf("and a last time ...");
     for(y=0; y<256; y++) {

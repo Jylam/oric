@@ -73,10 +73,10 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1   ;; AC88 OK
 
-lda #0
+lda #$FF  ; So it gets incremented in sprite_line.s to 0
 sta sy
 ;; while(sy<(18*4)) {
-y_loop
+
 #include "sprite_line.s"
 #include "sprite_line.s"
 #include "sprite_line.s"

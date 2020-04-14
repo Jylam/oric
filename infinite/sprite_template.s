@@ -1,3 +1,5 @@
+inc sy     ; 5 | 8
+ldy sy
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
 lda (sprite_alpha), y
