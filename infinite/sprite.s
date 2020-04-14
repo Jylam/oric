@@ -84,16 +84,17 @@ ldy sy
 #include "sprite_template.s"
 ;;        screen_ptr++;
 lda screen_ptr
-clc
 adc #1
 sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
 
-ldy sy    ; 4
-iny
-sty sy
+;ldy sy    ; 3
+;iny       ; 2
+;sty sy    ; 3
+inc sy     ; 5
+ldy sy     ; 3
 #include "sprite_template.s"
 ;;        screen_ptr++;
 lda screen_ptr
@@ -128,10 +129,10 @@ sta screen_ptr
 lda screen_ptr+1
 adc #0
 sta screen_ptr+1
+clc
 
 ;; if sy>=72, end
 ldy sy
-clc
 iny
 sty sy
 tya
