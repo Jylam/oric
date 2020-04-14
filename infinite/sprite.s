@@ -81,20 +81,7 @@ y_loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
 ldy sy
-lda (sprite_alpha), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-and tmpsa
-sta (screen_ptr), y
-;;        *screen_ptr |= sprite[sy];
-ldy sy
-lda (sprite), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-ora tmpsa
-sta (screen_ptr), y
+#include "sprite_template.s"
 ;;        screen_ptr++;
 lda screen_ptr
 clc
@@ -104,28 +91,36 @@ lda screen_ptr+1
 adc #0
 sta screen_ptr+1
 
-#include "sprite_template.s"
-#include "sprite_template.s"
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;        *screen_ptr &= sprite_alpha[sy];
-ldy sy
+ldy sy    ; 4
 iny
 sty sy
-lda (sprite_alpha), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-and tmpsa
-sta (screen_ptr), y
-;;        *screen_ptr |= sprite[sy];
-ldy sy
-lda (sprite), y
-sta tmpsa
-ldy #0
-lda (screen_ptr), y
-ora tmpsa
-sta (screen_ptr), y
+#include "sprite_template.s"
+;;        screen_ptr++;
+lda screen_ptr
+adc #1
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
+clc
+
+ldy sy    ; 4
+iny
+sty sy
+#include "sprite_template.s"
+;;        screen_ptr++;
+lda screen_ptr
+adc #1
+sta screen_ptr
+lda screen_ptr+1
+adc #0
+sta screen_ptr+1
+clc
+
+ldy sy    ; 4
+iny
+sty sy
+#include "sprite_template.s"
 ;;        screen_ptr+=37;
 lda screen_ptr
 adc #37
