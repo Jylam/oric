@@ -1,6 +1,7 @@
 ;; Draw 4 bytes (one sprite line)
 
 .(
+ldy sy ;; y is not modified in sprite_template.s
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
 #include "sprite_template.s"
@@ -38,5 +39,5 @@ sta screen_ptr
 bcc SOK
 inc screen_ptr+1
 SOK
-
+sty sy
 .)

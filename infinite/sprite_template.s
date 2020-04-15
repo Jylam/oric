@@ -1,9 +1,8 @@
 ;; Draw 1 byte
 .(
-inc sy     ; 5
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];
-ldy sy  ; 3
+iny
 lda (sprite_alpha), y   ; 5
 cmp #%01000000          ; 2
 beq FULL  ;; Whole byte is to be displayed, don't OR/AND
