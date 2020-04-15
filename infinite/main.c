@@ -16,15 +16,18 @@ extern u16  pdbg;
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
 
-volatile u8  table_yLOW[200];
-volatile u8  table_yHIGH[200];
-volatile u8  table_mul6[240];
-volatile u16 sprite_ptrs[6];
-volatile u16 sprite_alpha_ptrs[6];
-volatile u8  table_div6[240];
-volatile u8  table_pixel_value[6];
-volatile u8  pos_x_table[256];
-volatile u8  pos_y_table[256];
+u8  table_yLOW[200];
+u8  table_yHIGH[200];
+u8  table_mul6[240];
+extern u8  sprite_ptrsLOW[6];
+extern u8  sprite_ptrsHIGH[6];
+extern u8  sprite_alpha_ptrsLOW[6];
+extern u8  sprite_alpha_ptrsHIGH[6];
+extern u8  table_pixel_value[6];
+u8  table_div6[240];
+u8  pos_x_table[256];
+u8  pos_y_table[256];
+
 extern u8 *cur_buffer_ptr;
 extern u8 px, py;
 
@@ -50,10 +53,12 @@ void gen_tables(void) {
     printf("and again ...");
     for(y=0; y<6; y++) {
         table_pixel_value[y] = 1<<(6-(y+1));
-        sprite_ptrs[y] = (u16) sprite_data +y*4*18;
-        sprite_alpha_ptrs[y] = (u16) sprite_alpha_data +y*4*18;
+        sprite_ptrsLOW[y]   = ((u16)(sprite_data +y*4*18))&0x00FF;
+        sprite_ptrsHIGH[y] = ((u16)((sprite_data +y*4*18))&0xFF00)>>8;
+        sprite_alpha_ptrsLOW[y]   = ((u16)(sprite_alpha_data +y*4*18))&0x00FF;
+        sprite_alpha_ptrsHIGH[y] = ((u16)((sprite_alpha_data +y*4*18))&0xFF00)>>8;
     }
-#define ANIM
+//#define ANIM
 #ifdef ANIM
     printf("and a last time ...");
     for(y=0; y<256; y++) {
@@ -82,7 +87,7 @@ void clear_hires(void) {
 }
 
 
-
+#if 0
 // 3 * 2 bytes -> 18x16 pixels
 void put_sprite() {
     u8 x = px, y = py;
@@ -120,7 +125,7 @@ void put_sprite() {
         sy+=4;
     }
 }
-
+#endif
 void sleep(int t) {
     int i = 0;
     for(i = 0; i < t; i++) {
