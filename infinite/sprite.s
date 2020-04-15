@@ -31,29 +31,26 @@ sty sexel_offset
 
 ;; u8  pixel   = (x-(table_mul6[sexel_offset]));
 
-lda _table_mul6, y ;; 30 OK
+lda _table_mul6, y
 sta pixel
-lda _px             ;; 34 OK
+lda _px
 sec
 sbc pixel
-asl            ;; sprite_ptrs holds 16bit values
 sta pixel
 tay
 
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
-lda _sprite_ptrs, y
+lda _sprite_ptrsLOW, y
 sta sprite
-iny
-lda _sprite_ptrs, y
+lda _sprite_ptrsHIGH, y
 sta sprite+1           ;; 0768 OK
 
 
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 ldy pixel
-lda _sprite_alpha_ptrs, y
+lda _sprite_alpha_ptrsLOW, y
 sta sprite_alpha
-iny
-lda _sprite_alpha_ptrs, y
+lda _sprite_alpha_ptrsHIGH, y
 sta sprite_alpha+1          ;; 0917 OK
 
 
