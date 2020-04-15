@@ -6,7 +6,6 @@ sexel_offset    .dsb 1
 pixel           .dsb 1
 sy              .dsb 1
 _cur_buffer_ptr .dsb 2
-y_offset        .dsb 2
 sprite          .dsb 2
 sprite_alpha    .dsb 2
 screen_ptr      .dsb 2
@@ -66,7 +65,7 @@ sta screen_ptr
 bcc OK
 inc screen_ptr+1
 OK
-lda #$FF  ; So it gets incremented in sprite_line.s to 0
+lda #$FF  ; So it gets incremented in sprite_template.s to 0
 sta sy
 ;; while(sy<(18*4)) {
 

@@ -1,3 +1,5 @@
+;; Draw 4 bytes (one sprite line)
+
 .(
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;        *screen_ptr &= sprite_alpha[sy];

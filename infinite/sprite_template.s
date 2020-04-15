@@ -1,3 +1,4 @@
+;; Draw 1 byte
 .(
 inc sy     ; 5
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -18,7 +19,6 @@ lda (sprite), y
 ora (screen_ptr, x) ;; A contains (sprite), y
 sta (screen_ptr, x)
 jmp ENDSPRITE
-
 FULL
 lda (sprite), y
 sta (screen_ptr, x)
