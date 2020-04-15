@@ -12,6 +12,11 @@ sprite          .dsb 2
 sprite_alpha    .dsb 2
 screen_ptr      .dsb 2
 _pdbg           .dsb 2
+_sprite_ptrsLOW .dsb 6
+_sprite_ptrsHIGH .dsb 6
+_sprite_alpha_ptrsLOW .dsb 6
+_sprite_alpha_ptrsHIGH .dsb 6
+
 
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
