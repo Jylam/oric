@@ -29,7 +29,7 @@ extern u8 *cur_buffer_ptr;
 extern u8 px, py;
 
 #define HEIGHT 100
-#define BUFFER_COUNT 6
+#define BUFFER_COUNT 5
 
 u8 buffers[BUFFER_COUNT*HEIGHT*40]; // 7*100*40 -> 28 kbytes
 
