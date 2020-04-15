@@ -13,7 +13,6 @@ beq ENDSPRITE ;; Nothing is to be displayed, just quit
 and (screen_ptr, x) ;; A contains (sprite_alpha), y
 sta (screen_ptr, x)
 ;;        *screen_ptr |= sprite[sy];
-ldy sy
 lda (sprite), y
 
 ora (screen_ptr, x) ;; A contains (sprite), y
