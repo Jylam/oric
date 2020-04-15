@@ -33,9 +33,8 @@ END3
 lda screen_ptr
 adc #37
 sta screen_ptr
-lda screen_ptr+1
-adc #0
-sta screen_ptr+1
-
+bcc SOK
+inc screen_ptr+1
+SOK
 
 .)
