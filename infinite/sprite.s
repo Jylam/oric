@@ -2,7 +2,6 @@
 *= $80
 _px             .dsb 1
 _py             .dsb 1
-tmpsa           .dsb 1
 sexel_offset    .dsb 1
 pixel           .dsb 1
 sy              .dsb 1
