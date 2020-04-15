@@ -18,6 +18,7 @@ lda (sprite), y
 ora (screen_ptr, x) ;; A contains (sprite), y
 sta (screen_ptr, x)
 jmp ENDSPRITE
+
 FULL
 lda (sprite), y
 sta (screen_ptr, x)
