@@ -7,8 +7,7 @@ lda (sprite_alpha), y
 cmp #%01000000
 beq FULL  ;; Whole byte is to be displayed, don't OR/AND
 cmp #%01111111
-beq EMPTY
-clc
+beq ENDSPRITE ;; Nothing is to be displayed, just quit
 sta tmpsa
 
 ldy #0
@@ -30,8 +29,7 @@ FULL
 lda (sprite), y
 ldy #0
 sta (screen_ptr), y
-EMPTY
-clc
 ENDSPRITE
+clc
 .)
 
