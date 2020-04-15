@@ -58,7 +58,7 @@ void gen_tables(void) {
         sprite_alpha_ptrsLOW[y] = ((u16) sprite_alpha_data +y*4*18)&0x00FF;
         sprite_alpha_ptrsHIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
     }
-//#define ANIM
+#define ANIM
 #ifdef ANIM
     printf("and a last time ...");
     for(y=0; y<256; y++) {

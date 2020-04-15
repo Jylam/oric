@@ -30,7 +30,7 @@ sty sexel_offset
 
 lda _table_mul6, y
 sta pixel
-lda _px
+txa  ;; _px alrady in X
 sec
 sbc pixel
 sta pixel
@@ -64,10 +64,9 @@ sta screen_ptr+1   ;; AC80 OK
 lda screen_ptr
 adc sexel_offset
 sta screen_ptr
-lda screen_ptr+1
-adc #0
-sta screen_ptr+1   ;; AC88 OK
-
+bcc OK
+inc screen_ptr+1
+OK
 lda #$FF  ; So it gets incremented in sprite_line.s to 0
 sta sy
 ;; while(sy<(18*4)) {
