@@ -70,6 +70,7 @@ lda #$FF  ; So it gets incremented in sprite_line.s to 0
 sta sy
 ;; while(sy<(18*4)) {
 
+ldx #0 ;; Used in sprite_template.s
 #include "sprite_line.s"
 #include "sprite_line.s"
 #include "sprite_line.s"
