@@ -6,10 +6,10 @@ sexel_offset    .dsb 1
 pixel           .dsb 1
 sy              .dsb 1
 _cur_buffer_ptr .dsb 2
+_screen_cpy_ptr .dsb 2
 sprite          .dsb 2
 sprite_alpha    .dsb 2
 screen_ptr      .dsb 2
-_pdbg           .dsb 2
 ;_sprite_ptrsLOW .dsb 6         ;; Those 4 seem to big //TODO
 ;_sprite_ptrsHIGH .dsb 6
 ;_sprite_alpha_ptrsLOW .dsb 6
@@ -47,6 +47,7 @@ lda _sprite_alpha_ptrsLOW, y
 sta sprite_alpha
 lda _sprite_alpha_ptrsHIGH, y
 sta sprite_alpha+1          ;; 0917 OK
+
 
 
 ldy _py

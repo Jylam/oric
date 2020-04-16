@@ -11,6 +11,7 @@
 
 extern void IrqOff(void);
 extern void put_sprite_asm(); // Uses _px and _py
+extern void copy_buffer();
 extern u16  pdbg;
 
 u8 *screen = (u8*)0xa000;
@@ -29,6 +30,7 @@ u8 pos_x_table[256];
 u8 pos_y_table[256];
 
 extern u8 *cur_buffer_ptr;
+extern u8 *screen_cpy_ptr;
 extern u8 px, py;
 
 #define HEIGHT 100
@@ -61,25 +63,38 @@ void gen_tables(void) {
 #define ANIM
 #ifdef ANIM
     printf("and a last time ...");
-    for(y=0; y<256; y++) {
+    for(y=0; y<255; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
         pos_x_table[y] = v;
         v = (cos(((i/255.0*360.0)*3.6)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
         pos_y_table[y] = v;
         i+=1.0;
+            if(y&16) {
+                printf("%d/255\n", y);
+            }
     }
 #endif
 }
 
 void set_colors(void) {
     int y;
+    memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
     for(y=0; y<200; y++) {
         screen[(y*40)+0] = A_FWYELLOW;
         screen[(y*40)+1] = A_BGBLACK;
     }
+    for(y=0; y<BUFFER_COUNT*HEIGHT; y++) {
+        buffers[(y*40)+0] = A_FWYELLOW;
+        buffers[(y*40)+1] = A_BGBLACK;
+    }
 
-    screen_text[80] = A_FWWHITE;
-    screen_text[81] = A_BGBLUE;
+
+    screen_text[0] = A_FWBLACK;
+    screen_text[1] = A_BGBLACK;
+    screen_text[40] = A_FWBLACK;
+    screen_text[41] = A_BGBLACK;
+    screen_text[80] = A_FWBLACK;
+    screen_text[81] = A_BGBLACK;
 }
 
 void clear_hires(void) {
@@ -136,20 +151,20 @@ void main()
 {
     u8 test = 0b10000001;
     u16 anim_offset = 0;
-    u8 x, y;
+    u8 x, y, i;
     u8 active_screen = 0;
     u8 t = 0;
     u8 *screen_ptr;
     u16 y_offset = 0;
-    gen_tables();
     IrqOff();
+    gen_tables();
     hires();
     set_colors();
 
-    memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
 
     y_offset = (table_yHIGH[((200-HEIGHT)/2)]<<8)|(table_yLOW[((200-HEIGHT)/2)]);
     screen_ptr = screen + y_offset;
+    screen_cpy_ptr = screen + y_offset;
 
     //cur_buffer_ptr = screen_ptr;
     cur_buffer_ptr = screen;
@@ -175,11 +190,20 @@ void main()
         py = y;
         put_sprite_asm();
 
-        memcpy(screen_ptr, cur_buffer_ptr, 40*HEIGHT);
+        screen_cpy_ptr = screen_ptr;
+        memcpy(screen_cpy_ptr, cur_buffer_ptr, 40*HEIGHT);
+
+        screen_cpy_ptr+=(40*130);
+        cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
+        for(i=0; i<HEIGHT; i+=10) {
+                copy_buffer(); // Copies 40 bytes from cur_buffer_ptr to screen_cpy_ptr
+                cur_buffer_ptr+=400;
+                screen_cpy_ptr+=80;
+        }
 
         active_screen++;
         if(active_screen == BUFFER_COUNT)
-            active_screen = 0;
+                active_screen = 0;
     }
 #endif
 }
