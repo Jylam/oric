@@ -79,13 +79,17 @@ void gen_tables(void) {
 void set_colors(void) {
     int y;
     memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
-    for(y=0; y<200; y++) {
-        screen[(y*40)+0] = A_FWYELLOW;
-        screen[(y*40)+1] = A_BGBLACK;
+    for(y=0; y<100; y++) {
+        screen[(((y*2)+0)*40)+0] = A_FWYELLOW;
+        screen[(((y*2)+0)*40)+1] = A_BGBLACK;
+        screen[(((y*2)+1)*40)+0] = A_FWGREEN;
+        screen[(((y*2)+1)*40)+1] = A_BGBLACK;
     }
-    for(y=0; y<BUFFER_COUNT*HEIGHT; y++) {
-        buffers[(y*40)+0] = A_FWYELLOW;
-        buffers[(y*40)+1] = A_BGBLACK;
+    for(y=0; y<(BUFFER_COUNT*HEIGHT)/2; y++) {
+        buffers[(((y*2)+0)*40)+0] = A_FWYELLOW;
+        buffers[(((y*2)+0)*40)+1] = A_BGBLACK;
+        buffers[(((y*2)+1)*40)+0] = A_FWGREEN;
+        buffers[(((y*2)+1)*40)+1] = A_BGBLACK;
     }
 
 
