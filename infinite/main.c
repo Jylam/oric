@@ -160,6 +160,14 @@ void main()
     u8 t = 0;
     u8 *screen_ptr;
     u16 y_offset = 0;
+
+    float f = 0.0f;
+    for(f = 0; f<200; f+=20) {
+        float ftest = sin(f*M_PI/180.0);
+        printf("%f: %f\n", f, ftest);
+    }
+    for(;;);
+
     IrqOff();
     gen_tables();
     hires();
