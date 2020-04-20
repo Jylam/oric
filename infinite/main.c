@@ -61,7 +61,7 @@ void gen_tables(void) {
         sprite_alpha_ptrsHIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
     }
 #define ANIM
-#ifdef ANIM
+#ifdef ANIkdkM
     printf("and a last time ...");
     for(y=0; y<255; y++) {
         double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
@@ -157,22 +157,18 @@ void main()
     u16 anim_offset = 0;
     u8 x, y, i;
     u8 active_screen = 0;
-    u8 t = 0;
+    u16 tx = 0, ty = 0;
     u8 *screen_ptr;
     u16 y_offset = 0;
-
+#if 0
     float f = 0.0f;
     for(f = 0; f<200; f+=20) {
-        float ftest = sin(f*M_PI/180.0)*200;
+        float ftest = sin(f*M_PI/180.0)*256;
         u8 r    = (sintable[(int)f]);
         printf("%f: %f %d\n", f, ftest, r);
     }
     for(;;);
-
-
-
-
-
+#endif
 
     IrqOff();
     gen_tables();
@@ -198,10 +194,11 @@ void main()
       put_sprite_asm();
 #else
     for(;;) {
-        x = pos_x_table[t];
-        y = pos_y_table[t];
-        t++;
+        x = sintable_x[tx>>8];
+        y = sintable_y[ty>>8];
 
+        tx+=355;
+        ty+=812;
         cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
 
         px =x+20;
