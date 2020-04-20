@@ -66,7 +66,7 @@ void set_colors(void) {
     memset(screen , 64, 200*40);
     memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
     for(y=0; y<200; y++) {
-        screen[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWGREEN;
+        screen[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWRED;
         mask++;
         if((y&mask)>64) {
             screen[(y*40)+0] = A_BGBLUE;
@@ -138,8 +138,8 @@ void main()
         x = sintable_x[tx>>8];
         y = sintable_y[ty>>8];
 
-        tx+=355;
-        ty+=812;
+        tx+=255;
+        ty+=412;
         cur_buffer_ptr = &buffers[active_screen*(40*HEIGHT)];
 
         px =x+20;
