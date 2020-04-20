@@ -2,7 +2,6 @@
 
 .(
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;        *screen_ptr &= sprite_alpha[sy];
 #include "sprite_template.s"
 ;;        screen_ptr++;
 inc screen_ptr
@@ -17,7 +16,6 @@ inc screen_ptr
 bne END2
 inc screen_ptr+1
 END2
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

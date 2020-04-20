@@ -7,7 +7,7 @@
 #define s16 signed int
 
 #include "sprite.h"
-
+#include "sintable.h"
 
 extern void IrqOff(void);
 extern void put_sprite_asm(); // Uses _px and _py
@@ -163,10 +163,16 @@ void main()
 
     float f = 0.0f;
     for(f = 0; f<200; f+=20) {
-        float ftest = sin(f*M_PI/180.0);
-        printf("%f: %f\n", f, ftest);
+        float ftest = sin(f*M_PI/180.0)*200;
+        u8 r    = (sintable[(int)f]);
+        printf("%f: %f %d\n", f, ftest, r);
     }
     for(;;);
+
+
+
+
+
 
     IrqOff();
     gen_tables();
