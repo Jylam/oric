@@ -26,8 +26,6 @@ u8 sprite_alpha_ptrsLOW[6];
 u8 sprite_alpha_ptrsHIGH[6];
 u8 table_pixel_value[6];
 u8 table_div6[240];
-u8 pos_x_table[256];
-u8 pos_y_table[256];
 
 extern u8 *cur_buffer_ptr;
 extern u8 *screen_cpy_ptr;
@@ -60,23 +58,34 @@ void gen_tables(void) {
         sprite_alpha_ptrsLOW[y] = ((u16) sprite_alpha_data +y*4*18)&0x00FF;
         sprite_alpha_ptrsHIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
     }
-#define ANIM
-#ifdef ANIkdkM
-    printf("and a last time ...");
-    for(y=0; y<255; y++) {
-        double v = (sin((i/255.0*360.0)*M_PI/180.0)*90.0) + 90;
-        pos_x_table[y] = v;
-        v = (cos(((i/255.0*360.0)*3.6)*M_PI/180.0)*(HEIGHT/2.5)) + (HEIGHT/2.5);
-        pos_y_table[y] = v;
-        i+=1.0;
-            if(y&16) {
-                printf("%d/255\n", y);
-            }
-    }
-#endif
 }
 
 void set_colors(void) {
+    int y;
+    unsigned char mask = 0;
+    memset(screen , 64, 200*40);
+    memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
+    for(y=0; y<200; y++) {
+        screen[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWGREEN;
+        mask++;
+        if((y&mask)>64) {
+            screen[(y*40)+0] = A_BGBLUE;
+        } else {
+            screen[(y*40)+0] = A_BGBLACK;
+        }
+    }
+
+
+
+    for(y=0; y<BUFFER_COUNT; y++) {
+            memcpy(&buffers[40*y*HEIGHT], &screen[(((200-HEIGHT)/2)*40)], 40*HEIGHT);
+    }
+    screen_text[0] = A_BGBLUE;
+    screen_text[40] = A_BGBLUE;
+    screen_text[80] = A_BGBLUE;
+
+}
+void set_colorsORIC(void) {
     int y;
     memset(buffers, 64, BUFFER_COUNT*HEIGHT*40);
     for(y=0; y<100; y++) {
@@ -101,56 +110,6 @@ void set_colors(void) {
     screen_text[81] = A_BGBLACK;
 }
 
-void clear_hires(void) {
-    memset(screen, 64, 40*200);
-}
-
-
-#if 0
-// 3 * 2 bytes -> 18x16 pixels
-void put_sprite() {
-    u8 x = px, y = py;
-    u8  *screen_ptr; // Current sexel in the display buffer
-    u8  sy = 0;      // sprite current Y
-    u16 y_offset     = (table_yHIGH[y]<<8)|table_yLOW[y];
-    u8  sexel_offset = table_div6[x];
-
-
-    // Each array is 4*18*6 bytes
-    u8  pixel   = (x-(table_mul6[sexel_offset]));
-
-    u8  *sprite = (u8*)sprite_ptrs[pixel];
-    u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
-
-    screen_ptr = cur_buffer_ptr + y_offset + sexel_offset;
-
-    while(sy<(18*4)) {
-        *screen_ptr &= sprite_alpha[sy];
-        *screen_ptr |= sprite[sy];
-        screen_ptr++;
-
-        *screen_ptr &= sprite_alpha[sy+1];
-        *screen_ptr |= sprite[sy+1];
-        screen_ptr++;
-
-        *screen_ptr &= sprite_alpha[sy+2];
-        *screen_ptr |= sprite[sy+2];
-        screen_ptr++;
-
-        *screen_ptr &= sprite_alpha[sy+3];
-        *screen_ptr |= sprite[sy+3];
-        screen_ptr += 37;
-
-        sy+=4;
-    }
-}
-#endif
-void sleep(int t) {
-    int i = 0;
-    for(i = 0; i < t; i++) {
-        printf("Wait %d\n", i);
-    }
-}
 void main()
 {
     u8 test = 0b10000001;
@@ -160,15 +119,6 @@ void main()
     u16 tx = 0, ty = 0;
     u8 *screen_ptr;
     u16 y_offset = 0;
-#if 0
-    float f = 0.0f;
-    for(f = 0; f<200; f+=20) {
-        float ftest = sin(f*M_PI/180.0)*256;
-        u8 r    = (sintable[(int)f]);
-        printf("%f: %f %d\n", f, ftest, r);
-    }
-    for(;;);
-#endif
 
     IrqOff();
     gen_tables();
@@ -180,19 +130,10 @@ void main()
     screen_ptr = screen + y_offset;
     screen_cpy_ptr = screen + y_offset;
 
-    //cur_buffer_ptr = screen_ptr;
     cur_buffer_ptr = screen;
     x = 52;
     y = 30;
-    //put_sprite    (cur_buffer_ptr, x, y);
-#ifndef ANIM
-    for(py=0;  py<182; py+=18)
-    for(px=18; px<222; px+=18)
-      put_sprite_asm();
-    for(py=6;  py<182; py+=18)
-    for(px=24; px<222; px+=1)
-      put_sprite_asm();
-#else
+
     for(;;) {
         x = sintable_x[tx>>8];
         y = sintable_y[ty>>8];
@@ -220,5 +161,4 @@ void main()
         if(active_screen == BUFFER_COUNT)
                 active_screen = 0;
     }
-#endif
 }
