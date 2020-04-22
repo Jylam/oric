@@ -57,10 +57,9 @@ void gen_tables(void) {
 void set_colors(void) {
     int y;
     unsigned char mask = 0;
-    memset(buffer , 64, 200*40);
 
     for(y=0; y<200; y++) {
-            buffer[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWRED;
+            buffer[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWGREEN;
             buffer[(y*40)+0] = A_BGBLUE;
     }
 
@@ -77,17 +76,15 @@ void main()
     IrqOff();
     gen_tables();
     hires();
+    memset(buffer , 64, 200*40);
     set_colors();
 
-
+    px = 50;
     for(;;) {
-
         for(px = 20; px < 200; px+=18) {
             put_sprite_asm();
         }
-        memcpy(screen, buffer, 40*100);
-        //memset(buffer , 64, 200*40);
-        set_colors();
+        memcpy(screen, buffer, 40*200);
         py++;
         if(py>=180) py=0;
     }
