@@ -4,6 +4,8 @@
 
  http://codeNtronix.com
 """
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import sys, math, pygame
 from operator import itemgetter
 
@@ -67,8 +69,8 @@ class Simulation:
         self.vertices = []
 
         pt_count = 0
-        M = 5
-        N = 5
+        M = 6
+        N = 8
         for m in range(0, M):
             for n in range(0, N):
                 self.vertices.append(Point3D(
@@ -112,7 +114,9 @@ class Simulation:
                 # Rotate the point around X axis, then around Y axis, and finally around Z axis.
                 r = v.rotateX(self.angle).rotateY(self.angle).rotateZ(self.angle)
                 # Transform the point from 3D to 2D
-                p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 6)
+                fov = 256
+                distance = 4
+                p = r.project(self.screen.get_width(), self.screen.get_height(), fov, distance)
                 # Put the point in the list of transformed vertices
                 t.append(p)
 
