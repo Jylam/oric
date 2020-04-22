@@ -11,6 +11,7 @@
 extern void IrqOff(void);
 extern void put_sprite_asm(); // Uses _px and _py
 extern void copy_buffer();
+extern void clear_buffer();
 
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
@@ -85,7 +86,8 @@ void main()
         }
         //memcpy(screen, buffer, 40*200);
         copy_buffer();
-        py++;
+        clear_buffer();
+        py+=5;
         if(py>=180) py=0;
     }
 }
