@@ -32,7 +32,7 @@ extern u8 *screen_cpy_ptr;
 extern u8 px, py;
 
 #define HEIGHT 100
-#define BUFFER_COUNT 5
+#define BUFFER_COUNT 6
 
 u8 buffers[BUFFER_COUNT*HEIGHT*40]; // 7*100*40 -> 28 kbytes
 
