@@ -7,7 +7,7 @@
 #define s16 signed int
 
 #include "sprite.h"
-
+#include "cube.h"
 extern void IrqOff(void);
 extern void put_sprite_asm(); // Uses _px and _py
 extern void copy_buffer();
@@ -72,7 +72,7 @@ void set_colors(void) {
 
 void main()
 {
-
+    int i;
     IrqOff();
     gen_tables();
     hires();
@@ -80,14 +80,39 @@ void main()
     set_colors();
     memcpy(screen, buffer, 200*40);
     py = 0;
+    px = 20;
     for(;;) {
-        for(px = 20; px < 200; px+=18) {
+            u8 *c = &cube_anim[i];
+            px = c[i];
+            py = c[i+1];
             put_sprite_asm();
-        }
-        //memcpy(screen, buffer, 40*200);
-        copy_buffer();
-        clear_buffer();
-        py+=5;
-        if(py>=180) py=0;
+            px = c[i+2];
+            py = c[i+3];
+            put_sprite_asm();
+            px = c[i+4];
+            py = c[i+5];
+            put_sprite_asm();
+            px = c[i+6];
+            py = c[i+7];
+            put_sprite_asm();
+            px = c[i+8];
+            py = c[i+9];
+            put_sprite_asm();
+            px = c[i+10];
+            py = c[i+11];
+            put_sprite_asm();
+            px = c[i+12];
+            py = c[i+13];
+            put_sprite_asm();
+            px = c[i+14];
+            py = c[i+15];
+            put_sprite_asm();
+
+            copy_buffer();
+            clear_buffer();
+            i+=16;
+            if(i >= sizeof(cube_anim)) {
+                    i = 0;
+            }
     }
 }
