@@ -69,8 +69,8 @@ class Simulation:
         self.vertices = []
 
         pt_count = 0
-        M = 6
-        N = 8
+        M = 5
+        N = 7
         for m in range(0, M):
             for n in range(0, N):
                 self.vertices.append(Point3D(
