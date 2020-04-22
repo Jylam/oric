@@ -84,7 +84,8 @@ void main()
         for(px = 20; px < 200; px+=18) {
             put_sprite_asm();
         }
-        memcpy(screen, buffer, 40*200);
+        //memcpy(screen, buffer, 40*200);
+        copy_buffer();
         py++;
         if(py>=180) py=0;
     }
