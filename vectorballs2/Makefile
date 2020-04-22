@@ -1,7 +1,7 @@
 #NO_LIB=1
 
-SRC=main.c line.s
-BIN=asteroric
+SRC=main.c sys.s sprite.s
+BIN=vectorballs
 
 OBJ=$(SRC:.c=.o)
 OBJ+=$(SRC:.s=.o)

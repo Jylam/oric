@@ -129,10 +129,7 @@ void main()
     for(i = 0; i < sizeof(cube_edges); i++)
         cube_edges[i] = cube_edges[i]*2;
 
-    // Scale the cube
-    //for(i = 0; i < sizeof(cube_anim); i++)
-    //    cube_anim[i] = (cube_anim[i]/2)+10;
-
+#if 1
     for(;;) {
         u8 *c = &cube_anim[anim_offset];
         u8 *edges = cube_edges;
@@ -157,7 +154,7 @@ void main()
         }
         clear_hires();
     }
-
+#else
     for(;;) {
         u16 x0 = (rand()%0xDF)+13;
         u16 y0 = rand()%0xBF;
@@ -165,4 +162,5 @@ void main()
         u16 y1 = rand()%0xBF;
         line(x0, y0, x1, y1);
     }
+#endif
 }
