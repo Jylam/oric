@@ -71,7 +71,6 @@ void set_colors(void) {
 
 void main()
 {
-    u8 x, y, i;
 
     IrqOff();
     gen_tables();
@@ -79,7 +78,7 @@ void main()
     memset(buffer , 64, 200*40);
     set_colors();
 
-    px = 50;
+    py = 0;
     for(;;) {
         for(px = 20; px < 200; px+=18) {
             put_sprite_asm();
