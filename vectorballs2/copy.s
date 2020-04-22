@@ -1,5 +1,5 @@
 _copy_buffer
-ldy #0
+ldy #2
 start_copy
 lda _buffer+(0*40), y
 sta $A000+(0*40), y
@@ -408,7 +408,7 @@ jmp start_copy
 end_copy
 rts
 _clear_buffer
-ldy #0
+ldy #2
 lda #64
 start_clear
 sta _buffer+(0*40), y

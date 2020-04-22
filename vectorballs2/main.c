@@ -78,7 +78,7 @@ void main()
     hires();
     memset(buffer , 64, 200*40);
     set_colors();
-
+    memcpy(screen, buffer, 200*40);
     py = 0;
     for(;;) {
         for(px = 20; px < 200; px+=18) {
