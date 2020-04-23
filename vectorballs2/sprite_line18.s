@@ -2,7 +2,7 @@
 
 .(
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-#include "sprite_template.s"
+#include "sprite_template18.s"
 ;;        screen_ptr++;
 inc screen_ptr
 bne END1
@@ -10,7 +10,7 @@ inc screen_ptr+1
 END1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-#include "sprite_template.s"
+#include "sprite_template18.s"
 ;;        screen_ptr++;
 inc screen_ptr
 bne END2
@@ -19,7 +19,7 @@ END2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "sprite_template.s"
+#include "sprite_template18.s"
 ;;        screen_ptr++;
 inc screen_ptr
 bne END3
@@ -28,7 +28,7 @@ END3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "sprite_template.s"
+#include "sprite_template18.s"
 ;;        screen_ptr+=37;
 lda screen_ptr
 adc #37
