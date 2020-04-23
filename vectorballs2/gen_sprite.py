@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from PIL import Image
 import numpy
 
@@ -45,4 +47,7 @@ def gen_image(filename, name):
 
 gen_image('boule_sprite18.png', 'sprite_data')
 gen_image('boule_sprite_alpha18.png', 'sprite_alpha_data')
+
+gen_image('boule_sprite12.png', 'sprite12_data')
+gen_image('boule_sprite_alpha12.png', 'sprite12_alpha_data')
 
