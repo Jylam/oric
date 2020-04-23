@@ -28,6 +28,10 @@ u8 sprite_ptrs12LOW[6];
 u8 sprite_ptrs12HIGH[6];
 u8 sprite_alpha_ptrs12LOW[6];
 u8 sprite_alpha_ptrs12HIGH[6];
+u8 sprite_ptrs8LOW[6];
+u8 sprite_ptrs8HIGH[6];
+u8 sprite_alpha_ptrs8LOW[6];
+u8 sprite_alpha_ptrs8HIGH[6];
 u8 table_pixel_value[6];
 u8 table_div6[240];
 
@@ -62,6 +66,11 @@ void gen_tables(void) {
         sprite_ptrs12HIGH[y] = ((u16) (sprite12_data +y*4*18)&0xFF00)>>8;
         sprite_alpha_ptrs12LOW[y] = ((u16) sprite12_alpha_data +y*4*18)&0x00FF;
         sprite_alpha_ptrs12HIGH[y] = ((u16) (sprite12_alpha_data +y*4*18)&0xFF00)>>8;
+
+        sprite_ptrs8LOW[y] = ((u16) sprite8_data +y*4*18)&0x00FF;
+        sprite_ptrs8HIGH[y] = ((u16) (sprite8_data +y*4*18)&0xFF00)>>8;
+        sprite_alpha_ptrs8LOW[y] = ((u16) sprite8_alpha_data +y*4*18)&0x00FF;
+        sprite_alpha_ptrs8HIGH[y] = ((u16) (sprite8_alpha_data +y*4*18)&0xFF00)>>8;
     }
 }
 
@@ -101,6 +110,8 @@ void main()
                 put_sprite18_asm();
             } else if(c[i+2] == 1) {
                 put_sprite12_asm();
+            } else if(c[i+2] == 2) {
+                put_sprite8_asm();
             }
         }
         copy_buffer();

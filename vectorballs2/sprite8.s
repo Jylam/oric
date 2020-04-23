@@ -1,6 +1,6 @@
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
-_put_sprite12_asm
+_put_sprite8_asm
 .(
 ;; u8  sexel_offset = table_div6[x];
 ldx _px
@@ -18,17 +18,17 @@ sta pixel
 tay
 
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
-lda _sprite_ptrs12LOW, y
+lda _sprite_ptrs8LOW, y
 sta sprite
-lda _sprite_ptrs12HIGH, y
+lda _sprite_ptrs8HIGH, y
 sta sprite+1           ;; 0768 OK
 
 
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 ldy pixel
-lda _sprite_alpha_ptrs12LOW, y
+lda _sprite_alpha_ptrs8LOW, y
 sta sprite_alpha
-lda _sprite_alpha_ptrs12HIGH, y
+lda _sprite_alpha_ptrs8HIGH, y
 sta sprite_alpha+1          ;; 0917 OK
 
 
@@ -55,24 +55,24 @@ sta sy
 
 ldx #0 ;; Used in sprite_template.s
 ldy sy ;; y is not modified in sprite_template.s
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
-#include "sprite_line12.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
+#include "sprite_line8.s"
 sty sy ;;
 
 end

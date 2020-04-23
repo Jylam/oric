@@ -1,6 +1,6 @@
 #NO_LIB=1
 
-SRC=main.c sys.s sprite18.s sprite12.s copy.s
+SRC=main.c sys.s sprite18.s sprite12.s sprite8.s copy.s
 BIN=vectorballs
 
 OBJ=$(SRC:.c=.o)
