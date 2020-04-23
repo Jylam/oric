@@ -10,7 +10,7 @@
 //#include "cube.h"
 #include "sphere.h"
 extern void IrqOff(void);
-extern void put_sprite_asm(); // Uses _px and _py
+extern void put_sprite18_asm(); // Uses _px and _py
 extern void copy_buffer();
 extern void clear_buffer();
 
@@ -84,17 +84,19 @@ void main()
     py = 0;
     px = 20;
     for(;;) {
-        for(i=0; i<(PT_COUNT*2); i+=2) {
+        for(i=0; i<(PT_COUNT*3); i+=3) {
             u8 *c = &anim[frame];
             px = c[i];
             py = c[i+1];
-            put_sprite_asm();
+            if(c[i+2] == 0) {
+            put_sprite18_asm();
+            }
         }
         copy_buffer();
         clear_buffer();
-        frame+=(PT_COUNT*2);
+        frame+=(PT_COUNT*3);
         if(frame >= sizeof(anim)) {
-            frame = 0;
+                frame = 0;
         }
     }
 }

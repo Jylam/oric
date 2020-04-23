@@ -93,7 +93,7 @@ class Simulation:
         self.colors = [(255,0,255),(255,0,0),(0,255,0),(0,0,255),(0,255,255),(255,255,0)]
 
         self.angle = 0
-
+        self.frame = 0
     def run(self):
         """ Main Loop """
         print("u8 anim[] = {")
@@ -118,7 +118,6 @@ class Simulation:
                 p = r.project(self.screen.get_width(), self.screen.get_height(), fov, distance)
                 # Put the point in the list of transformed vertices
                 t.append(p)
-            print("-----------------------")
             t.sort(key=lambda p: p.z, reverse=True)
             for v in t:
                 if v.z < self.min_z:
@@ -127,16 +126,20 @@ class Simulation:
                     self.max_z = v.z
             for v in t:
                 ssize = 18
+                sprite = 0
                 if v.z   >= -.5:
                     ssize      = 16
+                    sprite = 1
                 if v.z >=  0:
                     ssize      = 12
+                    sprite = 2
                 if v.z >=  .5:
                     ssize      = 8
+                    sprite = 3
                 overlap = False
 
                 pygame.draw.circle(self.screen, (255,255,0), (int(v.x), int(v.y)), int(ssize/2))
-                print("%d, %d, %d, "%(int(v.x), int(v.y), ssize))
+                print("%d, %d, %d, "%(int(v.x), int(v.y), sprite))
 
             # Calculate the average Z values of each face.
             avg_z = []
@@ -159,7 +162,7 @@ class Simulation:
 
 
             self.angle += 2
-            if self.angle == 360:
+            if self.frame == 100:
                 print("};\n#define PT_COUNT", len(t))
                 pygame.quit()
                 sys.exit();

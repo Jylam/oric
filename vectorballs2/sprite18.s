@@ -11,7 +11,7 @@ screen_ptr      .dsb 2
 
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
-_put_sprite_asm
+_put_sprite18_asm
 
 ;; u8  sexel_offset = table_div6[x];
 ldx _px
