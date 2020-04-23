@@ -56,29 +56,27 @@ class Simulation:
         pygame.display.set_caption("Simulation of a rotating 3D Cube (http://codeNtronix.com)")
 
         self.clock = pygame.time.Clock()
-
-#        self.vertices = [
-#            Point3D(-1,1,-1),
-#            Point3D(1,1,-1),
-#            Point3D(1,-1,-1),
-#            Point3D(-1,-1,-1),
-#            Point3D(-1,1,1),
-#            Point3D(1,1,1),
-#            Point3D(1,-1,1),
-#            Point3D(-1,-1,1)
-#        ]
         self.vertices = []
-
-        pt_count = 0
-        M = 5
-        N = 7
-        for m in range(0, M):
-            for n in range(0, N):
-                self.vertices.append(Point3D(
-                    math.sin(math.pi * m/M)*math.cos(2*math.pi * n/N),
-                    math.sin(math.pi * m/M)*math.sin(2*math.pi * n/N),
-                    math.cos(math.pi * m/M)))
-                pt_count+=1
+        if False:
+            self.vertices.append(Point3D(-1,1,-1))
+            self.vertices.append(Point3D(1,1,-1))
+            self.vertices.append(Point3D(1,-1,-1))
+            self.vertices.append(Point3D(-1,-1,-1))
+            self.vertices.append(Point3D(-1,1,1))
+            self.vertices.append(Point3D(1,1,1))
+            self.vertices.append(Point3D(1,-1,1))
+            self.vertices.append(Point3D(-1,-1,1))
+        else:
+            pt_count = 0
+            M = 5
+            N = 7
+            for m in range(0, M):
+                for n in range(0, N):
+                    self.vertices.append(Point3D(
+                        math.sin(math.pi * m/M)*math.cos(2*math.pi * n/N),
+                        math.sin(math.pi * m/M)*math.sin(2*math.pi * n/N),
+                        math.cos(math.pi * m/M)))
+                    pt_count+=1
 
         # Define the vertices that compose each of the 6 faces. These numbers are
         # indices to the vertices list defined above.
@@ -128,18 +126,17 @@ class Simulation:
                 if v.z > self.max_z:
                     self.max_z = v.z
             for v in t:
-                ssize = 8
-                if v.z >= -.5:
-                    ssize = 12
-                elif v.z >= 0:
-                    ssize = 16
-                elif v.z >= .5:
-                    ssize = 18
+                ssize = 18
+                if v.z   >= -.5:
+                    ssize      = 16
+                if v.z >=  0:
+                    ssize      = 12
+                if v.z >=  .5:
+                    ssize      = 8
                 overlap = False
 
                 pygame.draw.circle(self.screen, (255,255,0), (int(v.x), int(v.y)), int(ssize/2))
-                print("%d, %d, %d,"%(int(v.x), int(v.y), ssize))
-
+                print("%d, %d, %d, "%(int(v.x), int(v.y), ssize))
 
             # Calculate the average Z values of each face.
             avg_z = []
