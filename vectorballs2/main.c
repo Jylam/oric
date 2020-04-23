@@ -20,10 +20,14 @@ u8 *screen_text = (u8*)0xbf68;
 u8 table_yLOW[200];
 u8 table_yHIGH[200];
 u8 table_mul6[240];
-u8 sprite_ptrsLOW[6];
-u8 sprite_ptrsHIGH[6];
-u8 sprite_alpha_ptrsLOW[6];
-u8 sprite_alpha_ptrsHIGH[6];
+u8 sprite_ptrs18LOW[6];
+u8 sprite_ptrs18HIGH[6];
+u8 sprite_alpha_ptrs18LOW[6];
+u8 sprite_alpha_ptrs18HIGH[6];
+u8 sprite_ptrs12LOW[6];
+u8 sprite_ptrs12HIGH[6];
+u8 sprite_alpha_ptrs12LOW[6];
+u8 sprite_alpha_ptrs12HIGH[6];
 u8 table_pixel_value[6];
 u8 table_div6[240];
 
@@ -49,10 +53,15 @@ void gen_tables(void) {
     printf("and again ...");
     for(y=0; y<6; y++) {
         table_pixel_value[y] = 1<<(6-(y+1));
-        sprite_ptrsLOW[y] = ((u16) sprite_data +y*4*18)&0x00FF;
-        sprite_ptrsHIGH[y] = ((u16) (sprite_data +y*4*18)&0xFF00)>>8;
-        sprite_alpha_ptrsLOW[y] = ((u16) sprite_alpha_data +y*4*18)&0x00FF;
-        sprite_alpha_ptrsHIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
+        sprite_ptrs18LOW[y] = ((u16) sprite_data +y*4*18)&0x00FF;
+        sprite_ptrs18HIGH[y] = ((u16) (sprite_data +y*4*18)&0xFF00)>>8;
+        sprite_alpha_ptrs18LOW[y] = ((u16) sprite_alpha_data +y*4*18)&0x00FF;
+        sprite_alpha_ptrs18HIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
+
+        sprite_ptrs12LOW[y] = ((u16) sprite12_data +y*4*18)&0x00FF;
+        sprite_ptrs12HIGH[y] = ((u16) (sprite12_data +y*4*18)&0xFF00)>>8;
+        sprite_alpha_ptrs12LOW[y] = ((u16) sprite12_alpha_data +y*4*18)&0x00FF;
+        sprite_alpha_ptrs12HIGH[y] = ((u16) (sprite12_alpha_data +y*4*18)&0xFF00)>>8;
     }
 }
 
@@ -89,7 +98,9 @@ void main()
             px = c[i];
             py = c[i+1];
             if(c[i+2] == 0) {
-            put_sprite18_asm();
+                put_sprite18_asm();
+            } else if(c[i+2] == 1) {
+                put_sprite12_asm();
             }
         }
         copy_buffer();

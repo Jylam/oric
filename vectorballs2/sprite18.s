@@ -12,7 +12,7 @@ screen_ptr      .dsb 2
 .text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite18_asm
-
+.(
 ;; u8  sexel_offset = table_div6[x];
 ldx _px
 ldy _table_div6, x
@@ -22,24 +22,24 @@ sty sexel_offset
 
 lda _table_mul6, y
 sta pixel
-txa  ;; _px alrady in X
+txa  ;; _px already in X
 sec
 sbc pixel
 sta pixel
 tay
 
 ;; u8  *sprite = (u8*)sprite_ptrs[pixel]; // 16bits pointer to u8*
-lda _sprite_ptrsLOW, y
+lda _sprite_ptrs18LOW, y
 sta sprite
-lda _sprite_ptrsHIGH, y
+lda _sprite_ptrs18HIGH, y
 sta sprite+1           ;; 0768 OK
 
 
 ;; u8  *sprite_alpha = (u8*)sprite_alpha_ptrs[pixel];
 ldy pixel
-lda _sprite_alpha_ptrsLOW, y
+lda _sprite_alpha_ptrs18LOW, y
 sta sprite_alpha
-lda _sprite_alpha_ptrsHIGH, y
+lda _sprite_alpha_ptrs18HIGH, y
 sta sprite_alpha+1          ;; 0917 OK
 
 
@@ -87,6 +87,7 @@ ldy sy ;; y is not modified in sprite_template.s
 sty sy ;;
 
 end
+.)
 rts
 
 
