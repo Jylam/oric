@@ -162,6 +162,7 @@ class Simulation:
 
 
             self.angle += 2
+            self.frame+=1
             if self.frame == 100:
                 print("};\n#define PT_COUNT", len(t))
                 pygame.quit()
