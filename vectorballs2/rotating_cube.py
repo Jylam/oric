@@ -50,7 +50,6 @@ class Point3D:
 
 class Simulation:
     def __init__(self, win_width = 228, win_height = 176):
-        total_size = 0
         pygame.init()
         self.min_z = float('inf')
         self.max_z = float('-inf')
@@ -177,10 +176,9 @@ class Simulation:
                     color = (255,255,0)
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
                 print("%d, %d, %d,"%(int(v.x), int(v.y+y_offset), sprite+(int(overlap)*4)))
-                total_size+=3
-            self.angle += 3
+            self.angle += 4
             self.frame+=1
-            if self.frame == 60:
+            if self.frame == 90:
                 print("};\n#define PT_COUNT %d\n// %d bytes"%(len(t), len(t)*3*self.frame))
                 pygame.quit()
                 sys.exit();

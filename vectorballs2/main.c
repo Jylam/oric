@@ -7,12 +7,9 @@
 #define s16 signed int
 
 #include "sprite.h"
-//#include "cube.h"
 #include "sphere.h"
 extern void IrqOff(void);
-extern void put_sprite18_noalpha(); // Uses _px and _py
 extern void copy_buffer();
-extern void clear_buffer();
 
 u8 *screen = (u8*)0xa000;
 u8 *screen_text = (u8*)0xbf68;
