@@ -21,11 +21,8 @@ sta screen_ptr
 bcc OK
 inc screen_ptr+1
 OK
-lda #$FF  ; So it gets incremented in sprite_template.s to 0
-sta sy
 
 ldx #0 ;; Used in sprite_template.s
-ldy sy ;; y is not modified in sprite_template.s
 lda #64
 
 
@@ -48,6 +45,7 @@ lda #64
 #include "clear_template.s"
 #include "clear_template.s"
 #include "clear_template.s"
+
 
 sty sy ;;
 rts

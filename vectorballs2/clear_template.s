@@ -1,37 +1,19 @@
 .(
-iny
+ldy #0
 lda #64
-sta (screen_ptr, x)
-clc
+sta (screen_ptr), y
 ;;        screen_ptr++;
-inc screen_ptr
-bne END1
-inc screen_ptr+1
-END1
 iny
-lda #64
-sta (screen_ptr, x)
-clc
+sta (screen_ptr), y
 ;;        screen_ptr++;
-inc screen_ptr
-bne END2
-inc screen_ptr+1
-END2
 iny
-lda #64
-sta (screen_ptr, x)
-clc
+sta (screen_ptr), y
 ;;        screen_ptr++;
-inc screen_ptr
-bne END3
-inc screen_ptr+1
-END3
 iny
-lda #64
-sta (screen_ptr, x)
+sta (screen_ptr), y
 clc
 lda screen_ptr
-adc #37
+adc #40
 sta screen_ptr
 bcc SOK
 inc screen_ptr+1
