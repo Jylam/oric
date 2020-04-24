@@ -119,11 +119,11 @@ void main()
             if(c[i+2] == 0) {
                 put_sprite18_noalpha();
             } else if(c[i+2] == 1) {
-                put_sprite16_asm();
+                put_sprite16_noalpha();
             } else if(c[i+2] == 2) {
-                put_sprite12_asm();
+                put_sprite12_noalpha();
             } else if(c[i+2] == 3) {
-                put_sprite8_asm();
+                put_sprite8_noalpha();
             } else if(c[i+2] == 4) {
                 put_sprite18_asm();
             } else if(c[i+2] == 5) {
