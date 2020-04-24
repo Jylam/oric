@@ -126,6 +126,7 @@ class Simulation:
                     self.min_z = v.z
                 if v.z > self.max_z:
                     self.max_z = v.z
+            I = 0
             for v in t:
                 h = 18
                 w = 24 # 4 bytes wide
@@ -149,23 +150,23 @@ class Simulation:
                 #        overlap = True
                 # That's silly, overlaping is 18x18 for now
                 overlap = False
+                Bx1 = v.x
+                By1 = v.y
+                Bx2 = v.x+w
+                By2 = v.y+h
                 for c in circles:
-                    Ax1 = c[0].x-9
-                    Ay1 = c[0].y-9
-                    Ax2 = c[0].x+9
-                    Ay2 = c[0].y+9
-                    Bx1 = v.x-9
-                    By1 = v.y-9
-                    Bx2 = v.x+9
-                    By2 = v.y+9
+                    Ax1 = c[0].x
+                    Ay1 = c[0].y
+                    Ax2 = c[0].x+c[1]
+                    Ay2 = c[0].y+c[2]
 
-                    if (Ax1 < Bx2) and (Ax2 > Bx1) and (Ay1 > By2) and (Ay2 < By1):
+                    if (Ax1 < Bx2) and (Ax2 > Bx1) and (Ay1 < By2) and (Ay2 > By1):
                         overlap = True
-                        pygame.draw.rect(self.screen, (255,0,0),(Ax1, Ay1, 18, 18))
-                    else:
-                        pygame.draw.rect(self.screen, (0,0,255),(Ax1, Ay1, 18, 18))
+                        #pygame.draw.rect(self.screen, (255,0,0),(Ax1, Ay1, 18, 18))
+                    #else:
+                        #pygame.draw.rect(self.screen, (0,0,255),(Ax1, Ay1, 18, 18))
 
-                circles.append((v, ssize))
+                circles.append((v, w, h))
                 color = 0
                 if overlap:
                     color = (255,0,0)
@@ -174,7 +175,6 @@ class Simulation:
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
                 print("%d, %d, %d,"%(int(v.x), int(v.y), sprite+(int(overlap)*4)))
 
-
             self.angle += 2
             self.frame+=1
             if self.frame == 40:
@@ -182,6 +182,6 @@ class Simulation:
                 pygame.quit()
                 sys.exit();
             pygame.display.flip()
-            time.sleep(1)
+            #time.sleep(.5)
 if __name__ == "__main__":
     Simulation().run()
