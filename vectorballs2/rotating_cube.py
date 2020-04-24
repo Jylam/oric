@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
  Simulation of a rotating 3D Cube
  Developed by Leonel Machava <leonelmachava@gmail.com>
@@ -8,7 +9,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import sys, math, pygame
 from operator import itemgetter
-
+import time
 class Point3D:
     def __init__(self, x = 0, y = 0, z = 0):
         self.x, self.y, self.z = float(x), float(y), float(z)
@@ -77,7 +78,7 @@ class Simulation:
                         math.sin(math.pi * m/M)*math.sin(2*math.pi * n/N),
                         math.cos(math.pi * m/M)))
                     pt_count+=1
-
+            self.vertices = self.vertices[6:]
         # Define the vertices that compose each of the 6 faces. These numbers are
         # indices to the vertices list defined above.
         self.faces  = [(0,1,2,3),(1,5,6,2),(5,4,7,6),(4,0,3,7),(0,4,5,1),(3,2,6,7)]
@@ -98,6 +99,7 @@ class Simulation:
         """ Main Loop """
         print("u8 anim[] = {")
         while 1:
+            circles = []
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -125,40 +127,34 @@ class Simulation:
                 if v.z > self.max_z:
                     self.max_z = v.z
             for v in t:
-                ssize = 18
+                ssize = 9
                 sprite = 0
                 if v.z   >= -.5:
-                    ssize      = 16
+                    ssize      = 8
                     sprite = 1
                 if v.z >=  0:
-                    ssize      = 12
+                    ssize      = 6
                     sprite = 2
                 if v.z >=  .5:
-                    ssize      = 8
+                    ssize      = 4
                     sprite = 3
                 overlap = False
 
-                pygame.draw.circle(self.screen, (255,255,0), (int(v.x), int(v.y)), int(ssize/2))
+                # Check if current circle overlaps a previous one
+                for c in circles:
+                    dist = math.sqrt((v.x - c[0].x)**2 + (v.y - c[0].y)**2)
+                    if dist < (c[1]+ssize):
+                        print("Circle overlaps with %f %f (%d)"%(c[0].x, c[0].y, c[1]))
+                        overlap = True
+                circles.append((v, ssize))
+                color = 0
+                if overlap:
+                    color = (255,0,0)
+                else:
+                    color = (255,255,0)
+                pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
+                print(self.screen.get_at((100, 100)))
                 print("%d, %d, %d, "%(int(v.x), int(v.y), sprite))
-
-            # Calculate the average Z values of each face.
-            avg_z = []
-            i = 0
-            for f in self.faces:
-                z = (t[f[0]].z + t[f[1]].z + t[f[2]].z + t[f[3]].z) / 4.0
-                avg_z.append([i,z])
-                i = i + 1
-
-            # Draw the faces using the Painter's algorithm:
-            # Distant faces are drawn before the closer ones.
-            for tmp in sorted(avg_z,key=itemgetter(1),reverse=True):
-                face_index = tmp[0]
-                f = self.faces[face_index]
-                pointlist = [(t[f[0]].x, t[f[0]].y), (t[f[1]].x, t[f[1]].y),
-                             (t[f[1]].x, t[f[1]].y), (t[f[2]].x, t[f[2]].y),
-                             (t[f[2]].x, t[f[2]].y), (t[f[3]].x, t[f[3]].y),
-                             (t[f[3]].x, t[f[3]].y), (t[f[0]].x, t[f[0]].y)]
-                #pygame.draw.polygon(self.screen,self.colors[face_index],pointlist)
 
 
             self.angle += 2
@@ -168,6 +164,6 @@ class Simulation:
                 pygame.quit()
                 sys.exit();
             pygame.display.flip()
-
+            time.sleep(.5)
 if __name__ == "__main__":
     Simulation().run()
