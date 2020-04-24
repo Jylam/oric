@@ -99,6 +99,10 @@ void set_colors(void) {
 void main()
 {
     int i, frame;
+    s8 offset_x = -35; // Max 43
+    s8 offset_y = -20; // Max 20
+    s8 inc_x = 1;
+    s8 inc_y = 2;
     IrqOff();
     gen_tables();
     hires();
@@ -106,13 +110,11 @@ void main()
     set_colors();
     memcpy(screen, buffer, 200*40);
     frame = 0;
-    py = 0;
-    px = 20;
     for(;;) {
         for(i=0; i<(PT_COUNT*3); i+=3) {
             u8 *c = &anim[frame];
-            px = c[i];
-            py = c[i+1];
+            px = c[i]+offset_x;
+            py = c[i+1]+offset_y;
             if(c[i+2] == 0) {
                 put_sprite18_noalpha();
             } else if(c[i+2] == 1) {
@@ -132,17 +134,31 @@ void main()
             }
         }
         copy_buffer();
-        //clear_buffer();
         for(i=0; i<(PT_COUNT*3); i+=3) {
             u8 *c = &anim[frame];
-            px = c[i];
-            py = c[i+1];
+            px = c[i]+offset_x;
+            py = c[i+1]+offset_y;
 
             clear_sprite();
         }
         frame+=(PT_COUNT*3);
         if(frame >= sizeof(anim)) {
             frame = 0;
+        }
+
+        offset_x+=inc_x;
+        offset_y+=inc_y;
+        if(offset_x==43) {
+            inc_x=-1;
+        }
+        if(offset_x==-35) {
+            inc_x=1;
+        }
+        if(offset_y==20) {
+            inc_y=-1;
+        }
+        if(offset_y==-20) {
+            inc_y=1;
         }
     }
 }

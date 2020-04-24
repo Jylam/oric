@@ -2,13 +2,10 @@
 ldy #0
 lda #64
 sta (screen_ptr), y
-;;        screen_ptr++;
 iny
 sta (screen_ptr), y
-;;        screen_ptr++;
 iny
 sta (screen_ptr), y
-;;        screen_ptr++;
 iny
 sta (screen_ptr), y
 clc

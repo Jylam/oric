@@ -22,11 +22,6 @@ bcc OK
 inc screen_ptr+1
 OK
 
-ldx #0 ;; Used in sprite_template.s
-lda #64
-
-
-
 #include "clear_template.s"
 #include "clear_template.s"
 #include "clear_template.s"
@@ -46,6 +41,4 @@ lda #64
 #include "clear_template.s"
 #include "clear_template.s"
 
-
-sty sy ;;
 rts
