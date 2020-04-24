@@ -3,8 +3,10 @@
 from PIL import Image
 import numpy
 
+total_size = 0;
 
 def gen_image(filename, name):
+    global total_size
     im = Image.open(filename)
     pix = im.load()
     print("u8 %s[] = {"%(name))
@@ -42,7 +44,7 @@ def gen_image(filename, name):
             for c in range(18, 24):
                 print("%d"%line[c], end='')
             print(",")
-
+            total_size+=4
     print("};")
 
 gen_image('boule_sprite18.png', 'sprite18_data')
@@ -57,4 +59,4 @@ gen_image('boule_sprite_alpha12.png', 'sprite12_alpha_data')
 gen_image('boule_sprite8.png', 'sprite8_data')
 gen_image('boule_sprite_alpha8.png', 'sprite8_alpha_data')
 
-
+print("// Size %d"%(total_size))
