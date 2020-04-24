@@ -60,8 +60,6 @@ ldy sy ;; y is not modified in sprite_template.s
 #include "sprite_line16_noalpha.s"
 #include "sprite_line16_noalpha.s"
 #include "sprite_line16_noalpha.s"
-#include "sprite_line16_noalpha.s"
-#include "sprite_line16_noalpha.s"
 sty sy ;;
 
 end

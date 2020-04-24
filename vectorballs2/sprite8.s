@@ -1,4 +1,3 @@
-.text
 ;; void put_sprite(u8 *buf, u8 x, u8 y)
 _put_sprite8_asm
 .(
@@ -55,12 +54,6 @@ sta sy
 
 ldx #0 ;; Used in sprite_template.s
 ldy sy ;; y is not modified in sprite_template.s
-#include "sprite_line8.s"
-#include "sprite_line8.s"
-#include "sprite_line8.s"
-#include "sprite_line8.s"
-#include "sprite_line8.s"
-#include "sprite_line8.s"
 #include "sprite_line8.s"
 #include "sprite_line8.s"
 #include "sprite_line8.s"

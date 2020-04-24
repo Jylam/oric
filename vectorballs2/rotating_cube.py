@@ -69,8 +69,8 @@ class Simulation:
             self.vertices.append(Point3D(-1,-1,1))
         else:
             pt_count = 0
-            M = 5
-            N = 7
+            M = 4
+            N = 6
             for m in range(0, M):
                 for n in range(0, N):
                     self.vertices.append(Point3D(
@@ -128,6 +128,7 @@ class Simulation:
                     self.max_z = v.z
             I = 0
             for v in t:
+                y_offset = 0
                 h = 18
                 w = 24 # 4 bytes wide
                 ssize = 9
@@ -139,6 +140,7 @@ class Simulation:
                     ssize      = 6
                     sprite = 2
                 if v.z >=  .5:
+                    y_offset = 4
                     ssize      = 4
                     sprite = 3
                 overlap = False
@@ -173,11 +175,11 @@ class Simulation:
                 else:
                     color = (255,255,0)
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
-                print("%d, %d, %d,"%(int(v.x), int(v.y), sprite+(int(overlap)*4)))
+                print("%d, %d, %d,"%(int(v.x), int(v.y+y_offset), sprite+(int(overlap)*4)))
 
-            self.angle += 2
+            self.angle += 3
             self.frame+=1
-            if self.frame == 40:
+            if self.frame == 60:
                 print("};\n#define PT_COUNT %d\n// %d bytes"%(len(t), len(t)*3*self.frame))
                 pygame.quit()
                 sys.exit();

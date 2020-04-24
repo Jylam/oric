@@ -67,20 +67,20 @@ void gen_tables(void) {
         sprite_alpha_ptrs18LOW[y] = ((u16) sprite18_alpha_data +y*4*18)&0x00FF;
         sprite_alpha_ptrs18HIGH[y] = ((u16) (sprite18_alpha_data +y*4*18)&0xFF00)>>8;
 
-        sprite_ptrs16LOW[y] = ((u16) sprite16_data +y*4*18)&0x00FF;
-        sprite_ptrs16HIGH[y] = ((u16) (sprite16_data +y*4*18)&0xFF00)>>8;
-        sprite_alpha_ptrs16LOW[y] = ((u16) sprite16_alpha_data +y*4*18)&0x00FF;
-        sprite_alpha_ptrs16HIGH[y] = ((u16) (sprite16_alpha_data +y*4*18)&0xFF00)>>8;
+        sprite_ptrs16LOW[y] = ((u16) sprite16_data +y*4*16)&0x00FF;
+        sprite_ptrs16HIGH[y] = ((u16) (sprite16_data +y*4*16)&0xFF00)>>8;
+        sprite_alpha_ptrs16LOW[y] = ((u16) sprite16_alpha_data +y*4*16)&0x00FF;
+        sprite_alpha_ptrs16HIGH[y] = ((u16) (sprite16_alpha_data +y*4*16)&0xFF00)>>8;
 
-        sprite_ptrs12LOW[y] = ((u16) sprite12_data +y*4*18)&0x00FF;
-        sprite_ptrs12HIGH[y] = ((u16) (sprite12_data +y*4*18)&0xFF00)>>8;
-        sprite_alpha_ptrs12LOW[y] = ((u16) sprite12_alpha_data +y*4*18)&0x00FF;
-        sprite_alpha_ptrs12HIGH[y] = ((u16) (sprite12_alpha_data +y*4*18)&0xFF00)>>8;
+        sprite_ptrs12LOW[y] = ((u16) sprite12_data +y*4*14)&0x00FF;
+        sprite_ptrs12HIGH[y] = ((u16) (sprite12_data +y*4*14)&0xFF00)>>8;
+        sprite_alpha_ptrs12LOW[y] = ((u16) sprite12_alpha_data +y*4*14)&0x00FF;
+        sprite_alpha_ptrs12HIGH[y] = ((u16) (sprite12_alpha_data +y*4*14)&0xFF00)>>8;
 
-        sprite_ptrs8LOW[y] = ((u16) sprite8_data +y*4*18)&0x00FF;
-        sprite_ptrs8HIGH[y] = ((u16) (sprite8_data +y*4*18)&0xFF00)>>8;
-        sprite_alpha_ptrs8LOW[y] = ((u16) sprite8_alpha_data +y*4*18)&0x00FF;
-        sprite_alpha_ptrs8HIGH[y] = ((u16) (sprite8_alpha_data +y*4*18)&0xFF00)>>8;
+        sprite_ptrs8LOW[y] = ((u16) sprite8_data +y*4*12)&0x00FF;
+        sprite_ptrs8HIGH[y] = ((u16) (sprite8_data +y*4*12)&0xFF00)>>8;
+        sprite_alpha_ptrs8LOW[y] = ((u16) sprite8_alpha_data +y*4*12)&0x00FF;
+        sprite_alpha_ptrs8HIGH[y] = ((u16) (sprite8_alpha_data +y*4*12)&0xFF00)>>8;
     }
 }
 
