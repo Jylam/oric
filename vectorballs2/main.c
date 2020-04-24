@@ -135,10 +135,17 @@ void main()
             }
         }
         copy_buffer();
-        clear_buffer();
+        //clear_buffer();
+        for(i=0; i<(PT_COUNT*3); i+=3) {
+            u8 *c = &anim[frame];
+            px = c[i];
+            py = c[i+1];
+
+            clear_sprite();
+        }
         frame+=(PT_COUNT*3);
         if(frame >= sizeof(anim)) {
-                frame = 0;
+            frame = 0;
         }
     }
 }
