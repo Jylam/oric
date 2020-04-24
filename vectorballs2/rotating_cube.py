@@ -144,7 +144,6 @@ class Simulation:
                 for c in circles:
                     dist = math.sqrt((v.x - c[0].x)**2 + (v.y - c[0].y)**2)
                     if dist < (c[1]+ssize):
-                        print("Circle overlaps with %f %f (%d)"%(c[0].x, c[0].y, c[1]))
                         overlap = True
                 circles.append((v, ssize))
                 color = 0
@@ -153,17 +152,15 @@ class Simulation:
                 else:
                     color = (255,255,0)
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
-                print(self.screen.get_at((100, 100)))
-                print("%d, %d, %d, "%(int(v.x), int(v.y), sprite))
+                print("%d, %d, %d,"%(int(v.x), int(v.y), sprite+(int(overlap)*4)))
 
 
             self.angle += 2
             self.frame+=1
-            if self.frame == 100:
-                print("};\n#define PT_COUNT", len(t))
+            if self.frame == 40:
+                print("};\n#define PT_COUNT %d\n// %d bytes"%(len(t), len(t)*3*self.frame))
                 pygame.quit()
                 sys.exit();
             pygame.display.flip()
-            time.sleep(.5)
 if __name__ == "__main__":
     Simulation().run()
