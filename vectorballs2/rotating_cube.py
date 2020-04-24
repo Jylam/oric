@@ -127,6 +127,8 @@ class Simulation:
                 if v.z > self.max_z:
                     self.max_z = v.z
             for v in t:
+                h = 18
+                w = 24 # 4 bytes wide
                 ssize = 9
                 sprite = 0
                 if v.z   >= -.5:
@@ -141,11 +143,27 @@ class Simulation:
                 overlap = False
 
                 # Check if current circle overlaps a previous one
-                for c in circles:
-                    dist = math.sqrt((v.x - c[0].x)**2 + (v.y - c[0].y)**2)
-                    if dist < (c[1]+ssize):
-                        overlap = True
+                #for c in circles:
+                #    dist = math.sqrt((v.x - c[0].x)**2 + (v.y - c[0].y)**2)
+                #    if dist < (c[1]+ssize):
+                #        overlap = True
                 # That's silly, overlaping is 18x18 for now
+                overlap = False
+                for c in circles:
+                    Ax1 = c[0].x-9
+                    Ay1 = c[0].y-9
+                    Ax2 = c[0].x+9
+                    Ay2 = c[0].y+9
+                    Bx1 = v.x-9
+                    By1 = v.y-9
+                    Bx2 = v.x+9
+                    By2 = v.y+9
+
+                    if (Ax1 < Bx2) and (Ax2 > Bx1) and (Ay1 > By2) and (Ay2 < By1):
+                        overlap = True
+                        pygame.draw.rect(self.screen, (255,0,0),(Ax1, Ay1, 18, 18))
+                    else:
+                        pygame.draw.rect(self.screen, (0,0,255),(Ax1, Ay1, 18, 18))
 
                 circles.append((v, ssize))
                 color = 0
@@ -164,5 +182,6 @@ class Simulation:
                 pygame.quit()
                 sys.exit();
             pygame.display.flip()
+            time.sleep(1)
 if __name__ == "__main__":
     Simulation().run()
