@@ -176,7 +176,7 @@ class Simulation:
                     color = (255,255,0)
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
                 print("%d, %d, %d,"%(int(v.x), int(v.y+y_offset), sprite+(int(overlap)*4)))
-            self.angle += 4
+            self.angle += (360.0/90)
             self.frame+=1
             if self.frame == 90:
                 print("};\n#define PT_COUNT %d\n// %d bytes"%(len(t), len(t)*3*self.frame))

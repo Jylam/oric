@@ -90,9 +90,9 @@ void set_colors(void) {
             buffer[(y*40)+0] = A_BGBLUE;
     }
 
-    screen_text[0] = A_BGBLUE;
-    screen_text[40] = A_BGBLUE;
-    screen_text[80] = A_BGBLUE;
+    screen_text[0] = A_BGBLACK;
+    screen_text[40] = A_BGBLACK;
+    screen_text[80] = A_BGBLACK;
 
 }
 
