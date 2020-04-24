@@ -24,6 +24,10 @@ u8 sprite_ptrs18LOW[6];
 u8 sprite_ptrs18HIGH[6];
 u8 sprite_alpha_ptrs18LOW[6];
 u8 sprite_alpha_ptrs18HIGH[6];
+u8 sprite_ptrs16LOW[6];
+u8 sprite_ptrs16HIGH[6];
+u8 sprite_alpha_ptrs16LOW[6];
+u8 sprite_alpha_ptrs16HIGH[6];
 u8 sprite_ptrs12LOW[6];
 u8 sprite_ptrs12HIGH[6];
 u8 sprite_alpha_ptrs12LOW[6];
@@ -57,10 +61,16 @@ void gen_tables(void) {
     printf("and again ...");
     for(y=0; y<6; y++) {
         table_pixel_value[y] = 1<<(6-(y+1));
-        sprite_ptrs18LOW[y] = ((u16) sprite_data +y*4*18)&0x00FF;
-        sprite_ptrs18HIGH[y] = ((u16) (sprite_data +y*4*18)&0xFF00)>>8;
-        sprite_alpha_ptrs18LOW[y] = ((u16) sprite_alpha_data +y*4*18)&0x00FF;
-        sprite_alpha_ptrs18HIGH[y] = ((u16) (sprite_alpha_data +y*4*18)&0xFF00)>>8;
+
+        sprite_ptrs18LOW[y] = ((u16) sprite18_data +y*4*18)&0x00FF;
+        sprite_ptrs18HIGH[y] = ((u16) (sprite18_data +y*4*18)&0xFF00)>>8;
+        sprite_alpha_ptrs18LOW[y] = ((u16) sprite18_alpha_data +y*4*18)&0x00FF;
+        sprite_alpha_ptrs18HIGH[y] = ((u16) (sprite18_alpha_data +y*4*18)&0xFF00)>>8;
+
+        sprite_ptrs16LOW[y] = ((u16) sprite16_data +y*4*18)&0x00FF;
+        sprite_ptrs16HIGH[y] = ((u16) (sprite16_data +y*4*18)&0xFF00)>>8;
+        sprite_alpha_ptrs16LOW[y] = ((u16) sprite16_alpha_data +y*4*18)&0x00FF;
+        sprite_alpha_ptrs16HIGH[y] = ((u16) (sprite16_alpha_data +y*4*18)&0xFF00)>>8;
 
         sprite_ptrs12LOW[y] = ((u16) sprite12_data +y*4*18)&0x00FF;
         sprite_ptrs12HIGH[y] = ((u16) (sprite12_data +y*4*18)&0xFF00)>>8;
@@ -109,8 +119,10 @@ void main()
             if(c[i+2] == 0) {
                 put_sprite18_asm();
             } else if(c[i+2] == 1) {
-                put_sprite12_asm();
+                put_sprite16_asm();
             } else if(c[i+2] == 2) {
+                put_sprite12_asm();
+            } else if(c[i+2] == 3) {
                 put_sprite8_asm();
             }
         }

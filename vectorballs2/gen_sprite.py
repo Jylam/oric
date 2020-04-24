@@ -14,7 +14,7 @@ def gen_image(filename, name):
             curline = []
             for x in range(im.size[0]):
                 curline.append(pix[x,y])
-            if name == "sprite_data" or name == "sprite12_data" or name == "sprite8_data":
+            if name == "sprite18_data" or name == "sprite12_data" or name == "sprite8_data" or name == "sprite16_data":
                 curline.append(0)
                 curline.append(0)
                 curline.append(0)
@@ -45,8 +45,11 @@ def gen_image(filename, name):
 
     print("};")
 
-gen_image('boule_sprite18.png', 'sprite_data')
-gen_image('boule_sprite_alpha18.png', 'sprite_alpha_data')
+gen_image('boule_sprite18.png', 'sprite18_data')
+gen_image('boule_sprite_alpha18.png', 'sprite18_alpha_data')
+
+gen_image('boule_sprite16.png', 'sprite16_data')
+gen_image('boule_sprite_alpha16.png', 'sprite16_alpha_data')
 
 gen_image('boule_sprite12.png', 'sprite12_data')
 gen_image('boule_sprite_alpha12.png', 'sprite12_alpha_data')

@@ -145,6 +145,8 @@ class Simulation:
                     dist = math.sqrt((v.x - c[0].x)**2 + (v.y - c[0].y)**2)
                     if dist < (c[1]+ssize):
                         overlap = True
+                # That's silly, overlaping is 18x18 for now
+
                 circles.append((v, ssize))
                 color = 0
                 if overlap:
