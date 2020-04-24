@@ -10,7 +10,7 @@
 //#include "cube.h"
 #include "sphere.h"
 extern void IrqOff(void);
-extern void put_sprite18_asm(); // Uses _px and _py
+extern void put_sprite18_noalpha(); // Uses _px and _py
 extern void copy_buffer();
 extern void clear_buffer();
 
@@ -117,12 +117,20 @@ void main()
             px = c[i];
             py = c[i+1];
             if(c[i+2] == 0) {
-                put_sprite18_asm();
+                put_sprite18_noalpha();
             } else if(c[i+2] == 1) {
                 put_sprite16_asm();
             } else if(c[i+2] == 2) {
                 put_sprite12_asm();
             } else if(c[i+2] == 3) {
+                put_sprite8_asm();
+            } else if(c[i+2] == 4) {
+                put_sprite18_asm();
+            } else if(c[i+2] == 5) {
+                put_sprite16_asm();
+            } else if(c[i+2] == 6) {
+                put_sprite12_asm();
+            } else if(c[i+2] == 7) {
                 put_sprite8_asm();
             }
         }
