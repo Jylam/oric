@@ -34,5 +34,6 @@ OK12
 #include "clear_template.s"
 #include "clear_template.s"
 #include "clear_template.s"
+#include "clear_template.s"
 
 rts

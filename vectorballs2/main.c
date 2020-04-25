@@ -41,7 +41,6 @@ extern u8 *screen_cpy_ptr;
 
 u8 buffer[200*40];
 
-
 extern void put_sprite18_noalpha(void);
 extern void put_sprite16_noalpha(void);
 extern void put_sprite12_noalpha(void);
@@ -58,10 +57,10 @@ void (*draw_sprite[8])() = {put_sprite18_noalpha, put_sprite16_noalpha,
                             put_sprite12_noalpha, put_sprite8_noalpha,
                             put_sprite18_asm,     put_sprite16_asm,
                             put_sprite12_asm,     put_sprite8_asm};
-void (*clear_sprite[8])() = {clear_sprite18, clear_sprite18,
-                             clear_sprite18, clear_sprite8,
-                             clear_sprite18, clear_sprite18,
-                             clear_sprite18, clear_sprite8};
+void (*clear_sprite[8])() = {clear_sprite18, clear_sprite16,
+                             clear_sprite12, clear_sprite8,
+                             clear_sprite18, clear_sprite16,
+                             clear_sprite12, clear_sprite8};
 
 // Precompute Y table (*40) and nibble offsets
 void gen_tables(void) {
