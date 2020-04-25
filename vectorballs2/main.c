@@ -109,7 +109,7 @@ void set_colors(void) {
 
     for(y=0; y<200; y++) {
             buffer[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWGREEN;
-            buffer[(y*40)+0] = y&2?A_BGBLACK:A_BGBLUE;
+            buffer[(y*40)+0] = y&1?A_BGBLUE:A_BGBLACK;
 
     }
 
