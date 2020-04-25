@@ -123,7 +123,7 @@ void main()
 {
     int i, frame;
     s8 offset_x = -35; // Max 43
-    s8 offset_y = -20; // Max 20
+    s8 offset_y = 0; // Max 20
     s8 inc_x = 1;
     s8 inc_y = 2;
     IrqOff();
@@ -159,16 +159,16 @@ void main()
 
         offset_x+=inc_x;
         offset_y+=inc_y;
-        if(offset_x==43) {
+        if(offset_x>=43) {
             inc_x=-1;
         }
-        if(offset_x==-35) {
+        if(offset_x<=-35) {
             inc_x=1;
         }
-        if(offset_y==20) {
+        if(offset_y>=10) {
             inc_y=-1;
         }
-        if(offset_y==-20) {
+        if(offset_y<=0) {
             inc_y=1;
         }
     }

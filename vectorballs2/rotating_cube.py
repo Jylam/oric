@@ -70,15 +70,16 @@ class Simulation:
         else:
             pt_count = 0
             M = 4
-            N = 6
-            for m in range(0, M):
+            N = 5
+            for m in range(0, M+1):
                 for n in range(0, N):
-                    self.vertices.append(Point3D(
-                        math.sin(math.pi * m/M)*math.cos(2*math.pi * n/N),
-                        math.sin(math.pi * m/M)*math.sin(2*math.pi * n/N),
-                        math.cos(math.pi * m/M)))
+                    x = math.sin(math.pi * m/M)*math.cos(2*math.pi * n/N)
+                    y = math.sin(math.pi * m/M)*math.sin(2*math.pi * n/N)
+                    z = math.cos(math.pi * m/M)
+                    self.vertices.append(Point3D(x, y, z))
                     pt_count+=1
-            self.vertices = self.vertices[6:]
+            self.vertices = self.vertices[4:-4]
+            pt_count=len(self.vertices)
         # Define the vertices that compose each of the 6 faces. These numbers are
         # indices to the vertices list defined above.
         self.faces  = [(0,1,2,3),(1,5,6,2),(5,4,7,6),(4,0,3,7),(0,4,5,1),(3,2,6,7)]
@@ -176,9 +177,10 @@ class Simulation:
                     color = (255,255,0)
                 pygame.draw.circle(self.screen, color, (int(v.x), int(v.y)), int(ssize))
                 print("%d, %d, %d,"%(int(v.x), int(v.y+y_offset), sprite+(int(overlap)*4)))
-            self.angle += (360.0/90)
+            frame_count = 90
+            self.angle += (360.0/frame_count)
             self.frame+=1
-            if self.frame == 90:
+            if self.frame == frame_count:
                 print("};\n#define PT_COUNT %d\n// %d bytes"%(len(t), len(t)*3*self.frame))
                 pygame.quit()
                 sys.exit();
