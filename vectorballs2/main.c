@@ -41,6 +41,20 @@ extern u8 *screen_cpy_ptr;
 
 u8 buffer[200*40];
 
+
+extern void put_sprite18_noalpha(void);
+extern void put_sprite16_noalpha(void);
+extern void put_sprite12_noalpha(void);
+extern void put_sprite8_noalpha(void);
+extern void put_sprite18_asm(void);
+extern void put_sprite16_asm(void);
+extern void put_sprite12_asm(void);
+extern void put_sprite8_asm(void);
+
+void (*draw_sprite[8])() = {put_sprite18_noalpha, put_sprite16_noalpha, put_sprite12_noalpha, put_sprite8_noalpha,
+                            put_sprite18_asm,     put_sprite16_asm,     put_sprite12_asm,     put_sprite8_asm};
+
+
 // Precompute Y table (*40) and nibble offsets
 void gen_tables(void) {
     int y;
@@ -110,28 +124,14 @@ void main()
     set_colors();
     memcpy(screen, buffer, 200*40);
     frame = 0;
+
     for(;;) {
         for(i=0; i<(PT_COUNT*3); i+=3) {
             u8 *c = &anim[frame];
+            u8 s = c[i+2];
             px = c[i]+offset_x;
             py = c[i+1]+offset_y;
-            if(c[i+2] == 0) {
-                put_sprite18_noalpha();
-            } else if(c[i+2] == 1) {
-                put_sprite16_noalpha();
-            } else if(c[i+2] == 2) {
-                put_sprite12_noalpha();
-            } else if(c[i+2] == 3) {
-                put_sprite8_noalpha();
-            } else if(c[i+2] == 4) {
-                put_sprite18_asm();
-            } else if(c[i+2] == 5) {
-                put_sprite16_asm();
-            } else if(c[i+2] == 6) {
-                put_sprite12_asm();
-            } else if(c[i+2] == 7) {
-                put_sprite8_asm();
-            }
+            draw_sprite[s]();
         }
         copy_buffer();
         for(i=0; i<(PT_COUNT*3); i+=3) {
