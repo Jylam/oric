@@ -50,10 +50,18 @@ extern void put_sprite18_asm(void);
 extern void put_sprite16_asm(void);
 extern void put_sprite12_asm(void);
 extern void put_sprite8_asm(void);
-
-void (*draw_sprite[8])() = {put_sprite18_noalpha, put_sprite16_noalpha, put_sprite12_noalpha, put_sprite8_noalpha,
-                            put_sprite18_asm,     put_sprite16_asm,     put_sprite12_asm,     put_sprite8_asm};
-
+extern void clear_sprite18(void);
+extern void clear_sprite16(void);
+extern void clear_sprite12(void);
+extern void clear_sprite8(void);
+void (*draw_sprite[8])() = {put_sprite18_noalpha, put_sprite16_noalpha,
+                            put_sprite12_noalpha, put_sprite8_noalpha,
+                            put_sprite18_asm,     put_sprite16_asm,
+                            put_sprite12_asm,     put_sprite8_asm};
+void (*clear_sprite[8])() = {clear_sprite18, clear_sprite18,
+                             clear_sprite18, clear_sprite8,
+                             clear_sprite18, clear_sprite18,
+                             clear_sprite18, clear_sprite8};
 
 // Precompute Y table (*40) and nibble offsets
 void gen_tables(void) {
@@ -101,7 +109,8 @@ void set_colors(void) {
 
     for(y=0; y<200; y++) {
             buffer[(y*40)+1] = (y&1)?A_FWYELLOW:A_FWGREEN;
-            buffer[(y*40)+0] = A_BGBLUE;
+            buffer[(y*40)+0] = y&2?A_BGBLACK:A_BGBLUE;
+
     }
 
     screen_text[0] = A_BGBLACK;
@@ -134,12 +143,14 @@ void main()
             draw_sprite[s]();
         }
         copy_buffer();
+
         for(i=0; i<(PT_COUNT*3); i+=3) {
             u8 *c = &anim[frame];
+            u8 s = c[i+2];
             px = c[i]+offset_x;
             py = c[i+1]+offset_y;
 
-            clear_sprite();
+            clear_sprite[s]();
         }
         frame+=(PT_COUNT*3);
         if(frame >= sizeof(anim)) {

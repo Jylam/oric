@@ -1,6 +1,6 @@
 ;; void clear_sprite(u8 *buf, u8 x, u8 y)
 
-_clear_sprite
+_clear_sprite16
 ldx _px
 ldy _table_div6, x
 sty sexel_offset
@@ -18,12 +18,10 @@ sta screen_ptr+1
 lda screen_ptr
 adc sexel_offset
 sta screen_ptr
-bcc OK
+bcc OK16
 inc screen_ptr+1
-OK
+OK16
 
-#include "clear_template.s"
-#include "clear_template.s"
 #include "clear_template.s"
 #include "clear_template.s"
 #include "clear_template.s"

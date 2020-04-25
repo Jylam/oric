@@ -12,8 +12,8 @@ clc
 lda screen_ptr
 adc #40
 sta screen_ptr
-bcc SOK
+bcc COK
 inc screen_ptr+1
-SOK
+COK
 .)
 
