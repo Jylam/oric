@@ -29,8 +29,10 @@ while running:
                 pygame.draw.rect(board, color, (x*size+xoffset, y*size, size, size))
                 cnt = cnt+1
 
+        z = 1.0
         for i in range(0, 100):
-            t = pygame.transform.scale(board, (int(216*(i/100.0)), 100))
+            print("%02d: %d"%(xoffset, int(216*(i/100.0))))
+            t = pygame.transform.scale(board, (int(216*(i/100.0)), int(float(100.0*z))))
             screen.blit(t, (0, i), (0,i,216,1))
     #    pygame.image.save(screen, "checkerboard.png")
         pygame.display.flip()
