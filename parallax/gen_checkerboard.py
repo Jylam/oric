@@ -13,29 +13,37 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    board = pygame.Surface((216, 216))
+    board = pygame.Surface((216, 100))
     screen.fill((255, 0, 255))
 
+    cur_img = 0
     size = 27
     xoffset = 0;
-    while True:
+    while cur_img < 54:
         cnt = 0
-        for y in range(0, 8):
+        ysize = 27.0
+        y = 0.0
+        while y <= 216:
             cnt=cnt+1
             for x in range(-8, 8):
                 color = (0,0,0)
                 if cnt&1:
                     color = (255, 255, 255)
-                pygame.draw.rect(board, color, (x*size+xoffset, y*size, size, size))
+                pygame.draw.rect(board, color, (x*size+xoffset, int(y), size, int(ysize)))
                 cnt = cnt+1
-
-        z = 1.0
+            y+=ysize
+            ysize*=0.80
+            if ysize<0.00001:
+                ysize = 0.1
+        board = pygame.transform.flip(board, False, True)
         for i in range(0, 100):
-            print("%02d: %d"%(xoffset, int(216*(i/100.0))))
-            t = pygame.transform.scale(board, (int(216*(i/100.0)), int(float(100.0*z))))
+            t = pygame.transform.scale(board, (int(216*(i/100.0)), 100))
             screen.blit(t, (0, i), (0,i,216,1))
-    #    pygame.image.save(screen, "checkerboard.png")
+        print("Saving checkerboard%02d.png"%(cur_img))
+        pygame.image.save(screen, "checkerboard%02d.png"%(cur_img))
         pygame.display.flip()
-        time.sleep(.1)
+        cur_img+=1
+        if cur_img == 54:
+            pygame.quit()
         xoffset+=1
 pygame.quit()
