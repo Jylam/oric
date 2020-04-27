@@ -5,20 +5,22 @@ from PIL import Image
 import numpy
 
 
-def gen_data(filename):
+def read_data(filename):
     im = Image.open(filename)
     pix = im.load()
     width, height = im.size
 
     total = 0
     rle_total = 0
+    lines = []
     for y in range(0, height):
         old_color = (255, 0, 255)
         length = 0
+        line = []
         for x in range(0, width):
             color = im.getpixel((x, y))
             if color == (255, 0, 255):
-                print("")
+                lines.append(line)
                 break
             else:
                 if old_color != color:
@@ -28,8 +30,22 @@ def gen_data(filename):
                     length=1
                 else:
                     length+=1
+                line.append(int(color==(255,255,255)))
                 total+=1
                 old_color = color
             #    print(color[0], end='')
-    print("%d bytes, rle_total %d"%(total/8, rle_total))
-gen_data("checkerboard00.png")
+    print("%d bytes"%(total/8))
+    return lines
+
+def gen_RLE(lines):
+    for line in lines:
+        print(line)
+        old_b = 0
+        length = 0
+        for b in line:
+            if b!=old_b:
+                length=1
+
+lines = read_data("checkerboard00.png")
+gen_RLE(lines)
+
