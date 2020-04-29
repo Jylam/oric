@@ -38,14 +38,20 @@ def read_data(filename):
     return lines
 
 def gen_RLE(lines):
+    changes = 0
     for line in lines:
-        print(line)
+        print(line, end='')
+        line_changes = 0
         old_b = 0
         length = 0
         for b in line:
             if b!=old_b:
                 length=1
-
+                changes+=1
+                line_changes+=1
+            old_b = b
+        print(" %d"%(line_changes))
+    print("%d changes"%(changes))
 lines = read_data("checkerboard00.png")
 gen_RLE(lines)
 
