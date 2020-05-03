@@ -35,14 +35,12 @@ endif
 RUNBEFOREHACK:=$(shell rm -f $(BIN).final.s $(BIN).final.c)
 C_FILES=$(filter %.c, $(SRC))
 %.o: %.s
-	echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSMMMMMMMMMMMMMMMMMMMMMMMM
 	cat $< >> $(BIN).final.s
 %.o: %.c
 	cat $< >> $(BIN).final.c
 
 $(BIN): $(DATA) $(OBJ) compile_c
 ifneq ($(NO_LINK),1)
-	$(info LINKIIIIIING)
 	$(LINKER) -d $(LINKLIB) $(BIN).final.s -o .$(BIN).linked.s
 else
 		cp $(BIN).final.s .$(BIN).linked.s
