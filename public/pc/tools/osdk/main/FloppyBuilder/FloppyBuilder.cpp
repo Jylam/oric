@@ -53,7 +53,7 @@ bool GetNextToken(std::string& returnedToken,std::string& restOfLine,int lineNum
       ++currentPosition;
     }
 
-    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )      
+    while ( (car=*currentPosition) && ( (match && (car!=match)) || ( (!match) && ((car!=' ') && (car!='\t')) ) ) )
     {
       returnedToken.push_back(car);
       ++currentPosition;
@@ -265,7 +265,7 @@ int FloppyBuilder::Main()
     }
 
     if (!tokens.empty())
-    {      
+    {
       if (tokens[0]=="FormatVersion")
       {
         if (tokens.size()==2)
@@ -292,7 +292,8 @@ int FloppyBuilder::Main()
                 switch (minorVersion)
                 {
                 default:
-                case 19:  ShowError("AddFile does not have a size parameter anymore\n");
+                    break;
+                case 19:  ShowError("AddFile does not have a size parameter anymore at line %d\n", lineNumber);
                 case 20:
                   break;
                 }

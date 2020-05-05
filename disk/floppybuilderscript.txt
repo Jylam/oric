@@ -1,0 +1,17 @@
+FormatVersion 1.2
+DefineDisk 2 42 17			; 2 sides, 42 tracks, 17 sectors
+
+OutputLayoutFile floppy_description.h
+OutputFloppyFile test.dsk
+
+SetPosition 0 1
+WriteSector sector_1-jasmin.o 		; Sector 1
+WriteSector sector_2-microdisc.o 	; Sector 2
+WriteSector sector_3.o 				; Sector 3
+
+SetPosition 0 4
+WriteLoader disk.bin $500
+AddFile 256.dat
+SetCompressionMode None		; So far only two modes: 'None' and 'FilePack'
+
+

@@ -6,5 +6,5 @@ _FDC_ready   = $318
 
 
 _fdc_setup
-    lda _FDC_command
+    lda _FDC_ready
     rts
