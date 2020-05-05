@@ -1,6 +1,6 @@
 #NO_LIB=1
 
-SRC=main.c sys.s
+SRC=main.c sys.s fdc.s
 BIN=disk
 
 OBJ=$(SRC:.c=.o)
