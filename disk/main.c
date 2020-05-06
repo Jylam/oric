@@ -18,12 +18,16 @@ extern u8 FDC_ready;
 
 
 u8 *screen = (u8*)0xa000;
-u8 *screen_text = (u8*)0xbf68;
+u8 *screen_text = (u8*)0xbb80;
 
 void main()
 {
-    //IrqOff();
-    fdc_setup();
+    int y;
+    IrqOff();
+    for(y = 0; y < 28; y++) {
+        screen_text[y*40] = A_BGBLUE;
+    }
+    //fdc_setup();
     printf("Infos:\n");
     printf("Command %x\n", FDC_command);
     printf("Track   %x\n", FDC_track);
