@@ -27,6 +27,10 @@ void main()
     for(y = 0; y < 28; y++) {
         screen_text[y*40] = A_BGBLUE;
     }
+
+    while(1) {
+        y=y+1;
+    }
     //fdc_setup();
     printf("Infos:\n");
     printf("Command %x\n", FDC_command);

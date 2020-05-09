@@ -4,8 +4,10 @@ _FDC_sector  = $312
 _FDC_data    = $313
 _FDC_ready   = $318
 
-;main
-;_main
-pouet
-    lda _FDC_ready
-    jmp pouet
+__manager_start
+_fdc_setup
+    lda #$55
+    rts
+
+__manager_end
+

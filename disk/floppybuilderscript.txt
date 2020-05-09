@@ -10,7 +10,7 @@ WriteSector sector_2-microdisc.o 	; Sector 2
 WriteSector sector_3.o 				; Sector 3
 
 SetPosition 0 4
-WriteLoader disk.bin $500
+WriteLoader disk.bin $C000
 AddFile 256.dat
 SetCompressionMode None		; So far only two modes: 'None' and 'FilePack'
 
