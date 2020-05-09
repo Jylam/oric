@@ -55,6 +55,7 @@ assemble() {
 }
 
 cleanup
+~/code/oric/oric/public/pc/tools/osdk/main/FloppyBuilder/FloppyBuilder init floppybuilderscript.txt
 add_c_file "main.c"
 add_asm_file "sys.s"
 add_asm_file "fdc.s"

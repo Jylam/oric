@@ -28,15 +28,6 @@ void main()
         screen_text[y*40] = A_BGBLUE;
     }
 
-    while(1) {
-        y=y+1;
-    }
-    //fdc_setup();
-    printf("Infos:\n");
-    printf("Command %x\n", FDC_command);
-    printf("Track   %x\n", FDC_track);
-    printf("Sector  %x\n", FDC_sector);
-    printf("Data    %x\n", FDC_data);
-    printf("RDY     %x\n", FDC_ready);
+    fdc_setup();
     while(1);
 }
