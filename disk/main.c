@@ -24,6 +24,7 @@ void main()
 {
     int y;
     IrqOff();
+
     for(y = 0; y < 28; y++) {
         screen_text[y*40] = A_BGBLUE;
     }

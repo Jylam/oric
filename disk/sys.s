@@ -1,6 +1,8 @@
-;;; Disable IRQs
 _IrqOff
     sei
+    rts
+_IrqOn
+    cli
     rts
 
 

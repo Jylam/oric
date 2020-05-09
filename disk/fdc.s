@@ -8,10 +8,30 @@ _FDC_command = $310
 _FDC_track   = $311
 _FDC_sector  = $312
 _FDC_data    = $313
+_FDC_flags   = $314
 _FDC_ready   = $318
 
+IRQ_save_A .dsb 1
+IRQ_save_X .dsb 1
+IRQ_save_Y .dsb 1
+
 _fdc_setup
-    lda #DATA_TRACK  ; Test if we are already on the right track
+    sei
+
+    lda #<VIA_TIMER_DELAY
+    sta $306
+    lda #>VIA_TIMER_DELAY
+    sta $307
+
+
+
+    lda #<_irq_handler
+    sta $FFFE
+    lda #>_irq_handler
+    sta $FFFF
+    cli
+
+    lda #DATA_TRACK+1  ; Test if we are already on the right track
     cmp _FDC_track
     beq track_ok     ; Yes
 
@@ -22,12 +42,16 @@ _fdc_setup
 
                      ; Wait for status
 
-track_ok            ; track was the right one
-
-
-
+track_ok             ; track was the right one
 
 
     rts
 
+
+
+_irq_handler
+    sta IRQ_save_A
+    stx IRQ_save_X
+    sty IRQ_save_Y
+    rti
 
