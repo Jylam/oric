@@ -1,6 +1,9 @@
 #include "floppy_description.h"
+
 #define CMD_ReadSector	$80
 #define CMD_Seek		$1F
+
+#define VIA_TIMER1_VALUE 250  // 4KHz
 
 
 _FDC_status  = $310
@@ -17,11 +20,16 @@ IRQ_save_Y .dsb 1
 
 _fdc_setup
     sei
+    ; Disable all 6522 interrupts
+    ;lda #$7F
+    lda #%01111110 ; Except disk
+    sta $030E
 
-    lda #<VIA_TIMER_DELAY
-    sta $306
-    lda #>VIA_TIMER_DELAY
-    sta $307
+
+    lda #<VIA_TIMER1_VALUE
+    sta $0306
+    lda #>VIA_TIMER1_VALUE
+    sta $0307
 
 
 
@@ -31,7 +39,7 @@ _fdc_setup
     sta $FFFF
     cli
 
-    lda #DATA_TRACK+1  ; Test if we are already on the right track
+    lda #YM_TRACK  ; Test if we are already on the right track
     cmp _FDC_track
     beq track_ok     ; Yes
 
@@ -40,7 +48,7 @@ _fdc_setup
     lda #CMD_Seek
     sta _FDC_command ; Seek
 
-                     ; Wait for status
+    lda _FDC_status  ; Wait for status
 
 track_ok             ; track was the right one
 

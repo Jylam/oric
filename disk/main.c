@@ -27,6 +27,7 @@ void main()
 
     for(y = 0; y < 28; y++) {
         screen_text[y*40] = A_BGBLUE;
+        screen_text[y*40+1] = A_FWWHITE;
     }
 
     fdc_setup();

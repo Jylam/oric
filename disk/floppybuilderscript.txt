@@ -12,11 +12,10 @@ WriteSector sector_3.o 				; Sector 3
 SetPosition 0 4
 WriteLoader disk.bin $C000
 
-AddFile 256.dat
-AddDefine DATA_INDEX {FileIndex}
-AddDefine DATA_SIZE {FileSize}
-AddDefine DATA_TRACK {FileTrack}
-AddDefine DATA_SECTOR {FileSector}
+AddFile test.mym
+AddDefine YM_INDEX {FileIndex}
+AddDefine YM_SIZE {FileSize}
+AddDefine YM_TRACK {FileTrack}
+AddDefine YM_SECTOR {FileSector}
 SetCompressionMode None		; So far only two modes: 'None' and 'FilePack'
-
 
