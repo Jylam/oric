@@ -24,7 +24,8 @@ _fdc_setup
     ;lda #$7F
     lda #%01111110 ; Except disk
     sta $030E
-
+    lda #%00000001 ; Enable FDC Interrupt
+    sta _FDC_status
 
     lda #<VIA_TIMER1_VALUE
     sta $0306
