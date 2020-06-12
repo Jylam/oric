@@ -62,5 +62,10 @@ _irq_handler
     sta IRQ_save_A
     stx IRQ_save_X
     sty IRQ_save_Y
+
+
+    lda IRQ_save_A
+    ldx IRQ_save_X
+    ldy IRQ_save_Y
     rti
 
